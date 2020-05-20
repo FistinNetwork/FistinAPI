@@ -4,6 +4,7 @@ plugins {
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 group 'fr.flowarg'
 version '1.0.0'
@@ -32,6 +33,30 @@ repositories {
 shadowJar {
     configurations = [project.configurations.shadow]
 }
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'fr.flowarg'
+            artifactId = 'fistinapi'
+            version = '1.0.0'
+                
+            pom {
+                name = 'FistinAPI'
+                description = 'FistinAPI'
+                url = 'https://github.com/FistinNetwork/FistinAPI'
+            }
+        }
+    }
+        
+    repositories {
+        maven {
+            url = "https://maven.pkg.github.com/FistinNetwork"
+        }
+    }
+}
+
+
 
 dependencies {
 	implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
