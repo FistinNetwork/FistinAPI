@@ -26,7 +26,7 @@ jobs:
         args: https://cdn.getbukkit.org/spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar --create-dirs -o libs/spigot.jar
     
     - name: Permission
-      run: chmod 777 libs/spigot.jar
+      run: sudo chmod 777 libs/spigot.jar
         
     - name: Build with Gradle
       run: gradle build
