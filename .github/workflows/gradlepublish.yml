@@ -24,7 +24,10 @@ jobs:
       uses: wei/curl@v1
       with:
         args: https://cdn.getbukkit.org/spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar --create-dirs -o libs/spigot.jar
-
+        
+    - name: Debug
+      run: ls
+      
     - name: Build with Gradle
       run: gradle build
 
