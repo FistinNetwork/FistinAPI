@@ -1,0 +1,41 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'java'
+
+group 'fr.flowarg'
+version '1.0.0'
+archivesBaseName = "FistinAPI"
+
+compileJava.targetCompatibility = compileJava.sourceCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
+    }
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/public"
+    }
+    maven {
+        url "https://flowarg.github.io/maven/"
+    }
+    maven {
+        url "https://ci.frostcast.net/plugin/repository/everything/"
+    }
+    jcenter()
+    mavenCentral()
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+}
+
+dependencies {
+	implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    shadow 'fr.flowarg:sch:1.0.0'
+}
