@@ -51,6 +51,10 @@ publishing {
         
     repositories {
         maven {
+            credentials {
+                username System.getenv('${{ github.actor }}')
+                password System.getenv('${{ secrets.GITHUB_TOKEN }}')
+            }
             url = "https://maven.pkg.github.com/FistinNetwork"
         }
     }
