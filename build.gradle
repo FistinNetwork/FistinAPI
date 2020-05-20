@@ -37,9 +37,9 @@ shadowJar {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'fr.flowarg'
+            groupId = project.group
             artifactId = 'fistinapi'
-            version = '1.0.0'
+            version = project.version
                 
             pom {
                 name = 'FistinAPI'
@@ -55,7 +55,8 @@ publishing {
                 username System.getenv('USERNAME')
                 password System.getenv('TOKEN')
             }
-            url = "https://maven.pkg.github.com/FistinNetwork"
+            name = "FistinAPI maven"
+            url = "https://maven.pkg.github.com/FistinNetwork/FistinAPI"
         }
     }
 }
