@@ -55,7 +55,7 @@ publishing {
                 username System.getenv('USERNAME')
                 password System.getenv('TOKEN')
             }
-            name = "FistinAPI maven"
+            name = "FistinAPI_maven"
             url = "https://maven.pkg.github.com/FistinNetwork/FistinAPI"
         }
     }
