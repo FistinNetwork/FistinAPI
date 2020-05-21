@@ -5,8 +5,9 @@ plugins {
 apply plugin: 'eclipse'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
+apply plugin: 'maven'
 
-group 'fr.flowarg'
+group 'fr.flowarg.fistinnetwork'
 version '1.0.0'
 archivesBaseName = "FistinAPI"
 
@@ -37,11 +38,12 @@ shadowJar {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = project.group
-            artifactId = 'fistinapi'
-            version = project.version
-                
+            from(components.java)
+            
             pom {
+                groupId = project.group
+                artifactId = 'fistinapi'
+                version = project.version
                 name = 'FistinAPI'
                 description = 'FistinAPI'
                 url = 'https://github.com/FistinNetwork/FistinAPI'
