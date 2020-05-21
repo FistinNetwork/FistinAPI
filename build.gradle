@@ -63,11 +63,18 @@ publishing {
     }
 }
 
-
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
 dependencies {
 	implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation fileTree(dir: 'libs', include: '*.jar')
     shadow 'fr.flowarg:sch:1.0.0'
+}
+
+artifacts {
+    archives sourcesJar, shadowJar
 }
