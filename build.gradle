@@ -8,7 +8,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'maven'
 
 group 'fr.flowarg.fistinnetwork'
-version '1.0.1'
+version '1.0.2'
 archivesBaseName = "FistinAPI"
 
 compileJava.targetCompatibility = compileJava.sourceCompatibility = '1.8'
@@ -38,7 +38,9 @@ shadowJar {
 publishing {
     publications {
         maven(MavenPublication) {
-            from(components.java)
+            from components.java
+            artifact tasks.sourceJar
+            artifact tasks.shadowJar
             
             pom {
                 groupId = project.group
