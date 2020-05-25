@@ -10,13 +10,13 @@ public class DockerAPI implements IAPIComponent
 {
 	public void callCommand(String name)
 	{
-		// TODO gérer la commande unknow
 		new BukkitRunnable()
 		{
 			@Override
 			public void run()
 			{
 				final DockerCommand command = DockerCommand.getDockerCommandByName(name);
+				DockerAPI.this.getPlugin().getLogger().info(String.format("Calling %s command !", command.getName()));
 				command.getTask().run();
 			}
 		}.runTask(this.getPlugin());

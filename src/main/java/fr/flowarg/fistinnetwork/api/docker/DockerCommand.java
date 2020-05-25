@@ -3,9 +3,13 @@ package fr.flowarg.fistinnetwork.api.docker;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.flowarg.fistinnetwork.api.FistinAPI;
+
 public enum DockerCommand
 {
-	NONE("unknow", null);
+	NONE("unknow", () -> {
+		FistinAPI.getFistinAPI().getLogger().warning("Unknow command !");
+	});
 	
 	private static final Map<String, DockerCommand> DOCKER_COMMANDS = new HashMap<>();
 	
