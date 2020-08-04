@@ -1,16 +1,19 @@
 package fr.flowarg.fistinnetwork.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.flowarg.fistinnetwork.api.docker.DockerAPI;
 import fr.flowarg.fistinnetwork.api.plugin.IFistinPlugin;
-import fr.flowarg.sch.ConfigurationManager;
 
-public class FistinAPI extends JavaPlugin implements IFistinPlugin
+public class FistinAPI extends JavaPlugin
 {
 	private static FistinAPI fistinAPI;
 	private FireworkFactory fireworkFactory;
 	private DockerAPI dockerAPI;
+	private List<IFistinPlugin> plugins = new ArrayList<>();
 	
 	@Override
 	public void onEnable()
@@ -20,13 +23,20 @@ public class FistinAPI extends JavaPlugin implements IFistinPlugin
 		this.fireworkFactory = new FireworkFactory();
 		this.fireworkFactory.registerFireworks();
 		this.dockerAPI = new DockerAPI();
+		this.getServer().getScheduler().runTaskLater(this, () -> {
+			this.getLogger().info("Found %d plugins : " + this.plugins.size() + " !");
+			this.plugins.forEach(pl -> this.getLogger().info("Loaded " + pl.getName() + "."));
+		}, 20L);
 	}
 	
 	@Override
 	public void onDisable()
 	{
-		this.getLogger().info("Entering disabling phase...");
+		this.getLogger().info("Entering stopping phase...");
 		this.fireworkFactory = null;
+		this.dockerAPI.unload();
+		this.dockerAPI = null;
+		this.plugins.clear();
 		fistinAPI = null;
 	}
 	
@@ -44,19 +54,9 @@ public class FistinAPI extends JavaPlugin implements IFistinPlugin
 	{
 		return fistinAPI;
 	}
-
-	@Override
-	public void registerCommands() {}
-
-	@Override
-	public FistinAPI getAPI()
+	
+	public void registerPlugin(IFistinPlugin plugin)
 	{
-		return this;
-	}
-
-	@Override
-	public ConfigurationManager getConfiguration()
-	{
-		return null;
+		this.plugins.add(plugin);
 	}
 }

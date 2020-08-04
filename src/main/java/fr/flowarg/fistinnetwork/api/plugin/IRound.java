@@ -1,6 +1,6 @@
 package fr.flowarg.fistinnetwork.api.plugin;
 
-public interface IRound extends IAPIComponent
+public interface IRound
 {
 	int getCount();
 	void startRound();

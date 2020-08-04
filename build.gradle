@@ -33,7 +33,7 @@ shadowJar {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    classifier 'sources'
     from sourceSets.main.allSource
 }
 

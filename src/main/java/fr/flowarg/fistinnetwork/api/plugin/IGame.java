@@ -1,6 +1,6 @@
 package fr.flowarg.fistinnetwork.api.plugin;
 
-public interface IGame extends IAPIComponent
+public interface IGame
 {
 	void start();
 	void time();

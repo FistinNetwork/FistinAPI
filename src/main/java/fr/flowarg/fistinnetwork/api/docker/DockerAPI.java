@@ -3,10 +3,8 @@ package fr.flowarg.fistinnetwork.api.docker;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.flowarg.fistinnetwork.api.FistinAPI;
-import fr.flowarg.fistinnetwork.api.plugin.IAPIComponent;
-import fr.flowarg.fistinnetwork.api.plugin.IFistinPlugin;
 
-public class DockerAPI implements IAPIComponent
+public class DockerAPI
 {
 	public void callCommand(String name)
 	{
@@ -22,8 +20,12 @@ public class DockerAPI implements IAPIComponent
 		}.runTask(this.getPlugin());
 	}
 	
-	@Override
-	public IFistinPlugin getPlugin()
+	public void unload()
+	{
+		DockerCommand.unload();
+	}
+	
+	public FistinAPI getPlugin()
 	{
 		return FistinAPI.getFistinAPI();
 	}

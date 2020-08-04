@@ -1,6 +1,6 @@
 package fr.flowarg.fistinnetwork.api.plugin;
 
-public interface IGameProvider extends IAPIComponent
+public interface IGameProvider
 {
 	IGame getGame();
 	void setGame(IGame game);

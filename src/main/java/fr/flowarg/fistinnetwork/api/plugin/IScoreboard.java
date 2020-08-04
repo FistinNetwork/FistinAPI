@@ -1,6 +1,6 @@
 package fr.flowarg.fistinnetwork.api.plugin;
 
-public interface IScoreboard extends IAPIComponent
+public interface IScoreboard
 {
 	ScoreboardSign getScoreboardSign();
 	void setScoreboardSign(ScoreboardSign scoreboardSign);

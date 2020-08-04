@@ -7,7 +7,7 @@ import fr.flowarg.fistinnetwork.api.FistinAPI;
 
 public enum DockerCommand
 {
-	NONE("unknow", () -> {
+	NONE("unknown", () -> {
 		FistinAPI.getFistinAPI().getLogger().warning("Unknow command !");
 	});
 	
@@ -41,5 +41,10 @@ public enum DockerCommand
 	public static DockerCommand getDockerCommandByName(String name)
 	{
 		return DOCKER_COMMANDS.getOrDefault(name, NONE);
+	}
+	
+	static void unload()
+	{
+		DOCKER_COMMANDS.clear();
 	}
 }
