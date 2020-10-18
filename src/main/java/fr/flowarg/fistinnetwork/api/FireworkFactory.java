@@ -16,23 +16,27 @@ import fr.flowarg.fistinnetwork.api.utils.PluginLocation;
 public class FireworkFactory
 {
 	private final Map<PluginLocation, FireworkEffect> effects = new HashMap<>();
-	
-	public void registerFireworks()
+	private final FireworkEffect.Builder builder = FireworkEffect.builder();
+	private boolean isRegistered;
+
+	public void registerFirework(PluginLocation location, FireworkEffect effect)
 	{
-		final FireworkEffect.Builder builder = FireworkEffect.builder();
+		if(this.isRegistered)
+			this.effects.putIfAbsent(location, effect);
+	}
+	
+	void registerBaseFireworks()
+	{
+		final FireworkEffect giveTntFirework = this.builder.flicker(false).trail(false).with(Type.CREEPER).withColor(Color.RED).build();
+		final FireworkEffect endTntTag = this.builder.flicker(true).trail(true).with(Type.STAR).withColor(Color.RED, Color.GREEN, Color.BLUE).withFade(Color.ORANGE).build();
 		
-		final FireworkEffect giveTntFirework = builder.flicker(false).trail(false).with(Type.CREEPER).withColor(Color.RED).build();
-		final FireworkEffect endTntTag = builder.flicker(true).trail(true).with(Type.STAR).withColor(Color.RED, Color.GREEN, Color.BLUE).withFade(Color.ORANGE).build();
-		
-		this.effects.put(new PluginLocation("tnttag", "giveTntFirework"), giveTntFirework);
-		this.effects.put(new PluginLocation("tnttag", "endTntTag"), endTntTag);
+		this.effects.putIfAbsent(new PluginLocation("tnttag", "giveTntFirework"), giveTntFirework);
+		this.effects.putIfAbsent(new PluginLocation("tnttag", "endTntTag"), endTntTag);
 	}
 	
 	public void spawnFirework(PluginLocation pluginLocation, Location location, double offsetY)
 	{
-		Location location2 = location;
-		if(offsetY != 0)
-			location2 = new Location(location.getWorld(), location.getX(), location.getY() + offsetY, location.getZ());
+		final Location location2 = offsetY == 0 ? location : new Location(location.getWorld(), location.getX(), location.getY() + offsetY, location.getZ());
 		final Firework firework = (Firework)location.getWorld().spawnEntity(location2, EntityType.FIREWORK);
 		final FireworkMeta fireworkMeta = firework.getFireworkMeta();
 		

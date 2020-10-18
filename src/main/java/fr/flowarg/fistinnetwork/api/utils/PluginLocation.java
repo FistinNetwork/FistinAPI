@@ -2,9 +2,9 @@ package fr.flowarg.fistinnetwork.api.utils;
 
 public class PluginLocation
 {
-	private String namespace;
-	private String path;
-	private String finalPath;
+	private final String namespace;
+	private final String path;
+	private final String finalPath;
 	
 	public PluginLocation(String namespace, String path)
 	{

@@ -21,7 +21,7 @@ public class FistinAPI extends JavaPlugin
 		fistinAPI = this;
 		this.getLogger().info("Entering initialization phase...");
 		this.fireworkFactory = new FireworkFactory();
-		this.fireworkFactory.registerFireworks();
+		this.fireworkFactory.registerBaseFireworks();
 		this.dockerAPI = new DockerAPI();
 		this.getServer().getScheduler().runTaskLater(this, () -> {
 			this.getLogger().info("Found %d plugins : " + this.plugins.size() + " !");

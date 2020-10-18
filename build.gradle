@@ -1,18 +1,19 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "com.github.johnrengelman.shadow" version "6.0.0"
 }
 
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
-apply plugin: 'maven'
 
 group 'fr.flowarg.fistinnetwork'
-version '1.0.3'
+version '1.1.0'
 archivesBaseName = "FistinAPI"
 
-compileJava.targetCompatibility = compileJava.sourceCompatibility = '1.8'
-compileJava.options.encoding = 'UTF-8'
+compileJava {
+    targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
+    options.encoding = 'UTF-8'
+}
 
 repositories {
     maven {
