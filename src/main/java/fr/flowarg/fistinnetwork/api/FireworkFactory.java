@@ -1,8 +1,6 @@
 package fr.flowarg.fistinnetwork.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import fr.flowarg.fistinnetwork.api.utils.PluginLocation;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -11,22 +9,23 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import fr.flowarg.fistinnetwork.api.utils.PluginLocation;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 public class FireworkFactory
 {
 	private final Map<PluginLocation, FireworkEffect> effects = new HashMap<>();
 	private final FireworkEffect.Builder builder = FireworkEffect.builder();
 
-	public void registerFirework(PluginLocation location, FireworkEffect effect)
+	public void registerFirework(PluginLocation location, Function<FireworkEffect.Builder, FireworkEffect> effect)
 	{
-		this.effects.putIfAbsent(location, effect);
+		this.effects.putIfAbsent(location, effect.apply(this.builder));
 	}
 	
 	void registerBaseFireworks()
 	{
-		final FireworkEffect firstSetup = this.builder.flicker(true).trail(true).with(Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build();
-		this.effects.putIfAbsent(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup"), firstSetup);
+		this.registerFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup"), bd -> bd.flicker(true).trail(true).with(Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
 	}
 	
 	public void spawnFirework(PluginLocation pluginLocation, Location location, double offsetY)
