@@ -176,7 +176,7 @@ public class ScoreboardSign
 		return new PacketPlayOutScoreboardScore(line);
 	}
 
-	public class VirtualTeam
+	public static class VirtualTeam
 	{
 		private final String name;
 		private String prefix;

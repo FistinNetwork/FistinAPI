@@ -1,6 +1,7 @@
 name: FistinAPI
-version: 1.0.0
+version: 1.1.0
 main: fr.flowarg.fistinnetwork.api.FistinAPI
 prefix: FistinAPI
+website: https://filouz.wtf
 description: API de FistinNetwork, (c) FlowArg - All rights reserved.
 author: Flow Arg (FlowArg)

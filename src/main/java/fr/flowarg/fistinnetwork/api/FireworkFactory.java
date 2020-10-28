@@ -17,21 +17,16 @@ public class FireworkFactory
 {
 	private final Map<PluginLocation, FireworkEffect> effects = new HashMap<>();
 	private final FireworkEffect.Builder builder = FireworkEffect.builder();
-	private boolean isRegistered;
 
 	public void registerFirework(PluginLocation location, FireworkEffect effect)
 	{
-		if(this.isRegistered)
-			this.effects.putIfAbsent(location, effect);
+		this.effects.putIfAbsent(location, effect);
 	}
 	
 	void registerBaseFireworks()
 	{
-		final FireworkEffect giveTntFirework = this.builder.flicker(false).trail(false).with(Type.CREEPER).withColor(Color.RED).build();
-		final FireworkEffect endTntTag = this.builder.flicker(true).trail(true).with(Type.STAR).withColor(Color.RED, Color.GREEN, Color.BLUE).withFade(Color.ORANGE).build();
-		
-		this.effects.putIfAbsent(new PluginLocation("tnttag", "giveTntFirework"), giveTntFirework);
-		this.effects.putIfAbsent(new PluginLocation("tnttag", "endTntTag"), endTntTag);
+		final FireworkEffect firstSetup = this.builder.flicker(true).trail(true).with(Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build();
+		this.effects.putIfAbsent(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup"), firstSetup);
 	}
 	
 	public void spawnFirework(PluginLocation pluginLocation, Location location, double offsetY)

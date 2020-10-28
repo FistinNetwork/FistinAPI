@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "6.0.0"
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 apply plugin: 'idea'
@@ -74,7 +74,6 @@ publishing {
 
 dependencies {
 	implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation fileTree(dir: 'libs', include: '*.jar')
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
     shadow 'fr.flowarg:sch:1.0.0'
 }

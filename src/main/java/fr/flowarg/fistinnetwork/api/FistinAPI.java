@@ -1,17 +1,22 @@
 package fr.flowarg.fistinnetwork.api;
 
-import fr.flowarg.fistinnetwork.api.plugin.IFistinPlugin;
+import fr.flowarg.fistinnetwork.api.utils.PluginLocation;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
-public class FistinAPI extends JavaPlugin
+public class FistinAPI extends JavaPlugin implements Listener
 {
+	public static final String NAMESPACE = "fistinapi";
 	private static FistinAPI fistinAPI;
 	private FireworkFactory fireworkFactory;
-	private final List<IFistinPlugin> plugins = new ArrayList<>();
-	
+
 	@Override
 	public void onEnable()
 	{
@@ -19,18 +24,34 @@ public class FistinAPI extends JavaPlugin
 		this.getLogger().info("Entering initialization phase...");
 		this.fireworkFactory = new FireworkFactory();
 		this.fireworkFactory.registerBaseFireworks();
-		this.getServer().getScheduler().runTaskLater(this, () -> {
-			this.getLogger().info("Found %d plugins : " + this.plugins.size() + " !");
-			this.plugins.forEach(pl -> this.getLogger().info("Loaded " + pl.getName() + "."));
-		}, 20L);
+	}
+
+	@EventHandler
+	public void onFirstPlayerJoin(PlayerJoinEvent event)
+	{
+		final File file = new File(this.getDataFolder(), "fistinapi.ptdr.t.ki");
+		if(!file.exists())
+		{
+			try
+			{
+				file.getParentFile().mkdirs();
+				file.createNewFile();
+				this.getLogger().info("Welcome in FistinAPI" + this.getDescription().getVersion() + " !");
+				Bukkit.broadcastMessage(ChatColor.DARK_BLUE.toString() + ChatColor.UNDERLINE.toString() + "Welcome in FistinAPI" + this.getDescription().getVersion() + " !");
+				this.fireworkFactory.spawnFirework(new PluginLocation(NAMESPACE, "firstSetup"), event.getPlayer().getLocation(), 5F);
+			} catch (IOException e)
+			{
+				this.getLogger().warning("Cannot create file " + file.getAbsolutePath() + " !");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
 	public void onDisable()
 	{
-		this.getLogger().info("Entering stopping phase...");
+		this.getLogger().info("Disabling FistinAPI...");
 		this.fireworkFactory = null;
-		this.plugins.clear();
 		fistinAPI = null;
 	}
 	
@@ -42,10 +63,5 @@ public class FistinAPI extends JavaPlugin
 	public static FistinAPI getFistinAPI()
 	{
 		return fistinAPI;
-	}
-	
-	public void registerPlugin(IFistinPlugin plugin)
-	{
-		this.plugins.add(plugin);
 	}
 }
