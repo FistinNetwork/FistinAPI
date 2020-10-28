@@ -24,6 +24,7 @@ public class FistinAPI extends JavaPlugin implements Listener
 		this.getLogger().info("Entering initialization phase...");
 		this.fireworkFactory = new FireworkFactory();
 		this.fireworkFactory.registerBaseFireworks();
+		this.getServer().getPluginManager().registerEvents(this, this);
 	}
 
 	@EventHandler

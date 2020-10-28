@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 group 'fr.flowarg.fistinnetwork'
-version '1.1.1'
+version '1.1.2'
 archivesBaseName = "FistinAPI"
 
 compileJava {
