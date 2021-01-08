@@ -1,4 +1,4 @@
-package fr.flowarg.fistinnetwork.api.utils;
+package fr.fistin.api.utils;
 
 import java.util.Objects;
 
@@ -48,14 +48,5 @@ public class PluginLocation
 		if (!Objects.equals(namespace, that.namespace)) return false;
 		if (!Objects.equals(path, that.path)) return false;
 		return Objects.equals(finalPath, that.finalPath);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		int result = namespace != null ? namespace.hashCode() : 0;
-		result = 31 * result + (path != null ? path.hashCode() : 0);
-		result = 31 * result + (finalPath != null ? finalPath.hashCode() : 0);
-		return result;
 	}
 }

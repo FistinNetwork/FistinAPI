@@ -1,4 +1,4 @@
-package fr.flowarg.fistinnetwork.api.plugin;
+package fr.fistin.api.plugin;
 
 public interface IScoreboard
 {

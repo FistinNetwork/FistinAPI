@@ -1,6 +1,6 @@
-package fr.flowarg.fistinnetwork.api;
+package fr.fistin.api;
 
-import fr.flowarg.fistinnetwork.api.utils.PluginLocation;
+import fr.fistin.api.utils.PluginLocation;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -44,5 +44,10 @@ public class FireworkFactory
 	public void spawnFirework(PluginLocation pluginLocation, Location location)
 	{
 		this.spawnFirework(pluginLocation, location, 0);
+	}
+
+	void clear()
+	{
+		this.effects.clear();
 	}
 }

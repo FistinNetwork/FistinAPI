@@ -6,8 +6,8 @@ apply plugin: 'idea'
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
-group 'fr.flowarg.fistinnetwork'
-version '1.1.2'
+group 'fr.fistin'
+version '1.2.0'
 archivesBaseName = "FistinAPI"
 
 compileJava {
@@ -26,11 +26,10 @@ repositories {
         url "https://flowarg.github.io/maven/"
     }
     jcenter()
-    mavenCentral()
 }
 
 shadowJar {
-    configurations = [project.configurations.shadow]
+    configurations = [project.configurations.api]
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -75,5 +74,5 @@ publishing {
 dependencies {
 	implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
-    shadow 'fr.flowarg:sch:1.0.0'
+    api 'fr.flowarg:sch:1.0.0'
 }

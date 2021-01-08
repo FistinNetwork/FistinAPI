@@ -1,6 +1,6 @@
-package fr.flowarg.fistinnetwork.api;
+package fr.fistin.api;
 
-import fr.flowarg.fistinnetwork.api.utils.PluginLocation;
+import fr.fistin.api.utils.PluginLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -51,9 +51,7 @@ public class FistinAPI extends JavaPlugin implements Listener
 	@Override
 	public void onDisable()
 	{
-		this.getLogger().info("Disabling FistinAPI...");
-		this.fireworkFactory = null;
-		fistinAPI = null;
+		this.fireworkFactory.clear();
 	}
 	
 	public FireworkFactory getFireworkFactory()

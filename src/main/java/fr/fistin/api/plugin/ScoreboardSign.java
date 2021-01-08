@@ -1,4 +1,4 @@
-package fr.flowarg.fistinnetwork.api.plugin;
+package fr.fistin.api.plugin;
 
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
