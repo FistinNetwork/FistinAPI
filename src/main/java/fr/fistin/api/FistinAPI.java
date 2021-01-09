@@ -1,21 +1,21 @@
 package fr.fistin.api;
 
-import fr.fistin.api.utils.PluginLocation;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import fr.fistin.api.packets.PacketManager;
+import fr.fistin.api.packets.FReturnToBungeePacket;
+import fr.fistin.api.utils.SetupListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 
-public class FistinAPI extends JavaPlugin implements Listener
+public class FistinAPI extends JavaPlugin
 {
 	public static final String NAMESPACE = "fistinapi";
 	private static FistinAPI fistinAPI;
 	private FireworkFactory fireworkFactory;
+	private PacketManager packetManager;
 
 	@Override
 	public void onEnable()
@@ -24,33 +24,34 @@ public class FistinAPI extends JavaPlugin implements Listener
 		this.getLogger().info("Entering initialization phase...");
 		this.fireworkFactory = new FireworkFactory();
 		this.fireworkFactory.registerBaseFireworks();
-		this.getServer().getPluginManager().registerEvents(this, this);
+		this.packetManager = new PacketManager();
+		this.registerBasePackets();
+		this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
 	}
 
-	@EventHandler
-	public void onFirstPlayerJoin(PlayerJoinEvent event)
+	private void registerBasePackets()
 	{
-		final File file = new File(this.getDataFolder(), "fistinapi.ptdr.t.ki");
-		if(!file.exists())
-		{
+		this.packetManager.registerPacket(FReturnToBungeePacket.class, packet -> {
 			try
 			{
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-				this.getLogger().info("Welcome in FistinAPI" + this.getDescription().getVersion() + " !");
-				Bukkit.broadcastMessage(ChatColor.DARK_BLUE.toString() + ChatColor.UNDERLINE.toString() + "Welcome in FistinAPI" + this.getDescription().getVersion() + " !");
-				this.fireworkFactory.spawnFirework(new PluginLocation(NAMESPACE, "firstSetup"), event.getPlayer().getLocation(), 5F);
-			} catch (IOException e)
-			{
-				this.getLogger().warning("Cannot create file " + file.getAbsolutePath() + " !");
-				e.printStackTrace();
+				final ByteArrayOutputStream byteArray  = new ByteArrayOutputStream();
+				final DataOutputStream out = new DataOutputStream(byteArray);
+
+				out.writeUTF("Connect");
+				out.writeUTF(packet.getServerName());
+				packet.getToSend().sendPluginMessage(packet.getPlugin(), packet.getBungeeCordChannel(), byteArray.toByteArray());
 			}
-		}
+			catch (IOException e)
+			{
+				this.getLogger().log(Level.SEVERE, e.getMessage(), e);
+			}
+		});
 	}
 	
 	@Override
 	public void onDisable()
 	{
+		this.packetManager.stop();
 		this.fireworkFactory.clear();
 	}
 	
@@ -58,7 +59,12 @@ public class FistinAPI extends JavaPlugin implements Listener
 	{
 		return this.fireworkFactory;
 	}
-	
+
+	public PacketManager getPacketManager()
+	{
+		return this.packetManager;
+	}
+
 	public static FistinAPI getFistinAPI()
 	{
 		return fistinAPI;
