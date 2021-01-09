@@ -28,8 +28,12 @@ repositories {
     jcenter()
 }
 
+configurations {
+    shade
+}
+
 shadowJar {
-    configurations = [project.configurations.api]
+    configurations = [project.configurations.shade]
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -72,7 +76,12 @@ publishing {
 }
 
 dependencies {
-	implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
-    api 'fr.flowarg:sch:1.0.0'
+    api('fr.flowarg:sch:1.0.0') {
+        exclude module: 'spigot-api'
+    }
+    shade('fr.flowarg:sch:1.0.0') {
+        exclude module: 'spigot-api'
+    }
 }
