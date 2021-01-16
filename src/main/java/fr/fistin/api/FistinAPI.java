@@ -2,6 +2,7 @@ package fr.fistin.api;
 
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.packets.FReturnToBungeePacket;
+import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.SetupListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,6 +14,8 @@ import java.util.logging.Level;
 public class FistinAPI extends JavaPlugin
 {
 	public static final String NAMESPACE = "fistinapi";
+	public static final String BUNGEE_CORD_CHANNEL = "BungeeCord";
+
 	private static FistinAPI fistinAPI;
 	private FireworkFactory fireworkFactory;
 	private PacketManager packetManager;
@@ -34,7 +37,7 @@ public class FistinAPI extends JavaPlugin
 		this.packetManager.registerPacket(FReturnToBungeePacket.class, packet -> {
 			try
 			{
-				final ByteArrayOutputStream byteArray  = new ByteArrayOutputStream();
+				final ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
 				final DataOutputStream out = new DataOutputStream(byteArray);
 
 				out.writeUTF("Connect");
@@ -53,6 +56,7 @@ public class FistinAPI extends JavaPlugin
 	{
 		this.packetManager.stop();
 		this.fireworkFactory.clear();
+		PluginProviders.clear();
 	}
 	
 	public FireworkFactory getFireworkFactory()

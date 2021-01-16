@@ -1,5 +1,6 @@
 package fr.fistin.api.packets;
 
+import fr.fistin.api.FistinAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,6 +15,14 @@ public class FReturnToBungeePacket implements FistinPacket
     {
         this.plugin = plugin;
         this.bungeeCordChannel = bungeeCordChannel;
+        this.serverName = serverName;
+        this.toSend = toSend;
+    }
+
+    public FReturnToBungeePacket(JavaPlugin plugin, String serverName, Player toSend)
+    {
+        this.plugin = plugin;
+        this.bungeeCordChannel = FistinAPI.BUNGEE_CORD_CHANNEL;
         this.serverName = serverName;
         this.toSend = toSend;
     }

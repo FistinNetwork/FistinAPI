@@ -27,7 +27,7 @@ public class SetupListener implements Listener
                 api.getServer().getScheduler().scheduleSyncDelayedTask(api, () -> {
                     api.getLogger().info("Welcome in FistinAPI" + api.getDescription().getVersion() + " !");
                     Bukkit.broadcastMessage(ChatColor.DARK_BLUE.toString() + ChatColor.UNDERLINE.toString() + "Welcome in FistinAPI " + api.getDescription().getVersion() + " !");
-                    api.getFireworkFactory().spawnFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup"), event.getPlayer().getLocation(), 5F);
+                    api.getFireworkFactory().spawnFirework(PluginLocation.getOrRegisterLocation(FistinAPI.NAMESPACE, "firstSetup"), event.getPlayer().getLocation(), 5F);
                 }, 40L);
             } catch (IOException e)
             {

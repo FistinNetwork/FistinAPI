@@ -20,12 +20,16 @@ public class FireworkFactory
 
 	public void registerFirework(PluginLocation location, Function<FireworkEffect.Builder, FireworkEffect> effect)
 	{
-		this.effects.putIfAbsent(location, effect.apply(this.builder));
+		if(!this.effects.containsKey(location))
+		{
+			FistinAPI.getFistinAPI().getLogger().info("Registered new firework with id (" + location.getFinalPath() + ")");
+			this.effects.put(location, effect.apply(this.builder));
+		}
 	}
 	
 	void registerBaseFireworks()
 	{
-		this.registerFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup"), bd -> bd.flicker(true).trail(true).with(Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
+		this.registerFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
 	}
 	
 	public void spawnFirework(PluginLocation pluginLocation, Location location, double offsetY)
