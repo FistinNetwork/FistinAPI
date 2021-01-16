@@ -3,7 +3,10 @@ package fr.fistin.api;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.plugin.providers.PluginProviders;
+import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.api.utils.SetupListener;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.ByteArrayOutputStream;
@@ -26,14 +29,15 @@ public class FistinAPI extends JavaPlugin
 		fistinAPI = this;
 		this.getLogger().info("Entering initialization phase...");
 		this.fireworkFactory = new FireworkFactory();
-		this.fireworkFactory.registerBaseFireworks();
 		this.packetManager = new PacketManager();
-		this.registerBasePackets();
+		this.registerBaseFeatures();
 		this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
 	}
 
-	private void registerBasePackets()
+	private void registerBaseFeatures()
 	{
+		this.fireworkFactory.registerFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
+
 		this.packetManager.registerPacket(FReturnToBungeePacket.class, packet -> {
 			try
 			{

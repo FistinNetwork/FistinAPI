@@ -27,11 +27,6 @@ public class FireworkFactory
 		}
 	}
 	
-	void registerBaseFireworks()
-	{
-		this.registerFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
-	}
-	
 	public void spawnFirework(PluginLocation pluginLocation, Location location, double offsetY)
 	{
 		final Location location2 = offsetY == 0 ? location : new Location(location.getWorld(), location.getX(), location.getY() + offsetY, location.getZ());
