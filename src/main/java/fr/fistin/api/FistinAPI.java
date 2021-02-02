@@ -1,5 +1,9 @@
 package fr.fistin.api;
 
+import fr.fistin.api.eventbus.IFistinEventExecutor;
+import fr.fistin.api.eventbus.internal.InternalEventBus;
+import fr.fistin.api.eventbus.IFistinEventBus;
+import fr.fistin.api.eventbus.internal.InternalFistinEventExecutor;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.plugin.providers.PluginProviders;
@@ -22,16 +26,26 @@ public class FistinAPI extends JavaPlugin
 	private static FistinAPI fistinAPI;
 	private FireworkFactory fireworkFactory;
 	private PacketManager packetManager;
+	private IFistinEventExecutor eventExecutor;
+	private IFistinEventBus eventBus;
 
 	@Override
 	public void onEnable()
 	{
 		fistinAPI = this;
 		this.getLogger().info("Entering initialization phase...");
+		this.registerEventsFeatures();
 		this.fireworkFactory = new FireworkFactory();
 		this.packetManager = new PacketManager();
 		this.registerBaseFeatures();
 		this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
+	}
+
+	private void registerEventsFeatures()
+	{
+		this.eventExecutor = new InternalFistinEventExecutor();
+		this.eventBus = new InternalEventBus();
+		this.eventExecutor.getRegisterer().addEventBus(this.eventBus);
 	}
 
 	private void registerBaseFeatures()
@@ -61,8 +75,19 @@ public class FistinAPI extends JavaPlugin
 		this.packetManager.stop();
 		this.fireworkFactory.clear();
 		PluginProviders.clear();
+		this.eventExecutor.clear();
 	}
-	
+
+	public IFistinEventBus getEventBus()
+	{
+		return this.eventBus;
+	}
+
+	public IFistinEventExecutor.IFistinEventBusRegisterer getEventRegisterer()
+	{
+		return this.eventExecutor.getRegisterer();
+	}
+
 	public FireworkFactory getFireworkFactory()
 	{
 		return this.fireworkFactory;
