@@ -5,7 +5,7 @@ import fr.fistin.api.plugin.IPlayerGrade;
 public enum PlayerGrades implements IPlayerGrade
 {
     NORMAL("normal", 0),
-    MVP("mvp", 1),
+    VIP("vip", 1),
     STAFF("staff", 2),
     ADMIN("admin", 3);
 
