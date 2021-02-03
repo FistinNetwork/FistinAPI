@@ -1,5 +1,6 @@
 package fr.fistin.api.eventbus.internal;
 
+import fr.fistin.api.utils.Internal;
 import fr.fistin.api.eventbus.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +12,7 @@ import java.util.Set;
  * Normally, developers don't need to check this class.
  * Internal class.
  */
+@Internal
 public final class InternalFistinEventExecutor implements IFistinEventExecutor
 {
     private final Set<IFistinEventBus> eventBuses = new HashSet<>();

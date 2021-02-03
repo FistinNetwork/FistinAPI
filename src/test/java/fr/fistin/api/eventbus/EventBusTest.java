@@ -31,6 +31,7 @@ public class EventBusTest
             }
         });
         executor.handleEvent(new AnotherTestEvent("waaaaaw"));
+        executor.clear();
     }
 
     private static class TestEvent implements IFistinEvent

@@ -1,9 +1,7 @@
 package fr.fistin.api;
 
 import fr.fistin.api.utils.PluginLocation;
-import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;

@@ -1,5 +1,6 @@
 package fr.fistin.api.plugin;
 
+import fr.fistin.api.FistinAPI;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -7,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class ScoreboardSign
 {
@@ -27,10 +29,10 @@ public class ScoreboardSign
             return;
 
         final PlayerConnection playerConnection = this.getPlayerConnection();
-        playerConnection.sendPacket(this.createObjectivePacket(0, this.objectiveName));
+        playerConnection.sendPacket(this.createObjectivePacket(PacketScoreboardMode.CREATE.ordinal(), this.objectiveName));
         playerConnection.sendPacket(this.setObjectiveSlot());
         int i = 0;
-        while (i < lines.length)
+        while (i < this.lines.length)
             this.sendLine(i++);
 
         this.created = true;
@@ -41,8 +43,8 @@ public class ScoreboardSign
         if (!this.created)
             return;
 
-        this.getPlayerConnection().sendPacket(this.createObjectivePacket(1, null));
-        for (VirtualTeam team : lines)
+        this.getPlayerConnection().sendPacket(this.createObjectivePacket(PacketScoreboardMode.REMOVE.ordinal(), null));
+        for (VirtualTeam team : this.lines)
             if (team != null)
                 this.getPlayerConnection().sendPacket(team.removeTeam());
 
@@ -53,7 +55,7 @@ public class ScoreboardSign
     {
         this.objectiveName = name;
         if (this.created)
-            this.getPlayerConnection().sendPacket(this.createObjectivePacket(2, name));
+            this.getPlayerConnection().sendPacket(this.createObjectivePacket(PacketScoreboardMode.UPDATE.ordinal(), name));
     }
 
     public void setLine(int line, String value) 
@@ -79,7 +81,7 @@ public class ScoreboardSign
             this.getPlayerConnection().sendPacket(team.removeTeam());
         }
 
-        lines[line] = null;
+        this.lines[line] = null;
     }
 
     public String getLine(int line)
@@ -102,7 +104,7 @@ public class ScoreboardSign
 
     private PlayerConnection getPlayerConnection()
     {
-        return ((CraftPlayer)player).getHandle().playerConnection;
+        return ((CraftPlayer)this.player).getHandle().playerConnection;
     }
 
     private void sendLine(int line)
@@ -135,7 +137,7 @@ public class ScoreboardSign
     private PacketPlayOutScoreboardObjective createObjectivePacket(int mode, String displayName)
     {
         final PacketPlayOutScoreboardObjective packet = new PacketPlayOutScoreboardObjective();
-        setField(packet, "a", player.getName());
+        setField(packet, "a", this.player.getName());
 
         // Mode
         // 0 : create
@@ -156,7 +158,7 @@ public class ScoreboardSign
     {
         final PacketPlayOutScoreboardDisplayObjective packet = new PacketPlayOutScoreboardDisplayObjective();
         setField(packet, "a", 1);
-        setField(packet, "b", player.getName());
+        setField(packet, "b", this.player.getName());
 
         return packet;
     }
@@ -197,11 +199,6 @@ public class ScoreboardSign
         private VirtualTeam(String name)
         {
             this(name, "", "");
-        }
-
-        public String getName()
-        {
-            return this.name;
         }
 
         public String getPrefix()
@@ -318,7 +315,7 @@ public class ScoreboardSign
             }
             catch (NoSuchFieldException | IllegalAccessException e)
             {
-                e.printStackTrace();
+                FistinAPI.getFistinAPI().getLogger().log(Level.SEVERE, e.getMessage(), e);
             }
 
             return packet;
@@ -354,10 +351,7 @@ public class ScoreboardSign
                 this.setPlayer(value.substring(16, 32));
                 this.setSuffix(value.substring(32));
             }
-            else
-            {
-                throw new IllegalArgumentException("Too long value ! Max 48 characters, value was " + value.length() + " !");
-            }
+            else throw new IllegalArgumentException("Too long value ! Max 48 characters, value was " + value.length() + " !");
         }
     }
 
@@ -371,7 +365,14 @@ public class ScoreboardSign
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
+            FistinAPI.getFistinAPI().getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
+    }
+
+    private enum PacketScoreboardMode
+    {
+        CREATE,
+        REMOVE,
+        UPDATE
     }
 }

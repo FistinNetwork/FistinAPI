@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.File;
 import java.io.IOException;
 
+@Internal
 public class SetupListener implements Listener
 {
     @EventHandler

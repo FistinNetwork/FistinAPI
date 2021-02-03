@@ -10,6 +10,12 @@ group 'fr.fistin'
 version '1.2.2'
 archivesBaseName = "FistinAPI"
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
 compileJava {
     targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
     options.encoding = 'UTF-8'
@@ -21,9 +27,6 @@ repositories {
     }
     maven {
         url "https://hub.spigotmc.org/nexus/content/repositories/public"
-    }
-    maven {
-        url "https://flowarg.github.io/maven/"
     }
     jcenter()
 }
@@ -51,18 +54,18 @@ publishing {
             from components.java
             artifact tasks.sourcesJar
             artifact tasks.shadowJar
-            
+
             pom {
                 groupId = project.group
                 artifactId = 'fistinapi'
                 version = project.version
                 name = 'FistinAPI'
-                description = 'FistinAPI'
+                description = 'An API for FistinNetwork, including some interesting features.'
                 url = 'https://github.com/FistinNetwork/FistinAPI'
             }
         }
     }
-        
+
     repositories {
         maven {
             credentials {

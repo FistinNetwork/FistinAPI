@@ -1,5 +1,6 @@
 package fr.fistin.api.eventbus.internal;
 
+import fr.fistin.api.utils.Internal;
 import fr.fistin.api.eventbus.FistinEventListener;
 import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
@@ -11,6 +12,7 @@ import java.util.Set;
  * Normally, developers don't need to check this class.
  * Internal class.
  */
+@Internal
 public final class InternalEventBus implements IFistinEventBus
 {
     private final Set<Class<? extends IFistinEvent>> registeredEvents = new HashSet<>();

@@ -1,11 +1,12 @@
 package fr.fistin.api;
 
-import fr.fistin.api.eventbus.IFistinEventExecutor;
-import fr.fistin.api.eventbus.internal.InternalEventBus;
 import fr.fistin.api.eventbus.IFistinEventBus;
+import fr.fistin.api.eventbus.IFistinEventExecutor;
+import fr.fistin.api.eventbus.IFistinEventExecutor.IFistinEventBusRegisterer;
+import fr.fistin.api.eventbus.internal.InternalEventBus;
 import fr.fistin.api.eventbus.internal.InternalFistinEventExecutor;
-import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.packets.FReturnToBungeePacket;
+import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.api.utils.SetupListener;
@@ -83,7 +84,7 @@ public class FistinAPI extends JavaPlugin
 		return this.eventBus;
 	}
 
-	public IFistinEventExecutor.IFistinEventBusRegisterer getEventRegisterer()
+	public IFistinEventBusRegisterer getEventRegisterer()
 	{
 		return this.eventExecutor.getRegisterer();
 	}
