@@ -24,10 +24,8 @@ public class PacketManager
 
     private boolean assertStarted()
     {
-        if(this.started)
-            return true;
-        System.err.println("PacketManager isn't started !");
-        return false;
+        if(this.started) return true;
+        else throw new PacketException("PacketManager isn't started !");
     }
 
     public void stop()

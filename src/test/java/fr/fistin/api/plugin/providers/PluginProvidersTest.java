@@ -120,12 +120,6 @@ public class PluginProvidersTest
             }
 
             @Override
-            public IPluginType getPluginType()
-            {
-                return PluginTypes.GAME;
-            }
-
-            @Override
             public String toString()
             {
                 return toString;
@@ -188,12 +182,6 @@ public class PluginProvidersTest
             public int gradeMultiplier(IPlayerGrade grade)
             {
                 return 1;
-            }
-
-            @Override
-            public IPluginType getPluginType()
-            {
-                return PluginTypes.GAME;
             }
 
             @Override

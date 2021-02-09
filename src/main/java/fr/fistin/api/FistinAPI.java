@@ -7,6 +7,8 @@ import fr.fistin.api.eventbus.internal.InternalEventBus;
 import fr.fistin.api.eventbus.internal.InternalFistinEventExecutor;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.PacketManager;
+import fr.fistin.api.plugin.impl.LevelingProvider;
+import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.api.utils.SetupListener;
@@ -51,6 +53,7 @@ public class FistinAPI extends JavaPlugin
 
 	private void registerBaseFeatures()
 	{
+		PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
 		this.fireworkFactory.registerFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
 
 		this.packetManager.registerPacket(FReturnToBungeePacket.class, packet -> {

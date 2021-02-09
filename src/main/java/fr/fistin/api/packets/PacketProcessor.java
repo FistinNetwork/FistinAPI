@@ -28,7 +28,7 @@ final class PacketProcessor
             final Consumer<P> action = (Consumer<P>)this.packets.get(packet.getClass());
             action.accept(packet);
         }
-        else System.err.printf("Unknown packet: %s (%s).%n", packet.toString(), packet.getClass().getName());
+        else throw new PacketException("Unknown packet: %s (%s).%n", packet.toString(), packet.getClass().getName());
     }
 
     final void free()

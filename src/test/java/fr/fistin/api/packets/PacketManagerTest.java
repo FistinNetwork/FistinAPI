@@ -21,7 +21,7 @@ public class PacketManagerTest
         packetManager.stop();
     }
 
-    @Test
+    @Test(expected = PacketException.class)
     public void testSendAfterStop()
     {
         final PacketManager packetManager = new PacketManager();
@@ -31,7 +31,7 @@ public class PacketManagerTest
         assertFalse(this.test);
     }
 
-    @Test
+    @Test(expected = PacketException.class)
     public void testSendUnregisteredPacket()
     {
         final PacketManager packetManager = new PacketManager();

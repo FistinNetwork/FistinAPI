@@ -4,7 +4,8 @@ import fr.fistin.api.plugin.IPluginType;
 
 public enum PluginTypes implements IPluginType
 {
-    GAME("game", 0);
+    GAME("game", 0),
+    UTILITY("utility", 1);
 
     private final String name;
     private final int id;
