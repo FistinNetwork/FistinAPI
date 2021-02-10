@@ -1,5 +1,6 @@
 package fr.fistin.api;
 
+import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.eventbus.IFistinEventBus;
 import fr.fistin.api.eventbus.IFistinEventExecutor;
 import fr.fistin.api.eventbus.IFistinEventExecutor.IFistinEventBusRegisterer;
@@ -31,12 +32,14 @@ public class FistinAPI extends JavaPlugin
 	private PacketManager packetManager;
 	private IFistinEventExecutor eventExecutor;
 	private IFistinEventBus eventBus;
+	private DatabaseManager databaseManager;
 
 	@Override
 	public void onEnable()
 	{
 		fistinAPI = this;
 		this.getLogger().info("Entering initialization phase...");
+		databaseManager = new DatabaseManager();
 		this.registerEventsFeatures();
 		this.fireworkFactory = new FireworkFactory();
 		this.packetManager = new PacketManager();
@@ -76,6 +79,7 @@ public class FistinAPI extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
+		this.databaseManager.close();
 		this.packetManager.stop();
 		this.fireworkFactory.clear();
 		PluginProviders.clear();
