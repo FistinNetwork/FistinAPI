@@ -2,6 +2,7 @@ package fr.fistin.api.plugin.providers;
 
 import fr.fistin.api.plugin.PlayerGrade;
 import fr.fistin.api.plugin.PluginType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotSame;
@@ -12,11 +13,25 @@ public class PluginProvidersTest
     @Test
     public void testOnePluginProvider()
     {
-        final ITNTTagProvider provider = defaultTagProvider("test ok");
+        class X implements IPluginProvider
+        {
+            @Override
+            public String toString()
+            {
+                return "test ok";
+            }
 
-        PluginProviders.setProvider(ITNTTagProvider.class, provider);
+            @Override
+            public PluginType getPluginType()
+            {
+                return PluginType.UTILITY;
+            }
+        }
+        final IPluginProvider provider = new X();
 
-        final ITNTTagProvider fromPluginProviders = PluginProviders.getProvider(ITNTTagProvider.class);
+        PluginProviders.setProvider(IPluginProvider.class, provider);
+
+        final IPluginProvider fromPluginProviders = PluginProviders.getProvider(IPluginProvider.class);
         assertSame(provider, fromPluginProviders);
         assertSame("test ok", fromPluginProviders.toString());
 
@@ -31,7 +46,7 @@ public class PluginProvidersTest
             @Override
             public PluginType getPluginType()
             {
-                return PluginType.GAME;
+                return PluginType.UTILITY;
             }
         }
 
@@ -42,14 +57,92 @@ public class PluginProvidersTest
     @Test
     public void testTwoPluginProviders()
     {
-        final ITNTTagProvider provider = defaultTagProvider("test ok");
-        final IRTFProvider provider1 = defaultRTFProvider();
+        class X implements IPluginProvider
+        {
+            @Override
+            public String toString()
+            {
+                return "test ok";
+            }
 
-        PluginProviders.setProvider(ITNTTagProvider.class, provider);
-        PluginProviders.setProvider(IRTFProvider.class, provider1);
+            @Override
+            public PluginType getPluginType()
+            {
+                return PluginType.UTILITY;
+            }
+        }
+        
+        class Y implements IGamePluginProvider
+        {
+            @Override
+            public String toString()
+            {
+                return "test ok2";
+            }
+            
+            @Override
+            public int xpForWin()
+            {
+                return 0;
+            }
 
-        final ITNTTagProvider fromPluginProviders = PluginProviders.getProvider(ITNTTagProvider.class);
-        final IRTFProvider fromPluginProviders1 = PluginProviders.getProvider(IRTFProvider.class);
+            @Override
+            public int xpForLoose()
+            {
+                return 0;
+            }
+
+            @Override
+            public int coinsForWin()
+            {
+                return 0;
+            }
+
+            @Override
+            public int coinsForLoose()
+            {
+                return 0;
+            }
+
+            @Override
+            public boolean canWinPointsOnWin()
+            {
+                return false;
+            }
+
+            @Override
+            public boolean canWinPointsOnLoose()
+            {
+                return false;
+            }
+
+            @Override
+            public boolean canWinXpOnWin()
+            {
+                return false;
+            }
+
+            @Override
+            public boolean canWinXpOnLoose()
+            {
+                return false;
+            }
+
+            @Override
+            public int gradeMultiplier(PlayerGrade grade)
+            {
+                return 1;
+            }
+        }
+        
+        final IPluginProvider provider = new X();
+        final IGamePluginProvider provider1 = new Y();
+
+        PluginProviders.setProvider(IPluginProvider.class, provider);
+        PluginProviders.setProvider(IGamePluginProvider.class, provider1);
+
+        final IPluginProvider fromPluginProviders = PluginProviders.getProvider(IPluginProvider.class);
+        final IGamePluginProvider fromPluginProviders1 = PluginProviders.getProvider(IGamePluginProvider.class);
 
         assertSame(provider, fromPluginProviders);
         assertSame("test ok", fromPluginProviders.toString());
@@ -63,147 +156,46 @@ public class PluginProvidersTest
     @Test
     public void testImmutableValuesOfMap()
     {
-        final ITNTTagProvider provider = defaultTagProvider("test ok");
-        final ITNTTagProvider provider1 = defaultTagProvider("test ok2");
-
-        PluginProviders.setProvider(ITNTTagProvider.class, provider);
-        PluginProviders.setProvider(ITNTTagProvider.class, provider1);
-
-        final ITNTTagProvider fromPluginProviders = PluginProviders.getProvider(ITNTTagProvider.class);
-
-        assertSame(provider, fromPluginProviders);
-        assertNotSame(provider1, fromPluginProviders);
-
-        PluginProviders.clear();
-    }
-
-    private static ITNTTagProvider defaultTagProvider(String toString)
-    {
-        return new ITNTTagProvider() {
-            @Override
-            public int xpForWin()
-            {
-                return 0;
-            }
-
-            @Override
-            public int xpForLoose()
-            {
-                return 0;
-            }
-
-            @Override
-            public int coinsForWin()
-            {
-                return 0;
-            }
-
-            @Override
-            public int coinsForLoose()
-            {
-                return 0;
-            }
-
-            @Override
-            public boolean canWinPointsOnWin()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinPointsOnLoose()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinXpOnWin()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinXpOnLoose()
-            {
-                return false;
-            }
-
-            @Override
-            public int gradeMultiplier(PlayerGrade grade)
-            {
-                return 1;
-            }
-
+        class X implements IPluginProvider
+        {
             @Override
             public String toString()
             {
-                return toString;
-            }
-        };
-    }
-
-    private static IRTFProvider defaultRTFProvider()
-    {
-        return new IRTFProvider() {
-            @Override
-            public int xpForWin()
-            {
-                return 0;
+                return "test ok";
             }
 
             @Override
-            public int xpForLoose()
+            public PluginType getPluginType()
             {
-                return 0;
+                return PluginType.UTILITY;
             }
-
-            @Override
-            public int coinsForWin()
-            {
-                return 0;
-            }
-
-            @Override
-            public int coinsForLoose()
-            {
-                return 0;
-            }
-
-            @Override
-            public boolean canWinPointsOnWin()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinPointsOnLoose()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinXpOnWin()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinXpOnLoose()
-            {
-                return false;
-            }
-
-            @Override
-            public int gradeMultiplier(PlayerGrade grade)
-            {
-                return 1;
-            }
-
+        }
+        
+        class Y implements IPluginProvider
+        {
             @Override
             public String toString()
             {
                 return "test ok2";
             }
-        };
+
+            @Override
+            public PluginType getPluginType()
+            {
+                return PluginType.UTILITY;
+            }
+        }
+        final IPluginProvider provider = new X();
+        final IPluginProvider provider1 = new Y();
+
+        PluginProviders.setProvider(IPluginProvider.class, provider);
+        PluginProviders.setProvider(IPluginProvider.class, provider1);
+
+        final IPluginProvider fromPluginProviders = PluginProviders.getProvider(IPluginProvider.class);
+
+        assertSame(provider, fromPluginProviders);
+        assertNotSame(provider1, fromPluginProviders);
+
+        PluginProviders.clear();
     }
 }
