@@ -1,5 +1,6 @@
-package fr.fistin.api;
+package fr.fistin.api.plugin.impl;
 
+import fr.fistin.api.database.DatabaseConfiguration;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.eventbus.IFistinEventBus;
 import fr.fistin.api.eventbus.IFistinEventExecutor;
@@ -8,9 +9,11 @@ import fr.fistin.api.eventbus.internal.InternalEventBus;
 import fr.fistin.api.eventbus.internal.InternalFistinEventExecutor;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.PacketManager;
-import fr.fistin.api.plugin.impl.LevelingProvider;
+import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
+import fr.fistin.api.utils.FireworkFactory;
+import fr.fistin.api.utils.Internal;
 import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.api.utils.SetupListener;
 import org.bukkit.Color;
@@ -22,12 +25,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 
-public class FistinAPI extends JavaPlugin
+@Internal
+final class FistinAPIProvider extends JavaPlugin implements IFistinAPIProvider
 {
-	public static final String NAMESPACE = "fistinapi";
-	public static final String BUNGEE_CORD_CHANNEL = "BungeeCord";
-
-	private static FistinAPI fistinAPI;
 	private FireworkFactory fireworkFactory;
 	private PacketManager packetManager;
 	private IFistinEventExecutor eventExecutor;
@@ -37,10 +37,11 @@ public class FistinAPI extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		fistinAPI = this;
 		this.getLogger().info("Entering initialization phase...");
-		databaseManager = new DatabaseManager();
+		this.saveDefaultConfig();
+		this.reloadConfig();
 		this.registerEventsFeatures();
+		this.databaseManager = new DatabaseManager(new DatabaseConfiguration());
 		this.fireworkFactory = new FireworkFactory();
 		this.packetManager = new PacketManager();
 		this.registerBaseFeatures();
@@ -56,8 +57,9 @@ public class FistinAPI extends JavaPlugin
 
 	private void registerBaseFeatures()
 	{
+		PluginProviders.setProvider(IFistinAPIProvider.class, this);
 		PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
-		this.fireworkFactory.registerFirework(new PluginLocation(FistinAPI.NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
+		this.fireworkFactory.registerFirework(new PluginLocation(NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
 
 		this.packetManager.registerPacket(FReturnToBungeePacket.class, packet -> {
 			try
@@ -80,34 +82,39 @@ public class FistinAPI extends JavaPlugin
 	public void onDisable()
 	{
 		this.databaseManager.close();
-		this.packetManager.stop();
+		this.packetManager.clear();
 		this.fireworkFactory.clear();
 		PluginProviders.clear();
 		this.eventExecutor.clear();
 	}
 
+	@Override
 	public IFistinEventBus getEventBus()
 	{
 		return this.eventBus;
 	}
 
+	@Override
 	public IFistinEventBusRegisterer getEventRegisterer()
 	{
 		return this.eventExecutor.getRegisterer();
 	}
 
+	@Override
 	public FireworkFactory getFireworkFactory()
 	{
 		return this.fireworkFactory;
 	}
 
+	@Override
 	public PacketManager getPacketManager()
 	{
 		return this.packetManager;
 	}
 
-	public static FistinAPI getFistinAPI()
+	@Override
+	public DatabaseManager getDatabaseManager()
 	{
-		return fistinAPI;
+		return this.databaseManager;
 	}
 }

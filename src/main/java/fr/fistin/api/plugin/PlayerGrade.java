@@ -1,8 +1,8 @@
-package fr.fistin.api.plugin.impl;
+package fr.fistin.api.plugin;
 
-import fr.fistin.api.plugin.IPlayerGrade;
+import fr.fistin.api.utils.IIdentifiable;
 
-public enum PlayerGrades implements IPlayerGrade
+public enum PlayerGrade implements IIdentifiable
 {
     NORMAL("normal", 0),
     VIP("vip", 1),
@@ -12,7 +12,7 @@ public enum PlayerGrades implements IPlayerGrade
     private final String name;
     private final int id;
 
-    PlayerGrades(String name, int id)
+    PlayerGrade(String name, int id)
     {
         this.name = name;
         this.id = id;

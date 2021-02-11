@@ -1,20 +1,16 @@
 package fr.fistin.api.plugin.impl;
 
-import fr.fistin.api.database.DatabaseManager;
-import fr.fistin.api.database.DbConnection;
 import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.utils.Internal;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 @Internal
-public class LevelingProvider implements ILevelingProvider
+final class LevelingProvider implements ILevelingProvider
 {
     @Override
     public void addExp(Player player, double amount)
     {
-        final UUID uuid = player.getUniqueId();
+        // TODO Access to database and put xp.
     }
 
     @Override

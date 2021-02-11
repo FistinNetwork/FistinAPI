@@ -1,7 +1,6 @@
 package fr.fistin.api.plugin.providers;
 
-import fr.fistin.api.plugin.IPluginType;
-import fr.fistin.api.plugin.impl.PluginTypes;
+import fr.fistin.api.plugin.PluginType;
 import org.bukkit.entity.Player;
 
 public interface ILevelingProvider extends IPluginProvider
@@ -15,8 +14,8 @@ public interface ILevelingProvider extends IPluginProvider
     double getCoins(final Player player);
 
     @Override
-    default IPluginType getPluginType()
+    default PluginType getPluginType()
     {
-        return PluginTypes.UTILITY;
+        return PluginType.UTILITY;
     }
 }

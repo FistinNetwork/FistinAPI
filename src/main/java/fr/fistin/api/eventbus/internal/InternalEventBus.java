@@ -1,9 +1,9 @@
 package fr.fistin.api.eventbus.internal;
 
-import fr.fistin.api.utils.Internal;
 import fr.fistin.api.eventbus.FistinEventListener;
 import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
+import fr.fistin.api.utils.Internal;
 
 import java.util.HashSet;
 import java.util.Set;

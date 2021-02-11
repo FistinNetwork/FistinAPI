@@ -18,7 +18,7 @@ public class PacketManagerTest
         packetManager.registerPacket(ATestPacket.class, aTestPacket -> this.test = false);
         packetManager.sendPacket(new ATestPacket("wawawaw"));
         assertTrue(this.test);
-        packetManager.stop();
+        packetManager.clear();
     }
 
     @Test(expected = PacketException.class)
@@ -26,7 +26,7 @@ public class PacketManagerTest
     {
         final PacketManager packetManager = new PacketManager();
         packetManager.registerPacket(ATestPacket.class, aTestPacket -> this.test = true);
-        packetManager.stop();
+        packetManager.clear();
         packetManager.sendPacket(new ATestPacket("wawawaw"));
         assertFalse(this.test);
     }
@@ -36,7 +36,7 @@ public class PacketManagerTest
     {
         final PacketManager packetManager = new PacketManager();
         packetManager.sendPacket(new ATestPacket("wawawaw"));
-        packetManager.stop();
+        packetManager.clear();
         assertFalse(this.test);
     }
 

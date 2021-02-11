@@ -1,17 +1,17 @@
 package fr.fistin.api.packets;
 
-import fr.fistin.api.FistinAPI;
+import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 public class FReturnToBungeePacket implements FistinPacket
 {
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
     private final String bungeeCordChannel;
     private final String serverName;
     private final Player toSend;
 
-    public FReturnToBungeePacket(JavaPlugin plugin, String bungeeCordChannel, String serverName, Player toSend)
+    public FReturnToBungeePacket(Plugin plugin, String bungeeCordChannel, String serverName, Player toSend)
     {
         this.plugin = plugin;
         this.bungeeCordChannel = bungeeCordChannel;
@@ -19,15 +19,15 @@ public class FReturnToBungeePacket implements FistinPacket
         this.toSend = toSend;
     }
 
-    public FReturnToBungeePacket(JavaPlugin plugin, String serverName, Player toSend)
+    public FReturnToBungeePacket(Plugin plugin, String serverName, Player toSend)
     {
         this.plugin = plugin;
-        this.bungeeCordChannel = FistinAPI.BUNGEE_CORD_CHANNEL;
+        this.bungeeCordChannel = IFistinAPIProvider.BUNGEE_CORD_CHANNEL;
         this.serverName = serverName;
         this.toSend = toSend;
     }
 
-    public JavaPlugin getPlugin()
+    public Plugin getPlugin()
     {
         return this.plugin;
     }
@@ -50,6 +50,6 @@ public class FReturnToBungeePacket implements FistinPacket
     @Override
     public String toString()
     {
-        return "FReturnToBungeePacket{" + "plugin=" + plugin + ", bungeeCordChannel='" + bungeeCordChannel + '\'' + ", serverName='" + serverName + '\'' + ", toSend=" + toSend + '}';
+        return "FReturnToBungeePacket{" + "plugin=" + this.plugin + ", bungeeCordChannel='" + this.bungeeCordChannel + '\'' + ", serverName='" + this.serverName + '\'' + ", toSend=" + this.toSend + '}';
     }
 }

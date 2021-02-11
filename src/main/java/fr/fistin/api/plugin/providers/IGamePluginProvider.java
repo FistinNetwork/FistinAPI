@@ -1,8 +1,7 @@
 package fr.fistin.api.plugin.providers;
 
-import fr.fistin.api.plugin.IPlayerGrade;
-import fr.fistin.api.plugin.IPluginType;
-import fr.fistin.api.plugin.impl.PluginTypes;
+import fr.fistin.api.plugin.PlayerGrade;
+import fr.fistin.api.plugin.PluginType;
 
 public interface IGamePluginProvider extends IPluginProvider
 {
@@ -14,11 +13,11 @@ public interface IGamePluginProvider extends IPluginProvider
     boolean canWinPointsOnLoose();
     boolean canWinXpOnWin();
     boolean canWinXpOnLoose();
-    int gradeMultiplier(IPlayerGrade grade);
+    int gradeMultiplier(PlayerGrade grade);
 
     @Override
-    default IPluginType getPluginType()
+    default PluginType getPluginType()
     {
-        return PluginTypes.GAME;
+        return PluginType.GAME;
     }
 }

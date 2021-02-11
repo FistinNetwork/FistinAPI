@@ -1,6 +1,7 @@
 package fr.fistin.api.utils;
 
-import fr.fistin.api.FistinAPI;
+import fr.fistin.api.plugin.providers.IFistinAPIProvider;
+import fr.fistin.api.plugin.providers.PluginProviders;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -16,7 +17,7 @@ public class SetupListener implements Listener
     @EventHandler
     public void onFirstPlayerJoin(PlayerJoinEvent event)
     {
-        final FistinAPI api = FistinAPI.getFistinAPI();
+        final IFistinAPIProvider api = PluginProviders.getProvider(IFistinAPIProvider.class);
         final File file = new File(api.getDataFolder(), "fistinapi.ptdr.t.ki");
         if(!file.exists())
         {
@@ -28,7 +29,7 @@ public class SetupListener implements Listener
                 api.getServer().getScheduler().scheduleSyncDelayedTask(api, () -> {
                     api.getLogger().info("Welcome in FistinAPI" + api.getDescription().getVersion() + " !");
                     Bukkit.broadcastMessage(ChatColor.DARK_BLUE.toString() + ChatColor.UNDERLINE.toString() + "Welcome in FistinAPI " + api.getDescription().getVersion() + " !");
-                    api.getFireworkFactory().spawnFirework(PluginLocation.getOrRegisterLocation(FistinAPI.NAMESPACE, "firstSetup"), event.getPlayer().getLocation(), 5F);
+                    api.getFireworkFactory().spawnFirework(PluginLocation.getOrRegisterLocation(IFistinAPIProvider.NAMESPACE, "firstSetup"), event.getPlayer().getLocation(), 5F);
                 }, 40L);
             } catch (IOException e)
             {

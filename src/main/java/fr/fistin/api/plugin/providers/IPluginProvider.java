@@ -1,8 +1,8 @@
 package fr.fistin.api.plugin.providers;
 
-import fr.fistin.api.plugin.IPluginType;
+import fr.fistin.api.plugin.PluginType;
 
 public interface IPluginProvider
 {
-    IPluginType getPluginType();
+    PluginType getPluginType();
 }

@@ -1,6 +1,7 @@
 package fr.fistin.api.plugin;
 
-import fr.fistin.api.FistinAPI;
+import fr.fistin.api.plugin.providers.IFistinAPIProvider;
+import fr.fistin.api.plugin.providers.PluginProviders;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -315,7 +316,7 @@ public class ScoreboardSign
             }
             catch (NoSuchFieldException | IllegalAccessException e)
             {
-                FistinAPI.getFistinAPI().getLogger().log(Level.SEVERE, e.getMessage(), e);
+                PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
             }
 
             return packet;
@@ -365,7 +366,7 @@ public class ScoreboardSign
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            FistinAPI.getFistinAPI().getLogger().log(Level.SEVERE, e.getMessage(), e);
+            PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 

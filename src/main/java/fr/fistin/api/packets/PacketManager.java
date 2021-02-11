@@ -28,9 +28,9 @@ public class PacketManager
         else throw new PacketException("PacketManager isn't started !");
     }
 
-    public void stop()
+    public void clear()
     {
-        this.packetProcessor.free();
+        this.packetProcessor.clear();
         this.started = false;
     }
 }

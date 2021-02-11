@@ -1,0 +1,8 @@
+databases:
+  leveling:
+    credentials:
+      user: "root"
+      pass: ""
+    host: "localhost"
+    dbName: "minecraft"
+    port: 3306

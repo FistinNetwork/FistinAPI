@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 group 'fr.fistin'
-version '1.2.2'
+version '1.2.3'
 archivesBaseName = "FistinAPI"
 
 java {
@@ -28,6 +28,7 @@ repositories {
     maven {
         url "https://hub.spigotmc.org/nexus/content/repositories/public"
     }
+    mavenCentral()
     jcenter()
 }
 
@@ -44,8 +45,13 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
 artifacts {
-    archives sourcesJar, shadowJar
+    archives sourcesJar, shadowJar, javadocJar
 }
 
 publishing {
@@ -54,6 +60,7 @@ publishing {
             from components.java
             artifact tasks.sourcesJar
             artifact tasks.shadowJar
+            artifact tasks.javadocJar
 
             pom {
                 groupId = project.group
@@ -82,10 +89,10 @@ dependencies {
     api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     api 'net.luckperms:api:5.2'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
-    api('fr.flowarg:sch:1.0.0') {
+    api('fr.flowarg:sch:1.0.1') {
         exclude module: 'spigot-api'
     }
-    shade('fr.flowarg:sch:1.0.0') {
+    shade('fr.flowarg:sch:1.0.1') {
         exclude module: 'spigot-api'
     }
 }

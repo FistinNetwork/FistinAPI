@@ -1,7 +1,7 @@
 package fr.fistin.api.eventbus.internal;
 
-import fr.fistin.api.utils.Internal;
 import fr.fistin.api.eventbus.*;
+import fr.fistin.api.utils.Internal;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

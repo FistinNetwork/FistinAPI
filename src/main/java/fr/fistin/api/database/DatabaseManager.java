@@ -2,22 +2,29 @@ package fr.fistin.api.database;
 
 import java.sql.SQLException;
 
-public class DatabaseManager {
-    private DbConnection dbConnection;
+public class DatabaseManager
+{
+    private final DBConnection levelingConnection;
 
-    public DatabaseManager() {
-        this.dbConnection = new DbConnection(new DbCredentials("localhost", "root", "", "minecraft", 3306));
+    public DatabaseManager(DatabaseConfiguration configuration)
+    {
+        this.levelingConnection = new DBConnection(new DBCredentials(configuration.getLevelingUser(), configuration.getLevelingPass()), configuration.getLevelingHost(), configuration.getLevelingDbName(), configuration.getLevelingPort());
     }
 
-    public DbConnection getDbConnection() {
-        return dbConnection;
+    public DBConnection getLevelingConnection()
+    {
+        return this.levelingConnection;
     }
 
-    public void close(){
-        try {
-            this.dbConnection.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+    public void close()
+    {
+        try
+        {
+            this.levelingConnection.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
         }
     }
 }

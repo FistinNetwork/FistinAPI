@@ -1,8 +1,6 @@
 package fr.fistin.api.plugin.providers;
 
-import fr.fistin.api.plugin.IPlayerGrade;
-import fr.fistin.api.plugin.IPluginType;
-import fr.fistin.api.plugin.impl.PluginTypes;
+import fr.fistin.api.plugin.PlayerGrade;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotSame;
@@ -114,7 +112,7 @@ public class PluginProvidersTest
             }
 
             @Override
-            public int gradeMultiplier(IPlayerGrade grade)
+            public int gradeMultiplier(PlayerGrade grade)
             {
                 return 1;
             }
@@ -179,7 +177,7 @@ public class PluginProvidersTest
             }
 
             @Override
-            public int gradeMultiplier(IPlayerGrade grade)
+            public int gradeMultiplier(PlayerGrade grade)
             {
                 return 1;
             }

@@ -31,7 +31,7 @@ final class PacketProcessor
         else throw new PacketException("Unknown packet: %s (%s).%n", packet.toString(), packet.getClass().getName());
     }
 
-    final void free()
+    final void clear()
     {
         this.packets.clear();
     }

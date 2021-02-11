@@ -1,8 +1,8 @@
-package fr.fistin.api.plugin.impl;
+package fr.fistin.api.plugin;
 
-import fr.fistin.api.plugin.IPluginType;
+import fr.fistin.api.utils.IIdentifiable;
 
-public enum PluginTypes implements IPluginType
+public enum PluginType implements IIdentifiable
 {
     GAME("game", 0),
     UTILITY("utility", 1);
@@ -10,7 +10,7 @@ public enum PluginTypes implements IPluginType
     private final String name;
     private final int id;
 
-    PluginTypes(String name, int id)
+    PluginType(String name, int id)
     {
         this.name = name;
         this.id = id;
