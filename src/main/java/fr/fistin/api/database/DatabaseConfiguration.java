@@ -3,12 +3,13 @@ package fr.fistin.api.database;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.Internal;
+import fr.flowarg.sch.ConfigurationManager;
 import fr.flowarg.sch.SpigotConfigurationEntry.IntegerEntry;
 import fr.flowarg.sch.SpigotConfigurationEntry.StringEntry;
 import org.bukkit.configuration.file.FileConfiguration;
 
 @Internal
-public class DatabaseConfiguration
+public class DatabaseConfiguration implements ConfigurationManager
 {
     private final FileConfiguration config = PluginProviders.getProvider(IFistinAPIProvider.class).getConfig();
     private final StringEntry levelingUser = new StringEntry("databases.leveling.credentials.user", this.config);
@@ -40,5 +41,23 @@ public class DatabaseConfiguration
     public Integer getLevelingPort()
     {
         return this.levelingPort.get();
+    }
+
+    @Override
+    public void saveConfig()
+    {
+        PluginProviders.getProvider(IFistinAPIProvider.class).saveConfig();
+    }
+
+    @Override
+    public void loadConfig()
+    {
+        PluginProviders.getProvider(IFistinAPIProvider.class).reloadConfig();
+    }
+
+    @Override
+    public FileConfiguration getConfig()
+    {
+        return this.config;
     }
 }

@@ -1,6 +1,7 @@
 package fr.fistin.api.plugin.providers;
 
 import fr.fistin.api.plugin.PlayerGrade;
+import fr.fistin.api.plugin.PluginType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotSame;
@@ -19,6 +20,22 @@ public class PluginProvidersTest
         assertSame(provider, fromPluginProviders);
         assertSame("test ok", fromPluginProviders.toString());
 
+        PluginProviders.clear();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAnObjectProviderInterface()
+    {
+        class X implements IPluginProvider
+        {
+            @Override
+            public PluginType getPluginType()
+            {
+                return PluginType.GAME;
+            }
+        }
+
+        PluginProviders.setProvider(X.class, new X());
         PluginProviders.clear();
     }
 

@@ -1,5 +1,6 @@
 package fr.fistin.api.plugin.impl;
 
+import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.database.DatabaseConfiguration;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.eventbus.IFistinEventBus;
@@ -38,27 +39,33 @@ final class FistinAPIProvider extends JavaPlugin implements IFistinAPIProvider
 	public void onEnable()
 	{
 		this.getLogger().info("Entering initialization phase...");
-		this.saveDefaultConfig();
-		this.reloadConfig();
-		this.registerEventsFeatures();
-		this.databaseManager = new DatabaseManager(new DatabaseConfiguration());
-		this.fireworkFactory = new FireworkFactory();
-		this.packetManager = new PacketManager();
-		this.registerBaseFeatures();
-		this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
+
+		this.preInit();
+		this.init();
+		this.postInit();
 	}
 
-	private void registerEventsFeatures()
+	private void preInit()
+	{
+		this.saveDefaultConfig();
+		this.reloadConfig();
+		PluginProviders.setProvider(IFistinAPIProvider.class, this);
+		PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
+		ConfigurationProviders.setConfig(DatabaseConfiguration.class, new DatabaseConfiguration());
+	}
+
+	private void init()
 	{
 		this.eventExecutor = new InternalFistinEventExecutor();
 		this.eventBus = new InternalEventBus();
-		this.eventExecutor.getRegisterer().addEventBus(this.eventBus);
+		this.databaseManager = new DatabaseManager();
+		this.fireworkFactory = new FireworkFactory();
+		this.packetManager = new PacketManager();
 	}
 
-	private void registerBaseFeatures()
+	private void postInit()
 	{
-		PluginProviders.setProvider(IFistinAPIProvider.class, this);
-		PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
+		this.eventExecutor.getRegisterer().addEventBus(this.eventBus);
 		this.fireworkFactory.registerFirework(new PluginLocation(NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
 
 		this.packetManager.registerPacket(FReturnToBungeePacket.class, packet -> {
@@ -76,6 +83,8 @@ final class FistinAPIProvider extends JavaPlugin implements IFistinAPIProvider
 				this.getLogger().log(Level.SEVERE, e.getMessage(), e);
 			}
 		});
+
+		this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
 	}
 	
 	@Override
@@ -85,6 +94,7 @@ final class FistinAPIProvider extends JavaPlugin implements IFistinAPIProvider
 		this.packetManager.clear();
 		this.fireworkFactory.clear();
 		PluginProviders.clear();
+		ConfigurationProviders.clear();
 		this.eventExecutor.clear();
 	}
 
