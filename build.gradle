@@ -50,6 +50,15 @@ task javadocJar(type: Jar) {
     from javadoc
 }
 
+task deploy(dependsOn: shadowJar) {
+    doLast {
+        copy {
+            from "$buildDir/libs/FistinAPI-" + version + "-all.jar"
+            into "E:\\Bureau\\Leveling Dev\\plugins"
+        }
+    }
+}
+
 artifacts {
     archives sourcesJar, shadowJar, javadocJar
 }

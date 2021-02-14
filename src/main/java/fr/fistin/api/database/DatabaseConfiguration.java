@@ -15,7 +15,7 @@ public class DatabaseConfiguration implements ConfigurationManager
     private final StringEntry levelingUser = new StringEntry("databases.leveling.credentials.user", this.config);
     private final StringEntry levelingPass = new StringEntry("databases.leveling.credentials.pass", this.config);
     private final StringEntry levelingHost = new StringEntry("databases.leveling.host", this.config);
-    private final StringEntry levelingDbName = new StringEntry("databases.leveling.dbname", this.config);
+    private final StringEntry levelingDbName = new StringEntry("databases.leveling.dbName", this.config);
     private final IntegerEntry levelingPort = new IntegerEntry("databases.leveling.port", this.config);
 
     public String getLevelingUser()
