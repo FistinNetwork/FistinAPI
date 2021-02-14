@@ -51,12 +51,11 @@ task javadocJar(type: Jar) {
 }
 
 task deploy(dependsOn: shadowJar) {
-    if("${localServerPluginsDir}" != "null")
-    {
-        doLast {
-            copy {
+    doLast {
+        copy {
+            if(System.getProperty("user.home").contains("Maxime")) {
                 from "$buildDir/libs/FistinAPI-" + version + "-all.jar"
-                into "${localServerPluginsDir}"
+                into "E:\\Bureau\\Leveling Dev\\plugins"
             }
         }
     }
