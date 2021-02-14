@@ -38,4 +38,4 @@ jobs:
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        localServerPluginsDir: null
+        DISABLE_DEPLOY: "true"
