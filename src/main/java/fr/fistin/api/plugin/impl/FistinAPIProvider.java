@@ -95,6 +95,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         this.fireworkFactory.clear();
         PluginProviders.clear();
         ConfigurationProviders.clear();
+        PluginLocation.clear();
         this.eventExecutor.clear();
     }
 

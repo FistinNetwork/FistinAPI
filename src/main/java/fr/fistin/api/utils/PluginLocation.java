@@ -50,6 +50,11 @@ public class PluginLocation
     {
         return getOrRegisterLocation(namespace + ':' + path);
     }
+    
+    public static void clear()
+    {
+        REGISTERED_LOCATIONS.clear();
+    }
 
     private static String downString(String str)
     {
