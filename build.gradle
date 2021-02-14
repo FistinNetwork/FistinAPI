@@ -51,7 +51,7 @@ task javadocJar(type: Jar) {
 }
 
 task deploy(dependsOn: shadowJar) {
-    if(System.getenv("DISABLE_DEPLOY") != "true" && "${localServerPluginsDir}" != null)
+    if("${localServerPluginsDir}" != "null")
     {
         doLast {
             copy {
