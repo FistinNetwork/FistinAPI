@@ -51,12 +51,12 @@ task javadocJar(type: Jar) {
 }
 
 task deploy(dependsOn: shadowJar) {
-    if(localServerPluginsDir != "null")
+    if("${localServerPluginsDir}" != null)
     {
         doLast {
             copy {
                 from "$buildDir/libs/FistinAPI-" + version + "-all.jar"
-                into localServerPluginsDir
+                into "${localServerPluginsDir}"
             }
         }
     }
