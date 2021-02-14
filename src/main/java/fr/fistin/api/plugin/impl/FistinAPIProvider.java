@@ -13,12 +13,14 @@ import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
+import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
 import fr.fistin.api.utils.FireworkFactory;
 import fr.fistin.api.utils.Internal;
 import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.api.utils.SetupListener;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.ByteArrayOutputStream;
@@ -26,6 +28,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 
+/**
+ * Entry point of the FistinAPI, need to be public to be recognized by PluginClassLoader.
+ */
 @Internal
 public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIProvider
 {
@@ -38,7 +43,8 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     @Override
     public void onEnable()
     {
-        this.getLogger().info("Entering initialization phase...");
+        this.getLogger().info("==========================");
+        this.getLogger().info("Hello, Starting Fistin API");
 
         this.preInit();
         this.init();
@@ -90,13 +96,16 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     @Override
     public void onDisable()
     {
-        this.databaseManager.close();
+        this.databaseManager.clear();
         this.packetManager.clear();
         this.fireworkFactory.clear();
+        this.eventExecutor.clear();
         PluginProviders.clear();
         ConfigurationProviders.clear();
         PluginLocation.clear();
-        this.eventExecutor.clear();
+
+        this.getLogger().info("Stopping Fistin API, bye !");
+        this.getLogger().info("==========================");
     }
 
     @Override
@@ -127,5 +136,11 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     public DatabaseManager getDatabaseManager()
     {
         return this.databaseManager;
+    }
+
+    @Override
+    public IScoreboardSign newScoreboardSign(Player player, String objectiveName)
+    {
+        return new ScoreboardSign(player, objectiveName);
     }
 }

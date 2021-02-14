@@ -5,7 +5,9 @@ import fr.fistin.api.eventbus.IFistinEventBus;
 import fr.fistin.api.eventbus.IFistinEventExecutor.IFistinEventBusRegisterer;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.PluginType;
+import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
 import fr.fistin.api.utils.FireworkFactory;
+import org.bukkit.entity.Player;
 
 public interface IFistinAPIProvider extends IPluginProvider, IBukkitPluginProvider
 {
@@ -17,6 +19,7 @@ public interface IFistinAPIProvider extends IPluginProvider, IBukkitPluginProvid
     FireworkFactory getFireworkFactory();
     PacketManager getPacketManager();
     DatabaseManager getDatabaseManager();
+    IScoreboardSign newScoreboardSign(Player player, String objectiveName);
 
     @Override
     default PluginType getPluginType()

@@ -3,31 +3,40 @@ package fr.fistin.api.database;
 import fr.fistin.api.configuration.ConfigurationProviders;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DatabaseManager
 {
-    private final DBConnection levelingConnection;
+    private final Map<String, DBConnection> connectionByName = new HashMap<>();
 
     public DatabaseManager()
     {
         final DatabaseConfiguration configuration = ConfigurationProviders.getConfig(DatabaseConfiguration.class);
-        this.levelingConnection = new DBConnection(new DBCredentials(configuration.getLevelingUser(), configuration.getLevelingPass()), configuration.getLevelingHost(), configuration.getLevelingDbName(), configuration.getLevelingPort());
+        this.addConnection("LevelingConnection", new DBConnection(new DBCredentials(configuration.getLevelingUser(), configuration.getLevelingPass()), configuration.getLevelingHost(), configuration.getLevelingDbName(), configuration.getLevelingPort()));
     }
 
-    public DBConnection getLevelingConnection()
+    public void addConnection(String name, DBConnection connection)
     {
-        return this.levelingConnection;
+        this.connectionByName.putIfAbsent(name, connection);
     }
 
-    public void close()
+    public DBConnection getConnection(String name)
     {
-        try
-        {
-            this.levelingConnection.close();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+        return this.connectionByName.get(name);
+    }
+
+    public void clear()
+    {
+        this.connectionByName.forEach((s, dbConnection) -> {
+            try
+            {
+                dbConnection.close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        });
+        this.connectionByName.clear();
     }
 }

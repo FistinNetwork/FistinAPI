@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 group 'fr.fistin'
-version '1.3.2'
+version '1.3.3'
 archivesBaseName = "FistinAPI"
 
 java {
@@ -51,10 +51,13 @@ task javadocJar(type: Jar) {
 }
 
 task deploy(dependsOn: shadowJar) {
-    doLast {
-        copy {
-            from "$buildDir/libs/FistinAPI-" + version + "-all.jar"
-            into "E:\\Bureau\\Leveling Dev\\plugins"
+    if(localServerPluginsDir != "null")
+    {
+        doLast {
+            copy {
+                from "$buildDir/libs/FistinAPI-" + version + "-all.jar"
+                into localServerPluginsDir
+            }
         }
     }
 }
@@ -98,10 +101,6 @@ dependencies {
     api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     api 'net.luckperms:api:5.2'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
-    api('fr.flowarg:sch:1.0.1') {
-        exclude module: 'spigot-api'
-    }
-    shade('fr.flowarg:sch:1.0.1') {
-        exclude module: 'spigot-api'
-    }
+    api 'fr.flowarg:sch:1.0.1'
+    shade 'fr.flowarg:sch:1.0.1'
 }

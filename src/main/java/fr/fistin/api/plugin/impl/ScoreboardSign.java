@@ -1,7 +1,9 @@
-package fr.fistin.api.plugin;
+package fr.fistin.api.plugin.impl;
 
+import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
+import fr.fistin.api.utils.Internal;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -9,21 +11,24 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
-public class ScoreboardSign
+@Internal
+class ScoreboardSign implements IScoreboardSign
 {
     private boolean created = false;
-    private final VirtualTeam[] lines = new VirtualTeam[15];
+    private final IVirtualTeam[] lines = new IVirtualTeam[15];
     private final Player player;
     private String objectiveName;
 
-    public ScoreboardSign(Player player, String objectiveName)
+    ScoreboardSign(Player player, String objectiveName)
     {
         this.player = player;
         this.objectiveName = objectiveName;
     }
 
+    @Override
     public void create()
     {
         if (this.created)
@@ -39,19 +44,21 @@ public class ScoreboardSign
         this.created = true;
     }
 
+    @Override
     public void destroy()
     {
         if (!this.created)
             return;
 
         this.getPlayerConnection().sendPacket(this.createObjectivePacket(PacketScoreboardMode.REMOVE.ordinal(), null));
-        for (VirtualTeam team : this.lines)
+        for (IVirtualTeam team : this.lines)
             if (team != null)
-                this.getPlayerConnection().sendPacket(team.removeTeam());
+                this.getPlayerConnection().sendPacket((PacketPlayOutScoreboardTeam)team.removeTeam().get());
 
         this.created = false;
     }
 
+    @Override
     public void setObjectiveName(String name)
     {
         this.objectiveName = name;
@@ -59,9 +66,10 @@ public class ScoreboardSign
             this.getPlayerConnection().sendPacket(this.createObjectivePacket(PacketScoreboardMode.UPDATE.ordinal(), name));
     }
 
-    public void setLine(int line, String value) 
+    @Override
+    public void setLine(int line, String value)
     {
-        final VirtualTeam team = this.getOrCreateTeam(line);
+        final IVirtualTeam team = this.getOrCreateTeam(line);
         final String old = team.getCurrentPlayer();
 
         if (old != null && this.created)
@@ -71,20 +79,22 @@ public class ScoreboardSign
         this.sendLine(line);
     }
 
+    @Override
     public void removeLine(int line)
     {
-        final VirtualTeam team = this.getOrCreateTeam(line);
+        final IVirtualTeam team = this.getOrCreateTeam(line);
         final String old = team.getCurrentPlayer();
 
         if (old != null && this.created)
         {
             this.getPlayerConnection().sendPacket(this.removeLine(old));
-            this.getPlayerConnection().sendPacket(team.removeTeam());
+            this.getPlayerConnection().sendPacket((PacketPlayOutScoreboardTeam)team.removeTeam().get());
         }
 
         this.lines[line] = null;
     }
 
+    @Override
     public String getLine(int line)
     {
         if (line > 14)
@@ -94,7 +104,8 @@ public class ScoreboardSign
         return this.getOrCreateTeam(line).getValue();
     }
 
-    public VirtualTeam getTeam(int line)
+    @Override
+    public IVirtualTeam getTeam(int line)
     {
         if (line > 14)
             return null;
@@ -118,16 +129,16 @@ public class ScoreboardSign
             return;
 
         final int score = (15 - line);
-        final VirtualTeam val = getOrCreateTeam(line);
+        final IVirtualTeam val = this.getOrCreateTeam(line);
         
-        for (Packet<?> packet : val.sendLine())
-            this.getPlayerConnection().sendPacket(packet);
+        for (Object packet : val.sendLine())
+            this.getPlayerConnection().sendPacket((PacketPlayOutScoreboardTeam)packet);
         
-        this.getPlayerConnection().sendPacket(sendScore(val.getCurrentPlayer(), score));
+        this.getPlayerConnection().sendPacket(this.sendScore(val.getCurrentPlayer(), score));
         val.reset();
     }
 
-    private VirtualTeam getOrCreateTeam(int line)
+    private IVirtualTeam getOrCreateTeam(int line)
     {
         if (this.lines[line] == null)
             this.lines[line] = new VirtualTeam("__fakeScore" + line);
@@ -179,7 +190,7 @@ public class ScoreboardSign
         return new PacketPlayOutScoreboardScore(line);
     }
 
-    public static class VirtualTeam
+    public static class VirtualTeam implements IVirtualTeam
     {
         private final String name;
         private String prefix;
@@ -202,11 +213,13 @@ public class ScoreboardSign
             this(name, "", "");
         }
 
+        @Override
         public String getPrefix()
         {
             return this.prefix;
         }
 
+        @Override
         public void setPrefix(String prefix)
         {
             if (this.prefix == null || !this.prefix.equals(prefix))
@@ -214,11 +227,13 @@ public class ScoreboardSign
             this.prefix = prefix;
         }
 
+        @Override
         public String getSuffix()
         {
             return this.suffix;
         }
 
+        @Override
         public void setSuffix(String suffix)
         {
             if (this.suffix == null || !this.suffix.equals(prefix))
@@ -241,25 +256,29 @@ public class ScoreboardSign
             return packet;
         }
 
-        public PacketPlayOutScoreboardTeam createTeam()
+        @Override
+        public Supplier<?> createTeam()
         {
-            return this.createPacket(0);
+            return () -> this.createPacket(PacketScoreboardMode.CREATE.ordinal());
         }
 
-        public PacketPlayOutScoreboardTeam updateTeam()
+        @Override
+        public Supplier<?> updateTeam()
         {
-            return this.createPacket(2);
+            return () -> this.createPacket(PacketScoreboardMode.UPDATE.ordinal());
         }
 
-        public PacketPlayOutScoreboardTeam removeTeam()
+        @Override
+        public Supplier<?> removeTeam()
         {
             final PacketPlayOutScoreboardTeam packet = new PacketPlayOutScoreboardTeam();
-            setField(packet, "a", name);
-            setField(packet, "h", 1);
+            setField(packet, "a", this.name);
+            setField(packet, "h", PacketScoreboardMode.REMOVE.ordinal());
             this.first = true;
-            return packet;
+            return () -> packet;
         }
 
+        @Override
         public void setPlayer(String name)
         {
             if (this.currentPlayer == null || !this.currentPlayer.equals(name))
@@ -268,18 +287,19 @@ public class ScoreboardSign
             this.currentPlayer = name;
         }
 
-        public Iterable<PacketPlayOutScoreboardTeam> sendLine()
+        @Override
+        public List<?> sendLine()
         {
             final List<PacketPlayOutScoreboardTeam> packets = new ArrayList<>();
 
-            if (this.first) packets.add(createTeam());
-            else if (this.prefixChanged || this.suffixChanged) packets.add(this.updateTeam());
+            if (this.first) packets.add((PacketPlayOutScoreboardTeam)this.createTeam().get());
+            else if (this.prefixChanged || this.suffixChanged) packets.add((PacketPlayOutScoreboardTeam)this.updateTeam().get());
             
             if (this.first || this.playerChanged)
             {
                 if (this.oldPlayer != null)
-                    packets.add(this.addOrRemovePlayer(4, this.oldPlayer));
-                packets.add(this.changePlayer());
+                    packets.add((PacketPlayOutScoreboardTeam)this.addOrRemovePlayer(4, this.oldPlayer).get());
+                packets.add((PacketPlayOutScoreboardTeam)this.changePlayer().get());
             }
 
             if (this.first) this.first = false;
@@ -287,6 +307,7 @@ public class ScoreboardSign
             return packets;
         }
 
+        @Override
         public void reset()
         {
             this.prefixChanged = false;
@@ -295,13 +316,15 @@ public class ScoreboardSign
             this.oldPlayer = null;
         }
 
-        public PacketPlayOutScoreboardTeam changePlayer()
+        @Override
+        public Supplier<?> changePlayer()
         {
-            return this.addOrRemovePlayer(3, currentPlayer);
+            return this.addOrRemovePlayer(3, this.currentPlayer);
         }
 
         @SuppressWarnings("unchecked")
-        public PacketPlayOutScoreboardTeam addOrRemovePlayer(int mode, String playerName)
+        @Override
+        public Supplier<?> addOrRemovePlayer(int mode, String playerName)
         {
             final PacketPlayOutScoreboardTeam packet = new PacketPlayOutScoreboardTeam();
             
@@ -319,19 +342,22 @@ public class ScoreboardSign
                 PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
             }
 
-            return packet;
+            return () -> packet;
         }
 
+        @Override
         public String getCurrentPlayer()
         {
             return this.currentPlayer;
         }
 
+        @Override
         public String getValue()
         {
             return this.getPrefix() + this.getCurrentPlayer() + this.getSuffix();
         }
 
+        @Override
         public void setValue(String value)
         {
             if (value.length() <= 16)
