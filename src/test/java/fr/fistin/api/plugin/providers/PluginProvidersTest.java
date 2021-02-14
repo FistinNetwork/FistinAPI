@@ -2,7 +2,7 @@ package fr.fistin.api.plugin.providers;
 
 import fr.fistin.api.plugin.PlayerGrade;
 import fr.fistin.api.plugin.PluginType;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotSame;
@@ -79,57 +79,15 @@ public class PluginProvidersTest
             {
                 return "test ok2";
             }
-            
-            @Override
-            public int xpForWin()
-            {
-                return 0;
-            }
 
             @Override
-            public int xpForLoose()
-            {
-                return 0;
-            }
+            public void winGame(Player player) {}
 
             @Override
-            public int coinsForWin()
-            {
-                return 0;
-            }
+            public void looseGame(Player player) {}
 
             @Override
-            public int coinsForLoose()
-            {
-                return 0;
-            }
-
-            @Override
-            public boolean canWinPointsOnWin()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinPointsOnLoose()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinXpOnWin()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean canWinXpOnLoose()
-            {
-                return false;
-            }
-
-            @Override
-            public int gradeMultiplier(PlayerGrade grade)
+            public float gradeMultiplier(PlayerGrade grade)
             {
                 return 1;
             }

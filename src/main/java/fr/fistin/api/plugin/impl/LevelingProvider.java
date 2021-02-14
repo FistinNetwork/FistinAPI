@@ -13,11 +13,11 @@ import java.sql.ResultSet;
 final class LevelingProvider implements ILevelingProvider
 {
     @Override
-    public void addExp(Player player, int amount) throws Exception
+    public void addExp(Player player, int amount, float boost) throws Exception
     {
         PreparedStatement statement = this.createConnection("UPDATE player_levels SET exp = exp+? WHERE uuid = ?");
 
-        statement.setInt(1, amount);
+        statement.setInt(1, Math.round(amount * boost));
         statement.setString(2, String.valueOf(player.getUniqueId()));
         statement.executeUpdate();
     }
@@ -33,11 +33,11 @@ final class LevelingProvider implements ILevelingProvider
     }
 
     @Override
-    public void addCoins(Player player, int amount) throws Exception
+    public void addCoins(Player player, int amount, float boost) throws Exception
     {
         PreparedStatement statement = this.createConnection("UPDATE player_levels SET coins = coins+? WHERE uuid = ?");
 
-        statement.setInt(1, amount);
+        statement.setInt(1, Math.round(amount * boost));
         statement.setString(2, String.valueOf(player.getUniqueId()));
         statement.executeUpdate();
     }

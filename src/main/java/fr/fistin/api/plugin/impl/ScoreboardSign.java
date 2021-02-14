@@ -1,8 +1,8 @@
 package fr.fistin.api.plugin.impl;
 
-import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
+import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
 import fr.fistin.api.utils.Internal;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

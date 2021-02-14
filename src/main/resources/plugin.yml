@@ -9,3 +9,7 @@ authors:
   - Flow Arg (Maintainer)
   - Filouz (Contributor)
   - Faustin (Contributor)
+commands:
+  providers:
+    description: List all loaded providers
+    permission: fistin.staff

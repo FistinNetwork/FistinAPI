@@ -20,6 +20,9 @@ import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.api.utils.SetupListener;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -91,6 +94,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         });
 
         this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
+        this.getCommand("providers").setExecutor(new CommandProviders());
     }
     
     @Override
@@ -142,5 +146,20 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     public IScoreboardSign newScoreboardSign(Player player, String objectiveName)
     {
         return new ScoreboardSign(player, objectiveName);
+    }
+
+    private static class CommandProviders implements CommandExecutor
+    {
+        @Override
+        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+        {
+            if(label.equalsIgnoreCase("providers"))
+            {
+                sender.sendMessage("Loaded PluginProviders: ");
+                PluginProviders.getProvidersClasses().forEach(aClass -> sender.sendMessage("- " + aClass.getName()));
+                return true;
+            }
+            return false;
+        }
     }
 }

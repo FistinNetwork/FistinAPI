@@ -1,6 +1,8 @@
 package fr.fistin.api.plugin.providers;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -19,6 +21,13 @@ public class PluginProviders
         if(providerInterface.isInterface())
             PLUGIN_PROVIDERS.computeIfAbsent(providerInterface, k -> () -> provider);
         else throw new IllegalArgumentException("providerInterface must be an interface !");
+    }
+
+    public static List<Class<? extends IPluginProvider>> getProvidersClasses()
+    {
+        final List<Class<? extends IPluginProvider>> result = new ArrayList<>();
+        PLUGIN_PROVIDERS.forEach((aClass, supplier) -> result.add(aClass));
+        return result;
     }
 
     public static void clear()

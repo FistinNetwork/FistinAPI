@@ -2,18 +2,13 @@ package fr.fistin.api.plugin.providers;
 
 import fr.fistin.api.plugin.PlayerGrade;
 import fr.fistin.api.plugin.PluginType;
+import org.bukkit.entity.Player;
 
 public interface IGamePluginProvider extends IPluginProvider
 {
-    int xpForWin();
-    int xpForLoose();
-    int coinsForWin();
-    int coinsForLoose();
-    boolean canWinPointsOnWin();
-    boolean canWinPointsOnLoose();
-    boolean canWinXpOnWin();
-    boolean canWinXpOnLoose();
-    int gradeMultiplier(PlayerGrade grade);
+    void winGame(Player player);
+    void looseGame(Player player);
+    float gradeMultiplier(PlayerGrade grade);
 
     @Override
     default PluginType getPluginType()
