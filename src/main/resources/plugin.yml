@@ -1,7 +1,11 @@
 name: FistinAPI
-version: 1.3.2
+version: 1.3.3
 main: fr.fistin.api.plugin.impl.FistinAPIProvider
 prefix: FistinAPI
 website: https://fistin.fr
 description: API de FistinNetwork, (c) FlowArg - All rights reserved.
 author: Flow Arg (FlowArg)
+authors:
+  - Flow Arg (Maintainer)
+  - Filouz (Contributor)
+  - Faustin (Contributor)
