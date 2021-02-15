@@ -4,6 +4,7 @@ main: fr.fistin.api.plugin.impl.FistinAPIProvider
 prefix: FistinAPI
 website: https://fistin.fr
 description: API de FistinNetwork, (c) FlowArg - All rights reserved.
+depend: [LuckPerms]
 author: Flow Arg (FlowArg)
 authors:
   - Flow Arg (Maintainer)
