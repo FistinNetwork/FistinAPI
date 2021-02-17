@@ -3,4 +3,4 @@ build
 libs/
 .idea
 out
-gradle.properties
+
