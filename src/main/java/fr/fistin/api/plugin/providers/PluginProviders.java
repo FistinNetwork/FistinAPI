@@ -1,10 +1,10 @@
 package fr.fistin.api.plugin.providers;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class PluginProviders
 {
@@ -23,11 +23,9 @@ public class PluginProviders
         else throw new IllegalArgumentException("providerInterface must be an interface !");
     }
 
-    public static List<Class<? extends IPluginProvider>> getProvidersClasses()
+    public static Set<String> getProvidersName()
     {
-        final List<Class<? extends IPluginProvider>> result = new ArrayList<>();
-        PLUGIN_PROVIDERS.forEach((aClass, supplier) -> result.add(aClass));
-        return result;
+        return PLUGIN_PROVIDERS.keySet().stream().map(Class::getName).collect(Collectors.toSet());
     }
 
     public static void clear()

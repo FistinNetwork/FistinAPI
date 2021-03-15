@@ -90,5 +90,6 @@ dependencies {
     api 'net.luckperms:api:5.2'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
     api 'fr.flowarg:sch:1.0.1'
+    api 'org.jetbrains:annotations:20.1.0'
     shade 'fr.flowarg:sch:1.0.1'
 }

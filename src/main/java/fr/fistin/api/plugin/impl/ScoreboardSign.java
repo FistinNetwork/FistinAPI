@@ -3,10 +3,10 @@ package fr.fistin.api.plugin.impl;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
-import fr.fistin.api.utils.Internal;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
-@Internal
+@ApiStatus.Internal
 class ScoreboardSign implements IScoreboardSign
 {
     private boolean created = false;

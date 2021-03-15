@@ -2,14 +2,12 @@ package fr.fistin.api.database;
 
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
-import fr.fistin.api.utils.Internal;
 import fr.flowarg.sch.ConfigurationManager;
 import fr.flowarg.sch.SpigotConfigurationEntry.IntegerEntry;
 import fr.flowarg.sch.SpigotConfigurationEntry.StringEntry;
 import org.bukkit.configuration.file.FileConfiguration;
 
-@Internal
-public class DatabaseConfiguration implements ConfigurationManager
+public final class DatabaseConfiguration implements ConfigurationManager
 {
     private final FileConfiguration config = PluginProviders.getProvider(IFistinAPIProvider.class).getConfig();
     private final StringEntry levelingUser = new StringEntry("databases.leveling.credentials.user", this.config);

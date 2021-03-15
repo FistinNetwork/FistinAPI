@@ -3,11 +3,9 @@ package fr.fistin.api.plugin.impl;
 import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.database.DatabaseConfiguration;
 import fr.fistin.api.database.DatabaseManager;
+import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
-import fr.fistin.api.eventbus.IFistinEventExecutor;
-import fr.fistin.api.eventbus.IFistinEventExecutor.IFistinEventBusRegisterer;
-import fr.fistin.api.eventbus.internal.InternalEventBus;
-import fr.fistin.api.eventbus.internal.InternalFistinEventExecutor;
+import fr.fistin.api.eventbus.template.DefaultEventBus;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
@@ -15,7 +13,6 @@ import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
 import fr.fistin.api.utils.FireworkFactory;
-import fr.fistin.api.utils.Internal;
 import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.api.utils.SetupListener;
 import org.bukkit.Color;
@@ -25,22 +22,23 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 /**
  * Entry point of the FistinAPI, need to be public to be recognized by PluginClassLoader.
  */
-@Internal
+@ApiStatus.Internal
 public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIProvider
 {
     private FireworkFactory fireworkFactory;
     private PacketManager packetManager;
-    private IFistinEventExecutor eventExecutor;
-    private IFistinEventBus eventBus;
+    private IFistinEventBus<Supplier<? extends IFistinEvent>> eventBus;
     private DatabaseManager databaseManager;
 
     @Override
@@ -65,8 +63,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
 
     private void init()
     {
-        this.eventExecutor = new InternalFistinEventExecutor();
-        this.eventBus = new InternalEventBus();
+        this.eventBus = new DefaultEventBus();
         this.databaseManager = new DatabaseManager();
         this.fireworkFactory = new FireworkFactory();
         this.packetManager = new PacketManager();
@@ -74,7 +71,6 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
 
     private void postInit()
     {
-        this.eventExecutor.getRegisterer().addEventBus(this.eventBus);
         this.fireworkFactory.registerFirework(new PluginLocation(NAMESPACE, "firstSetup", true), bd -> bd.flicker(true).trail(true).with(FireworkEffect.Type.BURST).withColor(Color.PURPLE, Color.BLUE, Color.YELLOW).withFade(Color.ORANGE).build());
 
         this.packetManager.registerPacket(FReturnToBungeePacket.class, packet -> {
@@ -103,7 +99,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         this.databaseManager.clear();
         this.packetManager.clear();
         this.fireworkFactory.clear();
-        this.eventExecutor.clear();
+        this.eventBus.clear();
         PluginProviders.clear();
         ConfigurationProviders.clear();
         PluginLocation.clear();
@@ -113,15 +109,9 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     }
 
     @Override
-    public IFistinEventBus getEventBus()
+    public IFistinEventBus<Supplier<? extends IFistinEvent>> getEventBus()
     {
         return this.eventBus;
-    }
-
-    @Override
-    public IFistinEventBusRegisterer getEventRegisterer()
-    {
-        return this.eventExecutor.getRegisterer();
     }
 
     @Override
@@ -156,7 +146,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
             if(label.equalsIgnoreCase("providers"))
             {
                 sender.sendMessage("Loaded PluginProviders: ");
-                PluginProviders.getProvidersClasses().forEach(aClass -> sender.sendMessage("- " + aClass.getName()));
+                PluginProviders.getProvidersName().forEach(name -> sender.sendMessage("* " + name));
                 return true;
             }
             return false;

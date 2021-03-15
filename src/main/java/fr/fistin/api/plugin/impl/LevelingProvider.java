@@ -3,14 +3,14 @@ package fr.fistin.api.plugin.impl;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
-import fr.fistin.api.utils.Internal;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.logging.Level;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
 
-@Internal
+@ApiStatus.Internal
 final class LevelingProvider implements ILevelingProvider
 {
     @Override

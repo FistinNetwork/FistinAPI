@@ -1,6 +1,6 @@
 package fr.fistin.api.packets;
 
-import fr.fistin.api.utils.Internal;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  * Separate {@link PacketManager} & {@link PacketProcessor}. PacketProcessor is an internal class. Changes may not affect PacketManager class.
  * Immutable class.
  */
-@Internal
+@ApiStatus.Internal
 final class PacketProcessor
 {
     private final Map<Class<? extends FistinPacket>, Consumer<? extends FistinPacket>> packets = new IdentityHashMap<>();

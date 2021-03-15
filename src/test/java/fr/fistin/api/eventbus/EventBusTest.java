@@ -1,17 +1,16 @@
 package fr.fistin.api.eventbus;
 
-import fr.fistin.api.eventbus.internal.InternalEventBus;
-import fr.fistin.api.eventbus.internal.InternalFistinEventExecutor;
+import fr.fistin.api.eventbus.template.DefaultEventBus;
 import org.junit.Test;
+
+import java.util.function.Supplier;
 
 public class EventBusTest
 {
     @Test
     public void testEventBusAPI()
     {
-        final IFistinEventExecutor executor = new InternalFistinEventExecutor();
-        final IFistinEventBus bus = new InternalEventBus();
-        executor.getRegisterer().addEventBus(bus);
+        final IFistinEventBus<Supplier<? extends IFistinEvent>> bus = new DefaultEventBus();
         bus.registerEvent(TestEvent.class);
         bus.registerEvent(AnotherTestEvent.class);
         bus.addListener(new FistinEventListener() {
@@ -21,8 +20,8 @@ public class EventBusTest
                 System.out.println("Handling event " + event.getName() + ", printing: " + event.getToPrint());
             }
         });
-        executor.handleEvent(new TestEvent("waaaaaw"));
-        executor.handleEvent(new AnotherTestEvent("waaaaaw"));
+        bus.handleEvent(() -> new TestEvent("waaaaaw"));
+        bus.handleEvent(() -> new AnotherTestEvent("waaaaaw"));
         bus.addListener(new FistinEventListener() {
             @FistinEventHandler
             public void handleTestEvent(AnotherTestEvent event)
@@ -30,8 +29,8 @@ public class EventBusTest
                 System.out.println("Handling another event " + event.getName() + ", printing: " + event.getToPrint());
             }
         });
-        executor.handleEvent(new AnotherTestEvent("waaaaaw"));
-        executor.clear();
+        bus.handleEvent(() -> new AnotherTestEvent("waaaaaw"));
+        bus.clear();
     }
 
     private static class TestEvent implements IFistinEvent
