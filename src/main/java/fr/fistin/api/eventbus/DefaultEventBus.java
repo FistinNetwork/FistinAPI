@@ -1,9 +1,4 @@
-package fr.fistin.api.eventbus.template;
-
-import fr.fistin.api.eventbus.FistinEventHandler;
-import fr.fistin.api.eventbus.FistinEventListener;
-import fr.fistin.api.eventbus.IFistinEvent;
-import fr.fistin.api.eventbus.IFistinEventBus;
+package fr.fistin.api.eventbus;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

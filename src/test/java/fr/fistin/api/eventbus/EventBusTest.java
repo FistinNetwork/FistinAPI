@@ -1,6 +1,5 @@
 package fr.fistin.api.eventbus;
 
-import fr.fistin.api.eventbus.template.DefaultEventBus;
 import org.junit.Test;
 
 import java.util.function.Supplier;

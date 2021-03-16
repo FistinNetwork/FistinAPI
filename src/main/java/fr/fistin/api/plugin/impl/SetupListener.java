@@ -1,4 +1,4 @@
-package fr.fistin.api.utils;
+package fr.fistin.api.plugin.impl;
 
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
@@ -9,8 +9,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.logging.Level;
 
 @ApiStatus.Internal
 public class SetupListener implements Listener
@@ -19,14 +21,16 @@ public class SetupListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         final IFistinAPIProvider api = PluginProviders.getProvider(IFistinAPIProvider.class);
-        //First add to database
         try {
-            Connection connection = api.getDatabaseManager().getConnection("LevelingConnection").getConnection();
-            Statement statement = connection.createStatement();
-            if(!this.isPlayerExist(event.getPlayer(), statement))
-                statement.execute(String.format("INSERT INTO player_levels (uuid, exp, coins) VALUES ('%s', 0, 0)", event.getPlayer().getUniqueId().toString()));
+            final Connection connection = api.getDatabaseManager().getConnection("LevelingConnection").getConnection();
+            if(!this.isPlayerExist(event.getPlayer(), connection.createStatement()))
+            {
+                final PreparedStatement statement = connection.prepareStatement("INSERT INTO player_levels (uuid, exp, coins) VALUES (?, 0, 0)");
+                statement.setString(1, event.getPlayer().getUniqueId().toString());
+                statement.executeUpdate();
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            api.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
