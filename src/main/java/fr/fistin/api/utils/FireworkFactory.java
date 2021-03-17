@@ -15,14 +15,13 @@ import java.util.function.Function;
 public class FireworkFactory
 {
 	private final Map<PluginLocation, FireworkEffect> effects = new HashMap<>();
-	private final FireworkEffect.Builder builder = FireworkEffect.builder();
 
 	public void registerFirework(PluginLocation location, Function<FireworkEffect.Builder, FireworkEffect> effect)
 	{
 		if(!this.effects.containsKey(location))
 		{
 			PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().info("Registered new firework with id (" + location.getFinalPath() + ")");
-			this.effects.put(location, effect.apply(this.builder));
+			this.effects.put(location, effect.apply(FireworkEffect.builder()));
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package fr.fistin.api.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class IdentifiableTest
@@ -28,7 +29,7 @@ public class IdentifiableTest
         }
 
         @Override
-        public String getName()
+        public @NotNull String getName()
         {
             return this.name;
         }

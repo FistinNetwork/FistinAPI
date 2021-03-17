@@ -1,6 +1,8 @@
 package fr.fistin.api.eventbus;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface IFistinEvent
 {
-    String getName();
+    @NotNull String getName();
 }

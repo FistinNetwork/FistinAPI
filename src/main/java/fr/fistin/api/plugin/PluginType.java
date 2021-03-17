@@ -1,6 +1,7 @@
 package fr.fistin.api.plugin;
 
 import fr.fistin.api.utils.IIdentifiable;
+import org.jetbrains.annotations.NotNull;
 
 public enum PluginType implements IIdentifiable
 {
@@ -17,7 +18,7 @@ public enum PluginType implements IIdentifiable
     }
 
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return this.name;
     }

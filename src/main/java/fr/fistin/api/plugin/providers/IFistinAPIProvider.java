@@ -3,11 +3,14 @@ package fr.fistin.api.plugin.providers;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
+import fr.fistin.api.item.IFistinItems;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.PluginType;
 import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
+import fr.fistin.api.smartinvs.InventoryManager;
 import fr.fistin.api.utils.FireworkFactory;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -16,14 +19,16 @@ public interface IFistinAPIProvider extends IPluginProvider, IBukkitPluginProvid
     String NAMESPACE = "fistinapi";
     String BUNGEE_CORD_CHANNEL = "BungeeCord";
 
-    IFistinEventBus<Supplier<? extends IFistinEvent>> getEventBus();
-    FireworkFactory getFireworkFactory();
-    PacketManager getPacketManager();
-    DatabaseManager getDatabaseManager();
-    IScoreboardSign newScoreboardSign(Player player, String objectiveName);
+    @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> getEventBus();
+    @NotNull FireworkFactory getFireworkFactory();
+    @NotNull PacketManager getPacketManager();
+    @NotNull DatabaseManager getDatabaseManager();
+    @NotNull IScoreboardSign newScoreboardSign(Player player, String objectiveName);
+    @NotNull InventoryManager smartInvsManager();
+    @NotNull IFistinItems items();
 
     @Override
-    default PluginType getPluginType()
+    default @NotNull PluginType getPluginType()
     {
         return PluginType.UTILITY;
     }

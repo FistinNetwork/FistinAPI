@@ -1,24 +1,27 @@
 package fr.fistin.api.eventbus;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFistinEvent>>
 {
+    private static final List<EventExecution> EVENT_EXECUTIONS = new ArrayList<>();
+
     private final Set<Class<? extends IFistinEvent>> registeredEvents = new HashSet<>();
     private final Set<FistinEventListener> listeners = new HashSet<>();
 
     @Override
-    public Set<Class<? extends IFistinEvent>> getRegisteredEvents()
+    public @NotNull Set<Class<? extends IFistinEvent>> getRegisteredEvents()
     {
         return this.registeredEvents;
     }
 
     @Override
-    public Set<FistinEventListener> getListeners()
+    public @NotNull Set<FistinEventListener> getListeners()
     {
         return this.listeners;
     }
@@ -38,17 +41,18 @@ public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFist
     @Override
     public void handleEvent(Supplier<? extends IFistinEvent> eventSup)
     {
+        EVENT_EXECUTIONS.add(new EventExecution(eventSup.get().getName(), System.currentTimeMillis()));
         final IFistinEvent event = eventSup.get();
         if(this.registeredEvents.contains(event.getClass()))
         {
             this.listeners.forEach(listener -> {
                 final Class<? extends FistinEventListener> clazz = listener.getClass();
-                for (Method method : clazz.getDeclaredMethods())
-                {
-                    if (method.isAnnotationPresent(FistinEventHandler.class))
-                    {
-                        if (method.getParameterCount() == 1 && method.getParameterTypes()[0] == event.getClass())
-                        {
+                Arrays.stream(clazz.getDeclaredMethods())
+                        .filter(method -> method.isAnnotationPresent(FistinEventHandler.class))
+                        .filter(method -> method.getParameterCount() == 1)
+                        .filter(method -> method.getParameterTypes()[0] == event.getClass())
+                        .collect(Collectors.toList())
+                        .forEach(method -> {
                             try
                             {
                                 method.setAccessible(true);
@@ -57,9 +61,7 @@ public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFist
                             {
                                 throw new RuntimeException(e);
                             }
-                        }
-                    }
-                }
+                        });
             });
         }
     }
@@ -69,5 +71,32 @@ public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFist
     {
         this.registeredEvents.clear();
         this.listeners.clear();
+    }
+
+    public static List<EventExecution> getEventExecutions()
+    {
+        return EVENT_EXECUTIONS;
+    }
+
+    public static class EventExecution
+    {
+        private final String name;
+        private final long timestamp;
+
+        public EventExecution(String name, long timestamp)
+        {
+            this.name = name;
+            this.timestamp = timestamp;
+        }
+
+        public String getName()
+        {
+            return this.name;
+        }
+
+        public long getTimestamp()
+        {
+            return this.timestamp;
+        }
     }
 }

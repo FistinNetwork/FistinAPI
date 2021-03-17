@@ -1,7 +1,9 @@
 package fr.fistin.api.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface IIdentifiable
 {
-    String getName();
+    @NotNull String getName();
     int getID();
 }

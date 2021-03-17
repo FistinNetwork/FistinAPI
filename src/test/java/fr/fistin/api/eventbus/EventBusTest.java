@@ -1,5 +1,6 @@
 package fr.fistin.api.eventbus;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.util.function.Supplier;
@@ -47,7 +48,7 @@ public class EventBusTest
         }
 
         @Override
-        public String getName()
+        public @NotNull String getName()
         {
             return "TestEvent";
         }
@@ -68,7 +69,7 @@ public class EventBusTest
         }
 
         @Override
-        public String getName()
+        public @NotNull String getName()
         {
             return "AnotherTestEvent";
         }

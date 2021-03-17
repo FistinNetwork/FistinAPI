@@ -2,6 +2,7 @@ package fr.fistin.api.plugin.providers;
 
 import fr.fistin.api.plugin.PluginType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public interface ILevelingProvider extends IPluginProvider
 {
@@ -14,7 +15,7 @@ public interface ILevelingProvider extends IPluginProvider
     int getCoins(final Player player);
 
     @Override
-    default PluginType getPluginType()
+    default @NotNull PluginType getPluginType()
     {
         return PluginType.UTILITY;
     }

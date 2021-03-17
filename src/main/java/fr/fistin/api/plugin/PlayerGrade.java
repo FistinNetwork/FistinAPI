@@ -1,6 +1,7 @@
 package fr.fistin.api.plugin;
 
 import fr.fistin.api.utils.IIdentifiable;
+import org.jetbrains.annotations.NotNull;
 
 public enum PlayerGrade implements IIdentifiable
 {
@@ -19,7 +20,7 @@ public enum PlayerGrade implements IIdentifiable
     }
 
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return this.name;
     }

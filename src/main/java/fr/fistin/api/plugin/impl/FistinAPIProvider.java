@@ -3,25 +3,25 @@ package fr.fistin.api.plugin.impl;
 import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.database.DatabaseConfiguration;
 import fr.fistin.api.database.DatabaseManager;
+import fr.fistin.api.eventbus.DefaultEventBus;
 import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
-import fr.fistin.api.eventbus.DefaultEventBus;
+import fr.fistin.api.item.IFistinItems;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.plugin.scoreboard.IScoreboardSign;
+import fr.fistin.api.smartinvs.InventoryManager;
 import fr.fistin.api.utils.FireworkFactory;
 import fr.fistin.api.utils.PluginLocation;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -39,6 +39,8 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     private PacketManager packetManager;
     private IFistinEventBus<Supplier<? extends IFistinEvent>> eventBus;
     private DatabaseManager databaseManager;
+    private InventoryManager smartInvsManager;
+    private IFistinItems items;
 
     @Override
     public void onEnable()
@@ -66,6 +68,9 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         this.databaseManager = new DatabaseManager();
         this.fireworkFactory = new FireworkFactory();
         this.packetManager = new PacketManager();
+        this.items = new FistinItemsImpl();
+        this.smartInvsManager = new InventoryManager(this);
+        this.smartInvsManager.init();
     }
 
     private void postInit()
@@ -89,7 +94,15 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         });
 
         this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
-        this.getCommand("providers").setExecutor(new CommandProviders());
+        this.getCommand("providers").setExecutor((sender, cmd, label, args) -> {
+            if(label.equalsIgnoreCase("providers"))
+            {
+                sender.sendMessage("-- PluginProviders --");
+                PluginProviders.getProvidersName().forEach(name -> sender.sendMessage("* " + name));
+                return true;
+            }
+            return false;
+        });
     }
     
     @Override
@@ -108,47 +121,44 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     }
 
     @Override
-    public IFistinEventBus<Supplier<? extends IFistinEvent>> getEventBus()
+    public @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> getEventBus()
     {
         return this.eventBus;
     }
 
     @Override
-    public FireworkFactory getFireworkFactory()
+    public @NotNull FireworkFactory getFireworkFactory()
     {
         return this.fireworkFactory;
     }
 
     @Override
-    public PacketManager getPacketManager()
+    public @NotNull PacketManager getPacketManager()
     {
         return this.packetManager;
     }
 
     @Override
-    public DatabaseManager getDatabaseManager()
+    public @NotNull DatabaseManager getDatabaseManager()
     {
         return this.databaseManager;
     }
 
     @Override
-    public IScoreboardSign newScoreboardSign(Player player, String objectiveName)
+    public @NotNull IScoreboardSign newScoreboardSign(Player player, String objectiveName)
     {
         return new ScoreboardSign(player, objectiveName);
     }
 
-    private static class CommandProviders implements CommandExecutor
+    @Override
+    public @NotNull InventoryManager smartInvsManager()
     {
-        @Override
-        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
-        {
-            if(label.equalsIgnoreCase("providers"))
-            {
-                sender.sendMessage("Loaded PluginProviders: ");
-                PluginProviders.getProvidersName().forEach(name -> sender.sendMessage("* " + name));
-                return true;
-            }
-            return false;
-        }
+        return this.smartInvsManager;
+    }
+
+    @Override
+    public @NotNull IFistinItems items()
+    {
+        return this.items;
     }
 }
