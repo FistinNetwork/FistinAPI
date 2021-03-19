@@ -15,13 +15,13 @@ public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFist
     private final Set<FistinEventListener> listeners = new HashSet<>();
 
     @Override
-    public @NotNull Set<Class<? extends IFistinEvent>> getRegisteredEvents()
+    public @NotNull Set<Class<? extends IFistinEvent>> registeredEvents()
     {
         return this.registeredEvents;
     }
 
     @Override
-    public @NotNull Set<FistinEventListener> getListeners()
+    public @NotNull Set<FistinEventListener> listeners()
     {
         return this.listeners;
     }
@@ -71,6 +71,12 @@ public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFist
     {
         this.registeredEvents.clear();
         this.listeners.clear();
+    }
+
+    @Override
+    public String implName()
+    {
+        return "default";
     }
 
     public static List<EventExecution> getEventExecutions()

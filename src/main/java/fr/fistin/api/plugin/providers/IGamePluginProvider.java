@@ -12,7 +12,7 @@ public interface IGamePluginProvider extends IPluginProvider
     float gradeMultiplier(PlayerGrade grade);
 
     @Override
-    default @NotNull PluginType getPluginType()
+    default @NotNull PluginType pluginType()
     {
         return PluginType.GAME;
     }

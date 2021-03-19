@@ -32,6 +32,6 @@ public class PluginLocationTest
         final PluginLocation loc = new PluginLocation("test", "junit", true);
         testMap.put(loc, "aValue");
 
-        assertEquals(testMap.get(PluginLocation.getOrRegisterLocation("test", "junit")), testMap.get(loc));
+        assertEquals(testMap.get(PluginLocation.getLocation("test", "junit")), testMap.get(loc));
     }
 }

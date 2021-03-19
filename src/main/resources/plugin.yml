@@ -1,16 +1,22 @@
 name: FistinAPI
-version: 1.3.6
-main: fr.fistin.api.plugin.impl.FistinAPIProvider
+version: 1.4.0
+main: fr.fistin.api.impl.FistinAPIProvider
 prefix: FistinAPI
 website: https://fistin.fr
 description: API de FistinNetwork, (c) FlowArg - All rights reserved.
 depend: [LuckPerms]
+load: POSTWORLD
 author: Flow Arg (FlowArg)
 authors:
   - Flow Arg (Maintainer)
   - Filouz (Contributor)
   - Faustin (Contributor)
 commands:
-  providers:
-    description: List all loaded providers
+  fistindebug:
+    description: FistinDebug command
     permission: fistin.staff
+    usage: /fistindebug items|fireworks|events [implBusName]|providers
+  fgive:
+    description: FistinGive command
+    permission: fistin.staff
+    usage: /fgive [item]

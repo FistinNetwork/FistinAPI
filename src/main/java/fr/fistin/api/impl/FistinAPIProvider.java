@@ -1,4 +1,4 @@
-package fr.fistin.api.plugin.impl;
+package fr.fistin.api.impl;
 
 import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.database.DatabaseConfiguration;
@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
@@ -57,6 +58,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     {
         this.saveDefaultConfig();
         this.reloadConfig();
+
         PluginProviders.setProvider(IFistinAPIProvider.class, this);
         PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
         ConfigurationProviders.setConfig(DatabaseConfiguration.class, new DatabaseConfiguration());
@@ -94,12 +96,19 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         });
 
         this.getServer().getPluginManager().registerEvents(new SetupListener(), this);
-        this.getCommand("providers").setExecutor((sender, cmd, label, args) -> {
-            if(label.equalsIgnoreCase("providers"))
+        this.getServer().getPluginManager().registerEvents(new ItemListener(), this);
+        this.getCommand("fistindebug").setExecutor(new DebugCommand(this));
+        this.getCommand("fgive").setExecutor((sender, command, label, args) -> {
+            if(args.length == 1)
             {
-                sender.sendMessage("-- PluginProviders --");
-                PluginProviders.getProvidersName().forEach(name -> sender.sendMessage("* " + name));
-                return true;
+                if(sender instanceof Player)
+                {
+                    final PluginLocation loc = PluginLocation.getLocation(args[0]);
+                    if(loc != null)
+                        ((Player)sender).getInventory().addItem(this.items.getItem(loc).enclosingItem());
+                    else sender.sendMessage("Item name not valid!");
+                    return true;
+                }
             }
             return false;
         });
@@ -112,34 +121,47 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         this.packetManager.clear();
         this.fireworkFactory.clear();
         this.eventBus.clear();
+        this.items.clear();
+
         PluginProviders.clear();
         ConfigurationProviders.clear();
         PluginLocation.clear();
 
-        this.getLogger().info("Stopping Fistin API, bye !");
+        try
+        {
+            final Field cache = Cache.class.getDeclaredField("cache");
+            cache.setAccessible(true);
+            cache.set(null, null);
+        }
+        catch (Exception e)
+        {
+            this.getLogger().log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        this.getLogger().info("Stopped Fistin API, bye !");
         this.getLogger().info("==========================");
     }
 
     @Override
-    public @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> getEventBus()
+    public @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> eventBus()
     {
         return this.eventBus;
     }
 
     @Override
-    public @NotNull FireworkFactory getFireworkFactory()
+    public @NotNull FireworkFactory fireworkFactory()
     {
         return this.fireworkFactory;
     }
 
     @Override
-    public @NotNull PacketManager getPacketManager()
+    public @NotNull PacketManager packetManager()
     {
         return this.packetManager;
     }
 
     @Override
-    public @NotNull DatabaseManager getDatabaseManager()
+    public @NotNull DatabaseManager databaseManager()
     {
         return this.databaseManager;
     }

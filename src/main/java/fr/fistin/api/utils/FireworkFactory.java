@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class FireworkFactory
@@ -46,5 +47,10 @@ public class FireworkFactory
 	public void clear()
 	{
 		this.effects.clear();
+	}
+
+	public Set<PluginLocation> effectsLocation()
+	{
+		return this.effects.keySet();
 	}
 }

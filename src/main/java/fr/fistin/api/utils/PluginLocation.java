@@ -37,18 +37,15 @@ public class PluginLocation
         if(register) REGISTERED_LOCATIONS.putIfAbsent(this.finalPath, this);
     }
 
-    public static PluginLocation getOrRegisterLocation(String finalPath)
+    public static PluginLocation getLocation(String finalPath)
     {
         final String okString = downString(finalPath);
-        PluginLocation location = REGISTERED_LOCATIONS.get(okString);
-        if(location == null)
-            location = new PluginLocation(okString, true);
-        return location;
+        return REGISTERED_LOCATIONS.get(okString);
     }
 
-    public static PluginLocation getOrRegisterLocation(String namespace, String path)
+    public static PluginLocation getLocation(String namespace, String path)
     {
-        return getOrRegisterLocation(namespace + ':' + path);
+        return getLocation(namespace + ':' + path);
     }
     
     public static void clear()

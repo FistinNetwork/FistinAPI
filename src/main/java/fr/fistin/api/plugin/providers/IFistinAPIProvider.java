@@ -14,21 +14,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public interface IFistinAPIProvider extends IPluginProvider, IBukkitPluginProvider
+public interface IFistinAPIProvider extends IBukkitPluginProvider
 {
     String NAMESPACE = "fistinapi";
     String BUNGEE_CORD_CHANNEL = "BungeeCord";
 
-    @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> getEventBus();
-    @NotNull FireworkFactory getFireworkFactory();
-    @NotNull PacketManager getPacketManager();
-    @NotNull DatabaseManager getDatabaseManager();
+    @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> eventBus();
+    @NotNull FireworkFactory fireworkFactory();
+    @NotNull PacketManager packetManager();
+    @NotNull DatabaseManager databaseManager();
     @NotNull IScoreboardSign newScoreboardSign(Player player, String objectiveName);
     @NotNull InventoryManager smartInvsManager();
     @NotNull IFistinItems items();
 
     @Override
-    default @NotNull PluginType getPluginType()
+    default @NotNull PluginType pluginType()
     {
         return PluginType.UTILITY;
     }

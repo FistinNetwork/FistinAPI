@@ -1,9 +1,12 @@
 package fr.fistin.api.database;
 
+import fr.fistin.api.plugin.providers.IFistinAPIProvider;
+import fr.fistin.api.plugin.providers.PluginProviders;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class DBConnection
 {
@@ -19,7 +22,6 @@ public class DBConnection
         this.host = host;
         this.dbName = dbName;
         this.port = port;
-        this.connect();
     }
 
     private void connect()
@@ -28,12 +30,10 @@ public class DBConnection
         {
             Class.forName("com.mysql.jdbc.Driver");
             this.connection = DriverManager.getConnection(this.toURI(), this.dbCredentials.getUser(), this.dbCredentials.getPass());
-
-            Logger.getLogger("Minecraft").info("Connected to the DB !");
         }
         catch (SQLException | ClassNotFoundException e)
         {
-            e.printStackTrace();
+            PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -47,7 +47,7 @@ public class DBConnection
         if(this.connection != null) if(!this.connection.isClosed()) this.connection.close();
     }
 
-    public Connection getConnection() throws SQLException
+    public Connection connection() throws SQLException
     {
         if(this.connection != null) if(!this.connection.isClosed()) return this.connection;
 

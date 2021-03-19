@@ -1,4 +1,4 @@
-package fr.fistin.api.plugin.impl;
+package fr.fistin.api.impl;
 
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;

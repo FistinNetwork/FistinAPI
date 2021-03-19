@@ -3,6 +3,7 @@ package fr.fistin.api.plugin.providers;
 import fr.fistin.api.plugin.PlayerGrade;
 import fr.fistin.api.plugin.PluginType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotSame;
@@ -22,7 +23,7 @@ public class PluginProvidersTest
             }
 
             @Override
-            public PluginType getPluginType()
+            public @NotNull PluginType pluginType()
             {
                 return PluginType.UTILITY;
             }
@@ -44,7 +45,7 @@ public class PluginProvidersTest
         class X implements IPluginProvider
         {
             @Override
-            public PluginType getPluginType()
+            public @NotNull PluginType pluginType()
             {
                 return PluginType.UTILITY;
             }
@@ -66,7 +67,7 @@ public class PluginProvidersTest
             }
 
             @Override
-            public PluginType getPluginType()
+            public @NotNull PluginType pluginType()
             {
                 return PluginType.UTILITY;
             }
@@ -123,7 +124,7 @@ public class PluginProvidersTest
             }
 
             @Override
-            public PluginType getPluginType()
+            public @NotNull PluginType pluginType()
             {
                 return PluginType.UTILITY;
             }
@@ -138,7 +139,7 @@ public class PluginProvidersTest
             }
 
             @Override
-            public PluginType getPluginType()
+            public @NotNull PluginType pluginType()
             {
                 return PluginType.UTILITY;
             }

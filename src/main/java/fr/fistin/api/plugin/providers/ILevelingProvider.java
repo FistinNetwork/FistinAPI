@@ -15,7 +15,7 @@ public interface ILevelingProvider extends IPluginProvider
     int getCoins(final Player player);
 
     @Override
-    default @NotNull PluginType getPluginType()
+    default @NotNull PluginType pluginType()
     {
         return PluginType.UTILITY;
     }
