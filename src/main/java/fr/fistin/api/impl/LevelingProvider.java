@@ -4,6 +4,7 @@ import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.TriFunction;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +23,7 @@ final class LevelingProvider implements ILevelingProvider
 {
     private static final Consumer<Throwable> EXCEPTION_CATCHER = e -> PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
 
-    private static final TriFunction<Integer, Float, Player, Consumer<PreparedStatement>> ADD_BY_PLAYER_REQUEST = (amount, boost, player) -> statement -> {
+    private static final TriFunction<Integer, Float, OfflinePlayer, Consumer<PreparedStatement>> ADD_BY_PLAYER_REQUEST = (amount, boost, player) -> statement -> {
         try
         {
             statement.setInt(1, Math.round(amount * boost));
@@ -35,7 +36,7 @@ final class LevelingProvider implements ILevelingProvider
         }
     };
 
-    private static final BiFunction<Integer, Player, Consumer<PreparedStatement>> REMOVE_BY_PLAYER_REQUEST = (amount, player) -> statement -> {
+    private static final BiFunction<Integer, OfflinePlayer, Consumer<PreparedStatement>> REMOVE_BY_PLAYER_REQUEST = (amount, player) -> statement -> {
         try
         {
             statement.setInt(1, amount);
@@ -49,31 +50,31 @@ final class LevelingProvider implements ILevelingProvider
     };
 
     @Override
-    public void addExp(Player player, int amount, float boost)
+    public void addExp(OfflinePlayer player, int amount, float boost)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET exp = exp+? WHERE uuid = ?", ADD_BY_PLAYER_REQUEST.apply(amount, boost, player));
     }
 
     @Override
-    public void removeExp(Player player, int amount)
+    public void removeExp(OfflinePlayer player, int amount)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET exp = exp-? WHERE uuid = ?", REMOVE_BY_PLAYER_REQUEST.apply(amount, player));
     }
 
     @Override
-    public void addCoins(Player player, int amount, float boost)
+    public void addCoins(OfflinePlayer player, int amount, float boost)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET coins = coins+? WHERE uuid = ?", ADD_BY_PLAYER_REQUEST.apply(amount, boost, player));
     }
 
     @Override
-    public void removeCoins(Player player, int amount)
+    public void removeCoins(OfflinePlayer player, int amount)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET coins = coins-? WHERE uuid = ?", REMOVE_BY_PLAYER_REQUEST.apply(amount, player));
     }
 
     @Override
-    public int getExp(Player player)
+    public int getExp(OfflinePlayer player)
     {
         return this.createConnectionAndRequest("SELECT exp FROM player_levels WHERE uuid = ?", statement -> {
             try
@@ -94,7 +95,7 @@ final class LevelingProvider implements ILevelingProvider
     }
 
     @Override
-    public int getCoins(Player player)
+    public int getCoins(OfflinePlayer player)
     {
         return this.createConnectionAndRequest("SELECT coins FROM player_levels WHERE uuid = ?", statement -> {
             try
