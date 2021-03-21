@@ -49,6 +49,19 @@ final class LevelingProvider implements ILevelingProvider
         }
     };
 
+    private static final BiFunction<Integer, OfflinePlayer, Consumer<PreparedStatement>> SET_BY_PLAYER_REQUEST = (amount, player) -> statement -> {
+        try
+        {
+            statement.setInt(1, amount);
+            statement.setString(2, String.valueOf(player.getUniqueId()));
+            statement.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            EXCEPTION_CATCHER.accept(e);
+        }
+    };
+
     @Override
     public void addExp(OfflinePlayer player, int amount, float boost)
     {
@@ -62,6 +75,12 @@ final class LevelingProvider implements ILevelingProvider
     }
 
     @Override
+    public void setExp(OfflinePlayer player, int amount)
+    {
+        this.createConnectionAndRequest("UPDATE player_levels SET exp = ? WHERE uuid = ?", SET_BY_PLAYER_REQUEST.apply(amount, player));
+    }
+
+    @Override
     public void addCoins(OfflinePlayer player, int amount, float boost)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET coins = coins+? WHERE uuid = ?", ADD_BY_PLAYER_REQUEST.apply(amount, boost, player));
@@ -72,6 +91,13 @@ final class LevelingProvider implements ILevelingProvider
     {
         this.createConnectionAndRequest("UPDATE player_levels SET coins = coins-? WHERE uuid = ?", REMOVE_BY_PLAYER_REQUEST.apply(amount, player));
     }
+
+    @Override
+    public void setCoins(OfflinePlayer player, int amount)
+    {
+        this.createConnectionAndRequest("UPDATE player_levels SET coins = ? WHERE uuid = ?", SET_BY_PLAYER_REQUEST.apply(amount, player));
+    }
+
 
     @Override
     public int getExp(OfflinePlayer player)
@@ -114,6 +140,8 @@ final class LevelingProvider implements ILevelingProvider
             }
         }, 0);
     }
+
+
 
     private <R> R createConnectionAndRequest(String cmd, Function<PreparedStatement, R> request, R nullValue)
     {
