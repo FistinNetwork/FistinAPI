@@ -61,7 +61,10 @@ class DebugCommand implements CommandExecutor
     private void sendItems(CommandSender sender)
     {
         sender.sendMessage("-- Items --");
-        this.api.items().getRegisteredItemsName().forEach(name -> sender.sendMessage("* " + name));
+        this.api.items().getRegisteredItemsName().forEach(name -> {
+            final String finalPath = this.api.items().nameToLocation().get(name).getFinalPath();
+            sender.sendMessage("* " + name + "\u00A7r (" + finalPath + ")");
+        });
     }
 
     private void sendFireworks(CommandSender sender)
