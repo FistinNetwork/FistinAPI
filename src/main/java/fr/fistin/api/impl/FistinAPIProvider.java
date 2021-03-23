@@ -106,7 +106,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
                     final PluginLocation loc = PluginLocation.getLocation(args[0]);
                     if(loc != null)
                         ((Player)sender).getInventory().addItem(this.items.getItem(loc).enclosingItem());
-                    else sender.sendMessage("Item name not valid!");
+                    else sender.sendMessage("\u00A7cItem name not valid!\u00A7r");
                     return true;
                 }
             }

@@ -1,5 +1,5 @@
 name: FistinAPI
-version: 1.4.1
+version: 1.4.3
 main: fr.fistin.api.impl.FistinAPIProvider
 prefix: FistinAPI
 website: https://fistin.fr
@@ -17,6 +17,10 @@ commands:
     permission: fistin.staff
     usage: /fistindebug items|fireworks|events [implBusName]|providers
   fgive:
-    description: FistinGive command
+    description: Give command for Fistin items
     permission: fistin.staff
     usage: /fgive [item]
+    aliases:
+      - fistingive
+      - fisting
+      - givefistin

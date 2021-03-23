@@ -4,15 +4,18 @@ import fr.fistin.api.eventbus.DefaultEventBus;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.PluginLocation;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-class DebugCommand implements CommandExecutor
+final class DebugCommand implements CommandExecutor
 {
     private final IFistinAPIProvider api;
 
@@ -22,9 +25,9 @@ class DebugCommand implements CommandExecutor
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if(label.equalsIgnoreCase("fistindebug"))
+        if(command.getName().equalsIgnoreCase("fistindebug"))
         {
             if(args.length >= 1)
             {
@@ -63,7 +66,18 @@ class DebugCommand implements CommandExecutor
         sender.sendMessage("-- Items --");
         this.api.items().getRegisteredItemsName().forEach(name -> {
             final String finalPath = this.api.items().nameToLocation().get(name).getFinalPath();
-            sender.sendMessage("* " + name + "\u00A7r (" + finalPath + ")");
+            if(sender instanceof Player)
+            {
+                final TextComponent clickable = new TextComponent(name);
+                clickable.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/fgive " + finalPath));
+
+                final TextComponent component = new TextComponent("* ");
+                component.addExtra(clickable);
+                component.addExtra("\u00A7r (" + finalPath + ")");
+
+                ((Player)sender).spigot().sendMessage(component);
+            }
+            else sender.sendMessage("* " + name + "\u00A7r (" + finalPath + ")");
         });
     }
 

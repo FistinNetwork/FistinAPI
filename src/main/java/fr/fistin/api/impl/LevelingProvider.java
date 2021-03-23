@@ -5,7 +5,6 @@ import fr.fistin.api.plugin.providers.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.TriFunction;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -140,8 +139,6 @@ final class LevelingProvider implements ILevelingProvider
             }
         }, 0);
     }
-
-
 
     private <R> R createConnectionAndRequest(String cmd, Function<PreparedStatement, R> request, R nullValue)
     {
