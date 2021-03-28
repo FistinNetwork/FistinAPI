@@ -1,6 +1,7 @@
 package fr.fistin.api.database;
 
 import fr.fistin.api.configuration.ConfigurationProviders;
+import fr.fistin.api.configuration.FistinAPIConfiguration;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ public class DatabaseManager
 
     public DatabaseManager()
     {
-        final DatabaseConfiguration configuration = ConfigurationProviders.getConfig(DatabaseConfiguration.class);
+        final FistinAPIConfiguration configuration = ConfigurationProviders.getConfig(FistinAPIConfiguration.class);
         this.addConnection("LevelingConnection", new DBConnection(new DBCredentials(configuration.getLevelingUser(), configuration.getLevelingPass()), configuration.getLevelingHost(), configuration.getLevelingDbName(), configuration.getLevelingPort()));
     }
 

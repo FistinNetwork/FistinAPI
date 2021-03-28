@@ -4,6 +4,9 @@ import fr.fistin.api.plugin.PluginType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Basic PluginProvider
+ */
 public interface IPluginProvider
 {
     @NotNull PluginType pluginType();

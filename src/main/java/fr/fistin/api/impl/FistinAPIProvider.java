@@ -1,7 +1,7 @@
 package fr.fistin.api.impl;
 
 import fr.fistin.api.configuration.ConfigurationProviders;
-import fr.fistin.api.database.DatabaseConfiguration;
+import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.eventbus.DefaultEventBus;
 import fr.fistin.api.eventbus.IFistinEvent;
@@ -61,7 +61,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
 
         PluginProviders.setProvider(IFistinAPIProvider.class, this);
         PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
-        ConfigurationProviders.setConfig(DatabaseConfiguration.class, new DatabaseConfiguration());
+        ConfigurationProviders.setConfig(FistinAPIConfiguration.class, new FistinAPIConfiguration());
     }
 
     private void init()
