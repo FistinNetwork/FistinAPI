@@ -41,6 +41,8 @@ public interface InventoryContents {
     InventoryContents fillColumn(int column, ClickableItem item);
     InventoryContents fillBorders(ClickableItem item);
 
+    InventoryContents fillCorners(ClickableItem item);
+
     InventoryContents fillRect(int fromRow, int fromColumn,
                                int toRow, int toColumn, ClickableItem item);
     InventoryContents fillRect(SlotPos fromPos, SlotPos toPos, ClickableItem item);
@@ -218,6 +220,32 @@ public interface InventoryContents {
         public InventoryContents fillBorders(ClickableItem item)
         {
             this.fillRect(0, 0, inv.getRows() - 1, inv.getColumns() - 1, item);
+            return this;
+        }
+
+        @Override
+        public InventoryContents fillCorners(ClickableItem item)
+        {
+            //Top left corners
+            this.set(0, 8, item);
+            this.set(0, 7, item);
+            this.set(1, 8, item);
+
+            //Top right corners
+            this.set(0, 0, item);
+            this.set(0, 1, item);
+            this.set(1, 0, item);
+
+            //Bottom left corners
+            this.set(4, 0, item);
+            this.set(5, 0, item);
+            this.set(5, 1, item);
+
+            //Bottom right corners
+            this.set(5, 8, item);
+            this.set(4, 8, item);
+            this.set(5, 7, item);
+
             return this;
         }
 
