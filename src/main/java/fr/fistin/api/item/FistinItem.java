@@ -46,6 +46,8 @@ public class FistinItem
 
     public void onItemRightClick(@NotNull Player player, @NotNull ClickType type, @Nullable Block clickedBlock) {}
 
+    public void onItemLeftClick(@NotNull Player player, @NotNull ClickType type, @Nullable Block clickedBlock) {}
+
     public String displayName()
     {
         return this.displayName;

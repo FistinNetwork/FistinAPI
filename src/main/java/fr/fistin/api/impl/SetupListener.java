@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
-class SetupListener implements Listener
+final class SetupListener implements Listener
 {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
@@ -37,11 +37,11 @@ class SetupListener implements Listener
         }
     }
 
-    private boolean isPlayerExist(Player player, Statement statement) throws Exception{
+    private boolean isPlayerExist(Player player, Statement statement) throws Exception {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM player_levels");
-        if(resultSet.getMetaData().getColumnName(1).equalsIgnoreCase("uuid")){
-            while (resultSet.next()){
-                if(resultSet.getString("uuid").equalsIgnoreCase(player.getUniqueId().toString())){
+        if(resultSet.getMetaData().getColumnName(1).equalsIgnoreCase("uuid")) {
+            while (resultSet.next()) {
+                if(resultSet.getString("uuid").equalsIgnoreCase(player.getUniqueId().toString())) {
                     return true;
                 }
             }

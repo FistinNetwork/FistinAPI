@@ -3,12 +3,15 @@ package fr.fistin.api.plugin;
 import fr.fistin.api.utils.IIdentifiable;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represent all grades in Fistin.
+ */
 public enum PlayerGrade implements IIdentifiable
 {
-    NORMAL("normal", 0),
-    VIP("vip", 1),
-    STAFF("staff", 2),
-    ADMIN("admin", 3);
+    NORMAL("fistin.normal", 0),
+    VIP("fistin.vip", 1),
+    STAFF("fistin.staff", 2),
+    ADMIN("fistin.admin", 3);
 
     private final String name;
     private final int id;

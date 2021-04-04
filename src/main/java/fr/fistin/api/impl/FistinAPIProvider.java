@@ -1,11 +1,12 @@
 package fr.fistin.api.impl;
 
 import fr.fistin.api.configuration.ConfigurationProviders;
-import fr.fistin.api.database.DatabaseConfiguration;
+import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.eventbus.DefaultEventBus;
 import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
+import fr.fistin.api.impl.smartinvs.InventoryContentsImpl;
 import fr.fistin.api.item.IFistinItems;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.PacketManager;
@@ -61,7 +62,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
 
         PluginProviders.setProvider(IFistinAPIProvider.class, this);
         PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
-        ConfigurationProviders.setConfig(DatabaseConfiguration.class, new DatabaseConfiguration());
+        ConfigurationProviders.setConfig(FistinAPIConfiguration.class, new FistinAPIConfiguration());
     }
 
     private void init()
@@ -71,7 +72,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
         this.fireworkFactory = new FireworkFactory();
         this.packetManager = new PacketManager();
         this.items = new FistinItemsImpl();
-        this.smartInvsManager = new InventoryManager(this);
+        this.smartInvsManager = new InventoryManager(this, InventoryContentsImpl::new);
         this.smartInvsManager.init();
     }
 

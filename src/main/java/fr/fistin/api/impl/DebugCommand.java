@@ -49,6 +49,8 @@ final class DebugCommand implements CommandExecutor
                             return true;
                         }
                         else return false;
+                    default:
+                        return false;
                 }
             }
         }

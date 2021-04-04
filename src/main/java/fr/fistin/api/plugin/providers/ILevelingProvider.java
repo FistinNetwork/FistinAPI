@@ -2,7 +2,6 @@ package fr.fistin.api.plugin.providers;
 
 import fr.fistin.api.plugin.PluginType;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public interface ILevelingProvider extends IPluginProvider

@@ -3,6 +3,7 @@ package fr.fistin.api.smartinvs;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.smartinvs.content.InventoryContents;
+import fr.fistin.api.smartinvs.content.InventoryContentsWrapper;
 import fr.fistin.api.smartinvs.content.InventoryProvider;
 import fr.fistin.api.smartinvs.opener.InventoryOpener;
 import org.bukkit.entity.Player;
@@ -28,10 +29,12 @@ public class SmartInventory
 
     private List<InventoryListener<? extends Event>> listeners;
     private final InventoryManager manager;
+    private final InventoryContentsWrapper contentsWrapper;
 
     private SmartInventory(InventoryManager manager)
     {
         this.manager = manager;
+        this.contentsWrapper = this.manager.getContentsWrapper();
     }
 
     public Inventory open(Player player)
@@ -52,7 +55,7 @@ public class SmartInventory
             this.manager.setInventory(player, null);
         });
 
-        final InventoryContents contents = new InventoryContents.Impl(this, player.getUniqueId());
+        final InventoryContents contents = this.contentsWrapper.newImpl(this, player.getUniqueId());
         contents.pagination().page(page);
 
         this.manager.setContents(player, contents);

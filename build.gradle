@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 group 'fr.fistin'
-version '1.4.3'
+version '1.4.4'
 archivesBaseName = "FistinAPI"
 
 java {
@@ -50,8 +50,15 @@ task javadocJar(type: Jar) {
     from javadoc
 }
 
+task apiJar(type: Jar) {
+    classifier 'api'
+    from sourceSets.main.output
+    include 'fr/fistin/api/**'
+    exclude 'fr/fistin/api/impl/**'
+}
+
 artifacts {
-    archives sourcesJar, shadowJar, javadocJar
+    archives sourcesJar, shadowJar, javadocJar, apiJar
 }
 
 publishing {
@@ -61,6 +68,7 @@ publishing {
             artifact tasks.sourcesJar
             artifact tasks.shadowJar
             artifact tasks.javadocJar
+            artifact tasks.apiJar
 
             pom {
                 groupId = project.group

@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
+/**
+ * Don't use directly this class, use {@link IScoreboardSign} instead !
+ */
 @ApiStatus.Internal
 class ScoreboardSign implements IScoreboardSign
 {

@@ -57,7 +57,7 @@ public class PacketManagerTest
         @Override
         public String toString()
         {
-            return "ATestPacket{" + "foobar='" + foobar + '\'' + '}';
+            return "ATestPacket{" + "foobar='" + this.foobar + '\'' + '}';
         }
     }
 }
