@@ -38,4 +38,3 @@ jobs:
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        DISABLE_DEPLOY: "true"
