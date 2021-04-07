@@ -258,7 +258,7 @@ public class InventoryContentsImpl implements InventoryContents
 
     private void update(int row, int column, ItemStack item)
     {
-        if (!this.inv.getManager().getOpenedPlayers(this.inv).contains(this.player)) return;
+        if (!this.inv.getManager().getOpenedPlayers(this.inv).contains(Bukkit.getPlayer(this.player))) return;
 
         final Inventory topInventory = Bukkit.getPlayer(this.player).getOpenInventory().getTopInventory();
         topInventory.setItem(this.inv.getColumns() * row + column, item);

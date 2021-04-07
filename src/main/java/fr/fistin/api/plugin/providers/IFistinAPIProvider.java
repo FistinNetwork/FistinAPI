@@ -1,6 +1,6 @@
 package fr.fistin.api.plugin.providers;
 
-import fr.fistin.api.database.DatabaseManager;
+import fr.fistin.api.database.IDatabaseManager;
 import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
 import fr.fistin.api.item.IFistinItems;
@@ -20,9 +20,10 @@ public interface IFistinAPIProvider extends IBukkitPluginProvider
     String BUNGEE_CORD_CHANNEL = "BungeeCord";
 
     @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> eventBus();
+    @NotNull IFistinEventBus<Supplier<? extends IFistinEvent>> newEventBus();
     @NotNull FireworkFactory fireworkFactory();
     @NotNull PacketManager packetManager();
-    @NotNull DatabaseManager databaseManager();
+    @NotNull IDatabaseManager databaseManager();
     @NotNull IScoreboardSign newScoreboardSign(Player player, String objectiveName);
     @NotNull InventoryManager smartInvsManager();
     @NotNull IFistinItems items();

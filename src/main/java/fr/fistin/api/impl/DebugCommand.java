@@ -1,6 +1,5 @@
 package fr.fistin.api.impl;
 
-import fr.fistin.api.eventbus.DefaultEventBus;
 import fr.fistin.api.plugin.providers.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.PluginLocation;

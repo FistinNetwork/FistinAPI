@@ -1,5 +1,10 @@
-package fr.fistin.api.eventbus;
+package fr.fistin.api.impl;
 
+import fr.fistin.api.eventbus.FistinEventHandler;
+import fr.fistin.api.eventbus.FistinEventListener;
+import fr.fistin.api.eventbus.IFistinEvent;
+import fr.fistin.api.eventbus.IFistinEventBus;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -7,6 +12,7 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@ApiStatus.Internal
 public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFistinEvent>>
 {
     private static final List<EventExecution> EVENT_EXECUTIONS = new ArrayList<>();

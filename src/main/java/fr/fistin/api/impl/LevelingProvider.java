@@ -20,8 +20,6 @@ import java.util.logging.Level;
 @ApiStatus.Internal
 final class LevelingProvider implements ILevelingProvider
 {
-    private static final Consumer<Throwable> EXCEPTION_CATCHER = e -> PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
-
     private static final TriFunction<Integer, Float, OfflinePlayer, Consumer<PreparedStatement>> ADD_BY_PLAYER_REQUEST = (amount, boost, player) -> statement -> {
         try
         {
@@ -31,7 +29,7 @@ final class LevelingProvider implements ILevelingProvider
         }
         catch(Exception e)
         {
-            EXCEPTION_CATCHER.accept(e);
+            catchException(e);
         }
     };
 
@@ -44,7 +42,7 @@ final class LevelingProvider implements ILevelingProvider
         }
         catch(Exception e)
         {
-            EXCEPTION_CATCHER.accept(e);
+            catchException(e);
         }
     };
 
@@ -57,7 +55,7 @@ final class LevelingProvider implements ILevelingProvider
         }
         catch(Exception e)
         {
-            EXCEPTION_CATCHER.accept(e);
+            catchException(e);
         }
     };
 
@@ -113,7 +111,7 @@ final class LevelingProvider implements ILevelingProvider
             }
             catch(Exception e)
             {
-                EXCEPTION_CATCHER.accept(e);
+                catchException(e);
                 return 0;
             }
         }, 0);
@@ -134,7 +132,7 @@ final class LevelingProvider implements ILevelingProvider
             }
             catch(Exception e)
             {
-                EXCEPTION_CATCHER.accept(e);
+                catchException(e);
                 return 0;
             }
         }, 0);
@@ -150,7 +148,7 @@ final class LevelingProvider implements ILevelingProvider
         }
         catch (SQLException e)
         {
-            EXCEPTION_CATCHER.accept(e);
+            catchException(e);
             return nullValue;
         }
     }
@@ -164,7 +162,7 @@ final class LevelingProvider implements ILevelingProvider
         }
         catch (SQLException e)
         {
-            EXCEPTION_CATCHER.accept(e);
+            catchException(e);
         }
     }
 
@@ -175,5 +173,10 @@ final class LevelingProvider implements ILevelingProvider
                 .databaseManager()
                 .getConnection("LevelingConnection")
                 .connection();
+    }
+
+    private static void catchException(Throwable e)
+    {
+        PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
     }
 }
