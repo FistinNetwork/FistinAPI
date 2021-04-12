@@ -1,6 +1,8 @@
 package fr.fistin.api.packets;
 
-public class PacketException extends RuntimeException
+import fr.fistin.api.utils.FistinAPIException;
+
+public class PacketException extends FistinAPIException
 {
     public PacketException(String message, Throwable cause)
     {

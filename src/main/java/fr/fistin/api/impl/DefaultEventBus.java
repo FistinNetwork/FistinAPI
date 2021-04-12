@@ -4,13 +4,13 @@ import fr.fistin.api.eventbus.FistinEventHandler;
 import fr.fistin.api.eventbus.FistinEventListener;
 import fr.fistin.api.eventbus.IFistinEvent;
 import fr.fistin.api.eventbus.IFistinEventBus;
+import fr.fistin.api.utils.FistinAPIException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @ApiStatus.Internal
 public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFistinEvent>>
@@ -57,7 +57,6 @@ public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFist
                         .filter(method -> method.isAnnotationPresent(FistinEventHandler.class))
                         .filter(method -> method.getParameterCount() == 1)
                         .filter(method -> method.getParameterTypes()[0] == event.getClass())
-                        .collect(Collectors.toList())
                         .forEach(method -> {
                             try
                             {
@@ -65,7 +64,7 @@ public class DefaultEventBus implements IFistinEventBus<Supplier<? extends IFist
                                 method.invoke(listener, event);
                             } catch (IllegalAccessException | InvocationTargetException e)
                             {
-                                throw new RuntimeException(e);
+                                throw new FistinAPIException(e);
                             }
                         });
             });
