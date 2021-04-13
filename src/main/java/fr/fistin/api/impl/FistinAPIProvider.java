@@ -1,12 +1,12 @@
 package fr.fistin.api.impl;
 
+import fr.fistin.api.IFistinAPIProvider;
+import fr.fistin.api.ILevelingProvider;
 import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.IDatabaseManager;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.PacketManager;
-import fr.fistin.api.IFistinAPIProvider;
-import fr.fistin.api.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.PluginLocation;
 import org.bukkit.plugin.java.JavaPlugin;

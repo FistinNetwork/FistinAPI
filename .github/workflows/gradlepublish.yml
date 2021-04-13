@@ -19,14 +19,6 @@ jobs:
         java-version: 1.8
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-    - name: Download jar
-      uses: wei/curl@v1
-      with:
-        args: https://cdn.getbukkit.org/spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar --create-dirs -o libs/spigot.jar
-    
-    - name: Permission
-      run: sudo chmod -R 777 libs/
         
     - name: Build with Gradle
       run: gradle build

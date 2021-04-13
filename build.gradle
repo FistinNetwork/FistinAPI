@@ -97,6 +97,5 @@ dependencies {
     api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     api 'fr.flowarg:sch:1.0.1'
     api 'org.jetbrains:annotations:20.1.0'
-    compileOnly fileTree(dir: 'libs', include: '*.jar')
     shade 'fr.flowarg:sch:1.0.1'
 }
