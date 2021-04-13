@@ -1,4 +1,4 @@
-package fr.fistin.api.utils;
+package fr.fistin.api.utils.triapi;
 
 import java.util.Objects;
 import java.util.function.Function;

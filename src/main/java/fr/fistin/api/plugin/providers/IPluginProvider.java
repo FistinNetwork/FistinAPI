@@ -1,5 +1,6 @@
 package fr.fistin.api.plugin.providers;
 
+import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.plugin.PluginType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,6 @@
 package fr.fistin.api.configuration;
 
-import fr.fistin.api.plugin.providers.IFistinAPIProvider;
+import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.flowarg.sch.ConfigurationManager;
 import fr.flowarg.sch.SpigotConfigurationEntry.IntegerEntry;

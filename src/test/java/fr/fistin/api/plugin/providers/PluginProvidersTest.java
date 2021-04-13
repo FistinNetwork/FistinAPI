@@ -1,8 +1,6 @@
 package fr.fistin.api.plugin.providers;
 
-import fr.fistin.api.plugin.PlayerGrade;
 import fr.fistin.api.plugin.PluginType;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -11,6 +9,17 @@ import static org.junit.Assert.assertSame;
 
 public class PluginProvidersTest
 {
+    private interface CustomProvider extends IPluginProvider
+    {
+        void action();
+
+        @Override
+        default @NotNull PluginType pluginType()
+        {
+            return PluginType.UTILITY;
+        }
+    }
+
     @Test
     public void testOnePluginProvider()
     {
@@ -73,7 +82,7 @@ public class PluginProvidersTest
             }
         }
         
-        class Y implements IGamePluginProvider
+        class Y implements CustomProvider
         {
             @Override
             public String toString()
@@ -82,26 +91,20 @@ public class PluginProvidersTest
             }
 
             @Override
-            public void winGame(Player player) {}
-
-            @Override
-            public void looseGame(Player player) {}
-
-            @Override
-            public float gradeMultiplier(PlayerGrade grade)
+            public void action()
             {
-                return 1;
+                System.out.println(this);
             }
         }
         
         final IPluginProvider provider = new X();
-        final IGamePluginProvider provider1 = new Y();
+        final CustomProvider provider1 = new Y();
 
         PluginProviders.setProvider(IPluginProvider.class, provider);
-        PluginProviders.setProvider(IGamePluginProvider.class, provider1);
+        PluginProviders.setProvider(CustomProvider.class, provider1);
 
         final IPluginProvider fromPluginProviders = PluginProviders.getProvider(IPluginProvider.class);
-        final IGamePluginProvider fromPluginProviders1 = PluginProviders.getProvider(IGamePluginProvider.class);
+        final CustomProvider fromPluginProviders1 = PluginProviders.getProvider(CustomProvider.class);
 
         assertSame(provider, fromPluginProviders);
         assertSame("test ok", fromPluginProviders.toString());

@@ -1,6 +1,7 @@
-package fr.fistin.api.plugin.providers;
+package fr.fistin.api;
 
 import fr.fistin.api.plugin.PluginType;
+import fr.fistin.api.plugin.providers.IPluginProvider;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 

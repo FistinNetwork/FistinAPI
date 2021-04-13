@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 group 'fr.fistin'
-version '1.4.4'
+version '1.5.0'
 archivesBaseName = "FistinAPI"
 
 java {
@@ -95,7 +95,6 @@ publishing {
 
 dependencies {
     api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
-    api 'net.luckperms:api:5.2'
     api 'fr.flowarg:sch:1.0.1'
     api 'org.jetbrains:annotations:20.1.0'
     compileOnly fileTree(dir: 'libs', include: '*.jar')

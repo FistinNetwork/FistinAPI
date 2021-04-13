@@ -1,9 +1,9 @@
 package fr.fistin.api.impl;
 
-import fr.fistin.api.plugin.providers.IFistinAPIProvider;
-import fr.fistin.api.plugin.providers.ILevelingProvider;
+import fr.fistin.api.IFistinAPIProvider;
+import fr.fistin.api.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
-import fr.fistin.api.utils.TriFunction;
+import fr.fistin.api.utils.triapi.TriFunction;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;

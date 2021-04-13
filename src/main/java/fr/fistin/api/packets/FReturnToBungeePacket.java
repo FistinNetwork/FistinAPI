@@ -1,6 +1,6 @@
 package fr.fistin.api.packets;
 
-import fr.fistin.api.plugin.providers.IFistinAPIProvider;
+import fr.fistin.api.IFistinAPIProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

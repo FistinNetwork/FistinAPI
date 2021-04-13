@@ -1,6 +1,6 @@
 package fr.fistin.api.database;
 
-import fr.fistin.api.plugin.providers.IFistinAPIProvider;
+import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 
 import java.sql.Connection;
