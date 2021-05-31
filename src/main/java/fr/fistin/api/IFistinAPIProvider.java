@@ -1,6 +1,7 @@
 package fr.fistin.api;
 
 import fr.fistin.api.database.IDatabaseManager;
+import fr.fistin.api.hydra.ServerLauncher;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.PluginType;
 import fr.fistin.api.plugin.providers.IBukkitPluginProvider;
@@ -13,6 +14,7 @@ public interface IFistinAPIProvider extends IBukkitPluginProvider
 
     @NotNull PacketManager packetManager();
     @NotNull IDatabaseManager databaseManager();
+    @NotNull ServerLauncher serverLauncher();
 
     @Override
     default @NotNull PluginType pluginType()

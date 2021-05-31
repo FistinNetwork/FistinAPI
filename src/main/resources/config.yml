@@ -6,3 +6,8 @@ databases:
     host: "localhost"
     dbName: "minecraft"
     port: 3306
+hydra:
+  host: "redishost"
+  port: 8080
+  pass: "redispassword"
+  enable: false

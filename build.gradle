@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 group 'fr.fistin'
-version '1.5.0'
+version '1.5.1'
 archivesBaseName = "FistinAPI"
 
 java {
@@ -28,8 +28,17 @@ repositories {
     maven {
         url "https://hub.spigotmc.org/nexus/content/repositories/public"
     }
+
+    maven {
+        credentials {
+            username System.getenv('USERNAME') != null ? System.getenv('USERNAME') : "${USERNAME}"
+            password System.getenv('TOKEN') != null ? System.getenv('TOKEN') : "${TOKEN}"
+        }
+        name = "HydraConnector_maven"
+        url = "https://maven.pkg.github.com/FistinNetwork/HydraConnector"
+    }
+
     mavenCentral()
-    jcenter()
 }
 
 configurations {
@@ -97,5 +106,7 @@ dependencies {
     api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     api 'fr.flowarg:sch:1.0.1'
     api 'org.jetbrains:annotations:20.1.0'
+    api 'fr.fistin:hydra-connector:1.1.3-SNAPSHOT'
     shade 'fr.flowarg:sch:1.0.1'
+    shade 'fr.fistin:hydra-connector:1.1.3-SNAPSHOT'
 }

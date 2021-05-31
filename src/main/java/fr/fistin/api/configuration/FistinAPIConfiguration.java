@@ -3,6 +3,7 @@ package fr.fistin.api.configuration;
 import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.flowarg.sch.ConfigurationManager;
+import fr.flowarg.sch.SpigotConfigurationEntry.BooleanEntry;
 import fr.flowarg.sch.SpigotConfigurationEntry.IntegerEntry;
 import fr.flowarg.sch.SpigotConfigurationEntry.StringEntry;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,6 +16,10 @@ public final class FistinAPIConfiguration implements ConfigurationManager
     private final StringEntry levelingHost = new StringEntry("databases.leveling.host", this.config);
     private final StringEntry levelingDbName = new StringEntry("databases.leveling.dbName", this.config);
     private final IntegerEntry levelingPort = new IntegerEntry("databases.leveling.port", this.config);
+    private final StringEntry hydraHost = new StringEntry("hydra.host", this.config);
+    private final IntegerEntry hydraPort = new IntegerEntry("hydra.port", this.config);
+    private final StringEntry hydraPass = new StringEntry("hydra.pass", this.config);
+    private final BooleanEntry hydraEnable = new BooleanEntry("hydra.enable", this.config);
 
     public String getLevelingUser()
     {
@@ -39,6 +44,26 @@ public final class FistinAPIConfiguration implements ConfigurationManager
     public Integer getLevelingPort()
     {
         return this.levelingPort.get();
+    }
+
+    public String getHydraHost()
+    {
+        return this.hydraHost.get();
+    }
+
+    public Integer getHydraPort()
+    {
+        return this.hydraPort.get();
+    }
+
+    public String getHydraPass()
+    {
+        return this.hydraPass.get();
+    }
+
+    public Boolean getHydraEnable()
+    {
+        return this.hydraEnable.get();
     }
 
     @Override
