@@ -21,13 +21,6 @@ public class ConfigurationProvidersTest
         ConfigurationProviders.clear();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAnInterfaceProvider()
-    {
-        ConfigurationProviders.setConfig(TestBadConfigInterface.class, new TestBadConfig());
-        ConfigurationProviders.clear();
-    }
-
     @Test
     public void testTwoConfigurationProviders()
     {
