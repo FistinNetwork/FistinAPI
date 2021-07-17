@@ -21,6 +21,9 @@ dependencies {
     implementation project.parent
     api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     api 'fr.flowarg:sch:1.0.1'
+    api ('fr.fistin:hydra-connector:1.1.4-SNAPSHOT') {
+        exclude module: 'gson'
+    }
     shade 'fr.flowarg:sch:1.0.1'
     shade 'fr.fistin:hydra-connector:1.1.4-SNAPSHOT'
 }
