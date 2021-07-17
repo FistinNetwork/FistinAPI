@@ -7,6 +7,22 @@ repositories {
     maven {
         url "https://hub.spigotmc.org/nexus/content/repositories/public"
     }
+
+    maven {
+        credentials {
+            if(System.getenv('USERNAME') != null) {
+                username  System.getenv('USERNAME')
+            }
+            else username "${USERNAME}"
+
+            if(System.getenv('TOKEN') != null) {
+                username  System.getenv('TOKEN')
+            }
+            else username "${TOKEN}"
+        }
+        name = "HydraConnector_maven"
+        url = "https://maven.pkg.github.com/FistinNetwork/HydraConnector"
+    }
 }
 
 configurations {

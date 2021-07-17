@@ -22,15 +22,6 @@ allprojects {
     }
 
     repositories {
-        maven {
-            credentials {
-                username System.getenv('USERNAME') != null ? System.getenv('USERNAME') : "${USERNAME}"
-                password System.getenv('TOKEN') != null ? System.getenv('TOKEN') : "${TOKEN}"
-            }
-            name = "HydraConnector_maven"
-            url = "https://maven.pkg.github.com/FistinNetwork/HydraConnector"
-        }
-
         mavenCentral()
     }
 
