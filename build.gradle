@@ -67,7 +67,7 @@ publishing {
 
             pom {
                 groupId = project.group
-                artifactId = 'fistinapi'
+                artifactId = 'fistinapi-api'
                 version = project.version
                 name = 'FistinAPI'
                 description = 'API afin de communiquer entre les différents composants de l\'infrastructure de FistinNetwork. (API)'
