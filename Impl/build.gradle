@@ -16,9 +16,9 @@ repositories {
             else username "${USERNAME}"
 
             if(System.getenv('TOKEN') != null) {
-                username  System.getenv('TOKEN')
+                password  System.getenv('TOKEN')
             }
-            else username "${TOKEN}"
+            else password "${TOKEN}"
         }
         name = "HydraConnector_maven"
         url = "https://maven.pkg.github.com/FistinNetwork/HydraConnector"
