@@ -41,7 +41,9 @@ dependencies {
         exclude module: 'gson'
     }
     shade 'fr.flowarg:sch:1.0.1'
-    shade 'fr.fistin:hydra-connector:1.1.4-SNAPSHOT'
+    shade ('fr.fistin:hydra-connector:1.1.4-SNAPSHOT') {
+        exclude module: 'gson'
+    }
 }
 
 task sourcesJar(type: Jar) {
