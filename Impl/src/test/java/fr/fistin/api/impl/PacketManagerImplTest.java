@@ -1,18 +1,21 @@
-package fr.fistin.api.packets;
+package fr.fistin.api.impl;
 
+import fr.fistin.api.packets.FistinPacket;
+import fr.fistin.api.packets.PacketException;
+import fr.fistin.api.packets.PacketManager;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class PacketManagerTest
+public class PacketManagerImplTest
 {
     private boolean test = false;
 
     @Test
     public void testRegisterAndSendPacket()
     {
-        final PacketManager packetManager = new PacketManager();
+        final PacketManager packetManager = new PacketManagerImpl();
         packetManager.registerPacket(ATestPacket.class, aTestPacket -> this.test = true);
         // it is ignored if the packet manager is ok.
         packetManager.registerPacket(ATestPacket.class, aTestPacket -> this.test = false);
@@ -24,7 +27,7 @@ public class PacketManagerTest
     @Test(expected = PacketException.class)
     public void testSendAfterStop()
     {
-        final PacketManager packetManager = new PacketManager();
+        final PacketManager packetManager = new PacketManagerImpl();
         packetManager.registerPacket(ATestPacket.class, aTestPacket -> this.test = true);
         packetManager.clear();
         packetManager.sendPacket(new ATestPacket("wawawaw"));
@@ -34,7 +37,7 @@ public class PacketManagerTest
     @Test(expected = PacketException.class)
     public void testSendUnregisteredPacket()
     {
-        final PacketManager packetManager = new PacketManager();
+        final PacketManager packetManager = new PacketManagerImpl();
         packetManager.sendPacket(new ATestPacket("wawawaw"));
         packetManager.clear();
         assertFalse(this.test);
@@ -47,11 +50,6 @@ public class PacketManagerTest
         public ATestPacket(String foobar)
         {
             this.foobar = foobar;
-        }
-
-        public String getFoobar()
-        {
-            return this.foobar;
         }
 
         @Override

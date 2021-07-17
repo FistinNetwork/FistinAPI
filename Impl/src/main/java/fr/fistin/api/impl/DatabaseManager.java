@@ -5,12 +5,14 @@ import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DBConnection;
 import fr.fistin.api.database.DBCredentials;
 import fr.fistin.api.database.IDatabaseManager;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-final class DatabaseManager implements IDatabaseManager
+@ApiStatus.Internal
+class DatabaseManager implements IDatabaseManager
 {
     private final Map<String, DBConnection> connectionByName = new HashMap<>();
 

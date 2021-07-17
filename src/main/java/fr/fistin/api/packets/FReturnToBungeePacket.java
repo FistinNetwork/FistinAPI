@@ -1,17 +1,17 @@
 package fr.fistin.api.packets;
 
 import fr.fistin.api.IFistinAPIProvider;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+
+import java.util.UUID;
 
 public class FReturnToBungeePacket implements FistinPacket
 {
-    private final Plugin plugin;
+    private final Object plugin;
     private final String bungeeCordChannel;
     private final String serverName;
-    private final Player toSend;
+    private final UUID toSend;
 
-    public FReturnToBungeePacket(Plugin plugin, String bungeeCordChannel, String serverName, Player toSend)
+    public FReturnToBungeePacket(Object plugin, String bungeeCordChannel, String serverName, UUID toSend)
     {
         this.plugin = plugin;
         this.bungeeCordChannel = bungeeCordChannel;
@@ -19,15 +19,12 @@ public class FReturnToBungeePacket implements FistinPacket
         this.toSend = toSend;
     }
 
-    public FReturnToBungeePacket(Plugin plugin, String serverName, Player toSend)
+    public FReturnToBungeePacket(Object plugin, String serverName, UUID toSend)
     {
-        this.plugin = plugin;
-        this.bungeeCordChannel = IFistinAPIProvider.BUNGEE_CORD_CHANNEL;
-        this.serverName = serverName;
-        this.toSend = toSend;
+        this(plugin, IFistinAPIProvider.BUNGEE_CORD_CHANNEL, serverName, toSend);
     }
 
-    public Plugin getPlugin()
+    public Object getPlugin()
     {
         return this.plugin;
     }
@@ -42,7 +39,7 @@ public class FReturnToBungeePacket implements FistinPacket
         return this.serverName;
     }
 
-    public Player getToSend()
+    public UUID getToSend()
     {
         return this.toSend;
     }

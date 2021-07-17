@@ -1,7 +1,5 @@
 package fr.fistin.api.configuration;
 
-import fr.flowarg.sch.ConfigurationManager;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotSame;
@@ -68,20 +66,8 @@ public class ConfigurationProvidersTest
         ConfigurationProviders.clear();
     }
 
-    private static class TestConfig implements ConfigurationManager
+    private static class TestConfig implements FistinConfiguration
     {
-        @Override
-        public void saveConfig() {}
-
-        @Override
-        public void loadConfig() {}
-
-        @Override
-        public FileConfiguration getConfig()
-        {
-            return null;
-        }
-
         @Override
         public String toString()
         {
@@ -89,20 +75,8 @@ public class ConfigurationProvidersTest
         }
     }
 
-    private static class AnotherTestConfig implements ConfigurationManager
+    private static class AnotherTestConfig implements FistinConfiguration
     {
-        @Override
-        public void saveConfig() {}
-
-        @Override
-        public void loadConfig() {}
-
-        @Override
-        public FileConfiguration getConfig()
-        {
-            return null;
-        }
-
         @Override
         public String toString()
         {
@@ -110,20 +84,7 @@ public class ConfigurationProvidersTest
         }
     }
 
-    interface TestBadConfigInterface extends ConfigurationManager {}
+    interface TestBadConfigInterface extends FistinConfiguration {}
 
-    private static class TestBadConfig implements TestBadConfigInterface
-    {
-        @Override
-        public void saveConfig() {}
-
-        @Override
-        public void loadConfig() {}
-
-        @Override
-        public FileConfiguration getConfig()
-        {
-            return null;
-        }
-    }
+    private static class TestBadConfig implements TestBadConfigInterface {}
 }

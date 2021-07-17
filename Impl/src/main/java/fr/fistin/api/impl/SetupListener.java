@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
-final class SetupListener implements Listener
+class SetupListener implements Listener
 {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)

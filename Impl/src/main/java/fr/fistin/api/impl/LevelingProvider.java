@@ -4,27 +4,28 @@ import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.ILevelingProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.triapi.TriFunction;
-import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
-final class LevelingProvider implements ILevelingProvider
+class LevelingProvider implements ILevelingProvider
 {
-    private static final TriFunction<Integer, Float, OfflinePlayer, Consumer<PreparedStatement>> ADD_BY_PLAYER_REQUEST = (amount, boost, player) -> statement -> {
+    private static final TriFunction<Integer, Float, UUID, Consumer<PreparedStatement>> ADD_BY_PLAYER_REQUEST = (amount, boost, player) -> statement -> {
         try
         {
             statement.setInt(1, Math.round(amount * boost));
-            statement.setString(2, String.valueOf(player.getUniqueId()));
+            statement.setString(2, String.valueOf(player));
             statement.executeUpdate();
         }
         catch(Exception e)
@@ -33,11 +34,11 @@ final class LevelingProvider implements ILevelingProvider
         }
     };
 
-    private static final BiFunction<Integer, OfflinePlayer, Consumer<PreparedStatement>> REMOVE_BY_PLAYER_REQUEST = (amount, player) -> statement -> {
+    private static final BiFunction<Integer, UUID, Consumer<PreparedStatement>> REMOVE_BY_PLAYER_REQUEST = (amount, player) -> statement -> {
         try
         {
             statement.setInt(1, amount);
-            statement.setString(2, String.valueOf(player.getUniqueId()));
+            statement.setString(2, String.valueOf(player));
             statement.executeUpdate();
         }
         catch(Exception e)
@@ -46,11 +47,11 @@ final class LevelingProvider implements ILevelingProvider
         }
     };
 
-    private static final BiFunction<Integer, OfflinePlayer, Consumer<PreparedStatement>> SET_BY_PLAYER_REQUEST = (amount, player) -> statement -> {
+    private static final BiFunction<Integer, UUID, Consumer<PreparedStatement>> SET_BY_PLAYER_REQUEST = (amount, player) -> statement -> {
         try
         {
             statement.setInt(1, amount);
-            statement.setString(2, String.valueOf(player.getUniqueId()));
+            statement.setString(2, String.valueOf(player));
             statement.executeUpdate();
         }
         catch(Exception e)
@@ -60,49 +61,49 @@ final class LevelingProvider implements ILevelingProvider
     };
 
     @Override
-    public void addExp(OfflinePlayer player, int amount, float boost)
+    public void addExp(@NotNull UUID player, int amount, float boost)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET exp = exp+? WHERE uuid = ?", ADD_BY_PLAYER_REQUEST.apply(amount, boost, player));
     }
 
     @Override
-    public void removeExp(OfflinePlayer player, int amount)
+    public void removeExp(@NotNull UUID player, int amount)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET exp = exp-? WHERE uuid = ?", REMOVE_BY_PLAYER_REQUEST.apply(amount, player));
     }
 
     @Override
-    public void setExp(OfflinePlayer player, int amount)
+    public void setExp(@NotNull UUID player, int amount)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET exp = ? WHERE uuid = ?", SET_BY_PLAYER_REQUEST.apply(amount, player));
     }
 
     @Override
-    public void addCoins(OfflinePlayer player, int amount, float boost)
+    public void addCoins(@NotNull UUID player, int amount, float boost)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET coins = coins+? WHERE uuid = ?", ADD_BY_PLAYER_REQUEST.apply(amount, boost, player));
     }
 
     @Override
-    public void removeCoins(OfflinePlayer player, int amount)
+    public void removeCoins(@NotNull UUID player, int amount)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET coins = coins-? WHERE uuid = ?", REMOVE_BY_PLAYER_REQUEST.apply(amount, player));
     }
 
     @Override
-    public void setCoins(OfflinePlayer player, int amount)
+    public void setCoins(@NotNull UUID player, int amount)
     {
         this.createConnectionAndRequest("UPDATE player_levels SET coins = ? WHERE uuid = ?", SET_BY_PLAYER_REQUEST.apply(amount, player));
     }
 
 
     @Override
-    public int getExp(OfflinePlayer player)
+    public int getExp(@NotNull UUID player)
     {
         return this.createConnectionAndRequest("SELECT exp FROM player_levels WHERE uuid = ?", statement -> {
             try
             {
-                statement.setString(1, String.valueOf(player.getUniqueId()));
+                statement.setString(1, String.valueOf(player));
                 statement.executeQuery();
 
                 final ResultSet resultSet = statement.getResultSet();
@@ -118,12 +119,12 @@ final class LevelingProvider implements ILevelingProvider
     }
 
     @Override
-    public int getCoins(OfflinePlayer player)
+    public int getCoins(@NotNull UUID player)
     {
         return this.createConnectionAndRequest("SELECT coins FROM player_levels WHERE uuid = ?", statement -> {
             try
             {
-                statement.setString(1, String.valueOf(player.getUniqueId()));
+                statement.setString(1, String.valueOf(player));
                 statement.executeQuery();
 
                 final ResultSet resultSet = statement.getResultSet();

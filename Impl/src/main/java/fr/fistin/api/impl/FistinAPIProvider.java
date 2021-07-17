@@ -15,6 +15,8 @@ import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.hydraconnector.HydraConnector;
 import fr.fistin.hydraconnector.protocol.channel.HydraChannel;
 import fr.fistin.hydraconnector.protocol.packet.server.StartServerPacket;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Level;
 
 /**
@@ -54,13 +58,13 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
 
         PluginProviders.setProvider(IFistinAPIProvider.class, this);
         PluginProviders.setProvider(ILevelingProvider.class, new LevelingProvider());
-        ConfigurationProviders.setConfig(FistinAPIConfiguration.class, new FistinAPIConfiguration());
+        ConfigurationProviders.setConfig(FistinAPIConfiguration.class, new FistinAPIConfigurationImpl());
     }
 
     private void init()
     {
         this.databaseManager = new DatabaseManager();
-        this.packetManager = new PacketManager();
+        this.packetManager = new PacketManagerImpl();
         this.serverLauncher = new ServerLauncherImpl();
         final FistinAPIConfiguration config = ConfigurationProviders.getConfig(FistinAPIConfiguration.class);
         this.hydraConnector = new HydraConnector(
@@ -84,7 +88,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
 
                 out.writeUTF("Connect");
                 out.writeUTF(packet.getServerName());
-                packet.getToSend().sendPluginMessage(packet.getPlugin(), packet.getBungeeCordChannel(), byteArray.toByteArray());
+                Bukkit.getPlayer(packet.getToSend()).sendPluginMessage((Plugin)packet.getPlugin(), packet.getBungeeCordChannel(), byteArray.toByteArray());
             }
             catch (IOException e)
             {
@@ -145,5 +149,41 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     public @NotNull ServerLauncher serverLauncher()
     {
         return this.serverLauncher;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T unsafeGet(String parameter, TypeGet typeGet)
+    {
+        switch (typeGet)
+        {
+            case FIELD:
+            {
+                try
+                {
+                    final Field field = JavaPlugin.class.getDeclaredField(parameter);
+                    field.setAccessible(true);
+                    return (T)field.get(this);
+                } catch (IllegalAccessException | NoSuchFieldException e)
+                {
+                    this.getLogger().log(Level.SEVERE, e.getMessage(), e);
+                    return null;
+                }
+            }
+            case METHOD:
+            {
+                try {
+                    final Method method = JavaPlugin.class.getDeclaredMethod(parameter);
+                    method.setAccessible(true);
+                    return (T)method.invoke(this);
+                }
+                catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e)
+                {
+                    this.getLogger().log(Level.SEVERE, e.getMessage(), e);
+                    return null;
+                }
+            }
+        }
+        throw new UnsupportedOperationException("Unknown TypeGet: " + typeGet);
     }
 }

@@ -1,0 +1,68 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
+    }
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/public"
+    }
+}
+
+configurations {
+    shade
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+}
+
+dependencies {
+    implementation project.parent
+    api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    api 'fr.flowarg:sch:1.0.1'
+    shade 'fr.flowarg:sch:1.0.1'
+    shade 'fr.fistin:hydra-connector:1.1.4-SNAPSHOT'
+}
+
+task sourcesJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+    from project.parent.sourceSets.main.allSource
+}
+
+jar {
+    from {
+        project.parent.sourceSets.main.output
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact tasks.sourcesJar
+            artifact tasks.javadocJar
+
+            pom {
+                groupId = project.group
+                artifactId = 'fistinapi'
+                version = project.version
+                name = 'FistinAPI'
+                description = 'API afin de communiquer entre les différents composants de l\'infrastructure de FistinNetwork. (Impl)'
+                url = 'https://github.com/FistinNetwork/FistinAPI'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username System.getenv('USERNAME')
+                password System.getenv('TOKEN')
+            }
+            name "FistinAPI_maven"
+            url 'https://maven.pkg.github.com/FistinNetwork/FistinAPI'
+        }
+    }
+}

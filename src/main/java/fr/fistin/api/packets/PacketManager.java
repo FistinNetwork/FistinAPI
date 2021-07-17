@@ -2,35 +2,9 @@ package fr.fistin.api.packets;
 
 import java.util.function.Consumer;
 
-public class PacketManager
+public interface PacketManager
 {
-    private final PacketProcessor packetProcessor = new PacketProcessor();
-    private boolean started;
-
-    public PacketManager()
-    {
-        this.started = true;
-    }
-
-    public <P extends FistinPacket> void registerPacket(Class<P> packet, Consumer<P> packetAction)
-    {
-        if(this.assertStarted()) this.packetProcessor.registerPacket(packet, packetAction);
-    }
-
-    public <P extends FistinPacket> void sendPacket(P packet)
-    {
-        if(this.assertStarted()) this.packetProcessor.processPacket(packet);
-    }
-
-    private boolean assertStarted()
-    {
-        if(this.started) return true;
-        else throw new PacketException("PacketManager isn't started !");
-    }
-
-    public void clear()
-    {
-        this.packetProcessor.clear();
-        this.started = false;
-    }
+    <P extends FistinPacket> void registerPacket(Class<P> packet, Consumer<P> packetAction);
+    <P extends FistinPacket> void sendPacket(P packet);
+    void clear();
 }
