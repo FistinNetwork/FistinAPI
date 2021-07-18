@@ -11,6 +11,7 @@ import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.HStartServerPacket;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.providers.PluginProviders;
+import fr.fistin.api.utils.FistinAPIException;
 import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.hydraconnector.HydraConnector;
 import fr.fistin.hydraconnector.protocol.channel.HydraChannel;
@@ -112,25 +113,14 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     {
         this.databaseManager.clear();
         this.packetManager.clear();
-        this.hydraConnector.getRedisConnection().disconnect();
+        this.hydraConnector.stop();
 
         PluginProviders.clear();
         ConfigurationProviders.clear();
         PluginLocation.clear();
 
-        try
-        {
-            final Field cache = Cache.class.getDeclaredField("cache");
-            cache.setAccessible(true);
-            cache.set(null, null);
-        }
-        catch (Exception e)
-        {
-            this.getLogger().log(Level.SEVERE, e.getMessage(), e);
-        }
-
         this.getLogger().info("Stopped Fistin API, bye !");
-        this.getLogger().info("==========================");
+        this.getLogger().info("=========================");
     }
 
     @Override
@@ -184,6 +174,6 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
                 }
             }
         }
-        throw new UnsupportedOperationException("Unknown TypeGet: " + typeGet);
+        throw new FistinAPIException("Unknown TypeGet: " + typeGet);
     }
 }

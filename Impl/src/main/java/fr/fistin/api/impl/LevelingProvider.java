@@ -96,7 +96,6 @@ class LevelingProvider implements ILevelingProvider
         this.createConnectionAndRequest("UPDATE player_levels SET coins = ? WHERE uuid = ?", SET_BY_PLAYER_REQUEST.apply(amount, player));
     }
 
-
     @Override
     public int getExp(@NotNull UUID player)
     {
@@ -170,7 +169,7 @@ class LevelingProvider implements ILevelingProvider
     @Nullable
     private Connection createConnection() throws SQLException
     {
-        return this.fistinAPI()
+        return IFistinAPIProvider.fistinAPI()
                 .databaseManager()
                 .getConnection("LevelingConnection")
                 .connection();
