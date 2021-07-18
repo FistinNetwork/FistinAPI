@@ -113,7 +113,9 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     {
         this.databaseManager.clear();
         this.packetManager.clear();
-        this.hydraConnector.stop();
+
+        if(ConfigurationProviders.getConfig(FistinAPIConfiguration.class).getHydraEnable())
+            this.hydraConnector.stop();
 
         PluginProviders.clear();
         ConfigurationProviders.clear();
