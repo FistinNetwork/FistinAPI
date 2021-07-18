@@ -11,12 +11,12 @@ repositories {
     maven {
         credentials {
             if(System.getenv('USERNAME') != null) {
-                username  System.getenv('USERNAME')
+                username System.getenv('USERNAME')
             }
             else username "${USERNAME}"
 
             if(System.getenv('TOKEN') != null) {
-                password  System.getenv('TOKEN')
+                password System.getenv('TOKEN')
             }
             else password "${TOKEN}"
         }
