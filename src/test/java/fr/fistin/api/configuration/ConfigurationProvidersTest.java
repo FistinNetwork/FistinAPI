@@ -1,83 +1,75 @@
 package fr.fistin.api.configuration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.lenient;
 
+@ExtendWith(MockitoExtension.class)
 public class ConfigurationProvidersTest
 {
+    private interface AnotherFistinConfig extends FistinConfiguration {}
+
+    @Mock
+    private FistinConfiguration testConfig;
+
+    @Mock
+    private AnotherFistinConfig anotherTestConfig;
+
+    @BeforeEach
+    public void setup()
+    {
+        lenient().when(this.testConfig.toString()).thenReturn("test ok");
+        lenient().when(this.anotherTestConfig.toString()).thenReturn("test ok2");
+    }
+
+    @AfterEach
+    public void clean()
+    {
+        ConfigurationProviders.clear();
+    }
+
     @Test
     public void testOneConfigurationProvider()
     {
-        final TestConfig provider = new TestConfig();
+        ConfigurationProviders.setConfig(FistinConfiguration.class, this.testConfig);
 
-        ConfigurationProviders.setConfig(TestConfig.class, provider);
-
-        final TestConfig fromPluginProviders = ConfigurationProviders.getConfig(TestConfig.class);
-        assertSame(provider, fromPluginProviders);
+        final FistinConfiguration fromPluginProviders = ConfigurationProviders.getConfig(FistinConfiguration.class);
+        assertSame(testConfig, fromPluginProviders);
         assertSame("test ok", fromPluginProviders.toString());
-
-        ConfigurationProviders.clear();
     }
 
     @Test
     public void testTwoConfigurationProviders()
     {
-        final TestConfig provider = new TestConfig();
-        final AnotherTestConfig provider1 = new AnotherTestConfig();
+        ConfigurationProviders.setConfig(FistinConfiguration.class, this.testConfig);
+        ConfigurationProviders.setConfig(AnotherFistinConfig.class, this.anotherTestConfig);
 
-        ConfigurationProviders.setConfig(TestConfig.class, provider);
-        ConfigurationProviders.setConfig(AnotherTestConfig.class, provider1);
+        final FistinConfiguration fromPluginProviders = ConfigurationProviders.getConfig(FistinConfiguration.class);
+        final AnotherFistinConfig fromPluginProviders1 = ConfigurationProviders.getConfig(AnotherFistinConfig.class);
 
-        final TestConfig fromPluginProviders = ConfigurationProviders.getConfig(TestConfig.class);
-        final AnotherTestConfig fromPluginProviders1 = ConfigurationProviders.getConfig(AnotherTestConfig.class);
-
-        assertSame(provider, fromPluginProviders);
+        assertSame(this.testConfig, fromPluginProviders);
         assertSame("test ok", fromPluginProviders.toString());
 
-        assertSame(provider1, fromPluginProviders1);
+        assertSame(this.anotherTestConfig, fromPluginProviders1);
         assertSame("test ok2", fromPluginProviders1.toString());
-
-        ConfigurationProviders.clear();
     }
 
     @Test
     public void testImmutableValuesOfMap()
     {
-        final TestConfig provider = new TestConfig();
-        final TestConfig provider1 = new TestConfig();
+        ConfigurationProviders.setConfig(FistinConfiguration.class, this.testConfig);
+        ConfigurationProviders.setConfig(FistinConfiguration.class, this.anotherTestConfig);
 
-        ConfigurationProviders.setConfig(TestConfig.class, provider);
-        ConfigurationProviders.setConfig(TestConfig.class, provider1);
+        final FistinConfiguration fromPluginProviders = ConfigurationProviders.getConfig(FistinConfiguration.class);
 
-        final TestConfig fromPluginProviders = ConfigurationProviders.getConfig(TestConfig.class);
-
-        assertSame(provider, fromPluginProviders);
-        assertNotSame(provider1, fromPluginProviders);
-
-        ConfigurationProviders.clear();
+        assertSame(this.testConfig, fromPluginProviders);
+        assertNotSame(this.anotherTestConfig, fromPluginProviders);
     }
-
-    private static class TestConfig implements FistinConfiguration
-    {
-        @Override
-        public String toString()
-        {
-            return "test ok";
-        }
-    }
-
-    private static class AnotherTestConfig implements FistinConfiguration
-    {
-        @Override
-        public String toString()
-        {
-            return "test ok2";
-        }
-    }
-
-    interface TestBadConfigInterface extends FistinConfiguration {}
-
-    private static class TestBadConfig implements TestBadConfigInterface {}
 }

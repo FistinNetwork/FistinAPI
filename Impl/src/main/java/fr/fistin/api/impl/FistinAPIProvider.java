@@ -5,13 +5,12 @@ import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.ILevelingProvider;
 import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
-import fr.fistin.api.database.IDatabaseManager;
+import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.hydra.ServerLauncher;
 import fr.fistin.api.packets.FReturnToBungeePacket;
 import fr.fistin.api.packets.HStartServerPacket;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.providers.PluginProviders;
-import fr.fistin.api.utils.FistinAPIException;
 import fr.fistin.api.utils.PluginLocation;
 import fr.fistin.hydraconnector.HydraConnector;
 import fr.fistin.hydraconnector.protocol.channel.HydraChannel;
@@ -25,9 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.logging.Level;
 
 /**
@@ -37,7 +33,7 @@ import java.util.logging.Level;
 public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIProvider
 {
     private PacketManager packetManager;
-    private IDatabaseManager databaseManager;
+    private DatabaseManager databaseManager;
     private HydraConnector hydraConnector;
     private ServerLauncher serverLauncher;
 
@@ -64,7 +60,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
 
     private void init()
     {
-        this.databaseManager = new DatabaseManager();
+        this.databaseManager = new DatabaseManagerImpl();
         this.packetManager = new PacketManagerImpl();
         this.serverLauncher = new ServerLauncherImpl();
         final FistinAPIConfiguration config = ConfigurationProviders.getConfig(FistinAPIConfiguration.class);
@@ -107,7 +103,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
                 this.hydraConnector.startPacketHandler();
         }
     }
-    
+
     @Override
     public void onDisable()
     {
@@ -132,7 +128,7 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     }
 
     @Override
-    public @NotNull IDatabaseManager databaseManager()
+    public @NotNull DatabaseManager databaseManager()
     {
         return this.databaseManager;
     }
@@ -141,41 +137,5 @@ public final class FistinAPIProvider extends JavaPlugin implements IFistinAPIPro
     public @NotNull ServerLauncher serverLauncher()
     {
         return this.serverLauncher;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T unsafeGet(String parameter, TypeGet typeGet)
-    {
-        switch (typeGet)
-        {
-            case FIELD:
-            {
-                try
-                {
-                    final Field field = JavaPlugin.class.getDeclaredField(parameter);
-                    field.setAccessible(true);
-                    return (T)field.get(this);
-                } catch (IllegalAccessException | NoSuchFieldException e)
-                {
-                    this.getLogger().log(Level.SEVERE, e.getMessage(), e);
-                    return null;
-                }
-            }
-            case METHOD:
-            {
-                try {
-                    final Method method = JavaPlugin.class.getDeclaredMethod(parameter);
-                    method.setAccessible(true);
-                    return (T)method.invoke(this);
-                }
-                catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e)
-                {
-                    this.getLogger().log(Level.SEVERE, e.getMessage(), e);
-                    return null;
-                }
-            }
-        }
-        throw new FistinAPIException("Unknown TypeGet: " + typeGet);
     }
 }

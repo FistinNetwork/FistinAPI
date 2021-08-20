@@ -2,18 +2,19 @@ package fr.fistin.api.impl;
 
 import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
-import fr.fistin.api.plugin.providers.IStandalonePlugin;
 import fr.fistin.api.plugin.providers.PluginProviders;
+import fr.fistin.api.utils.Utils;
 import fr.flowarg.sch.SpigotConfigurationEntry.BooleanEntry;
 import fr.flowarg.sch.SpigotConfigurationEntry.IntegerEntry;
 import fr.flowarg.sch.SpigotConfigurationEntry.StringEntry;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 class FistinAPIConfigurationImpl implements FistinAPIConfiguration
 {
-    private final FileConfiguration config = PluginProviders.getProvider(IFistinAPIProvider.class).unsafeGet("getConfig", IStandalonePlugin.TypeGet.METHOD);
+    private final FileConfiguration config = Utils.unsafeGet(Plugin.class, (Plugin)PluginProviders.getProvider(IFistinAPIProvider.class), "getConfig", Utils.TypeGet.METHOD);
     private final StringEntry levelingUser = new StringEntry("databases.leveling.credentials.user", this.config);
     private final StringEntry levelingPass = new StringEntry("databases.leveling.credentials.pass", this.config);
     private final StringEntry levelingHost = new StringEntry("databases.leveling.host", this.config);

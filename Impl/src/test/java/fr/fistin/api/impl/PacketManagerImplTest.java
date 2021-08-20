@@ -3,14 +3,20 @@ package fr.fistin.api.impl;
 import fr.fistin.api.packets.FistinPacket;
 import fr.fistin.api.packets.PacketException;
 import fr.fistin.api.packets.PacketManager;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PacketManagerImplTest
 {
-    private boolean test = false;
+    private boolean test;
+
+    @BeforeEach
+    public void setup()
+    {
+        this.test = false;
+    }
 
     @Test
     public void testRegisterAndSendPacket()
@@ -24,21 +30,21 @@ public class PacketManagerImplTest
         packetManager.clear();
     }
 
-    @Test(expected = PacketException.class)
+    @Test
     public void testSendAfterStop()
     {
         final PacketManager packetManager = new PacketManagerImpl();
         packetManager.registerPacket(ATestPacket.class, aTestPacket -> this.test = true);
         packetManager.clear();
-        packetManager.sendPacket(new ATestPacket("wawawaw"));
+        assertThrows(PacketException.class, () -> packetManager.sendPacket(new ATestPacket("wawawaw")));
         assertFalse(this.test);
     }
 
-    @Test(expected = PacketException.class)
+    @Test
     public void testSendUnregisteredPacket()
     {
         final PacketManager packetManager = new PacketManagerImpl();
-        packetManager.sendPacket(new ATestPacket("wawawaw"));
+        assertThrows(PacketException.class, () -> packetManager.sendPacket(new ATestPacket("wawawaw")));
         packetManager.clear();
         assertFalse(this.test);
     }

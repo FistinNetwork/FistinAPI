@@ -23,15 +23,14 @@ class SetupListener implements Listener
         final IFistinAPIProvider api = PluginProviders.getProvider(IFistinAPIProvider.class);
         try {
             final Connection connection = api.databaseManager().getConnection("LevelingConnection").connection();
-            if(connection != null)
-            {
-                if(!this.isPlayerExist(event.getPlayer(), connection.createStatement()))
-                {
-                    final PreparedStatement statement = connection.prepareStatement("INSERT INTO player_levels (uuid, exp, coins) VALUES (?, 0, 0)");
-                    statement.setString(1, event.getPlayer().getUniqueId().toString());
-                    statement.executeUpdate();
-                }
-            }
+
+            if(connection == null) return;
+
+            if(this.isPlayerExist(event.getPlayer(), connection.createStatement())) return;
+
+            final PreparedStatement statement = connection.prepareStatement("INSERT INTO player_levels (uuid, exp, coins) VALUES (?, 0, 0)");
+            statement.setString(1, event.getPlayer().getUniqueId().toString());
+            statement.executeUpdate();
         } catch (Exception e) {
             api.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }

@@ -4,7 +4,7 @@ import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DBConnection;
 import fr.fistin.api.database.DBCredentials;
-import fr.fistin.api.database.IDatabaseManager;
+import fr.fistin.api.database.DatabaseManager;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.sql.SQLException;
@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ApiStatus.Internal
-class DatabaseManager implements IDatabaseManager
+class DatabaseManagerImpl implements DatabaseManager
 {
     private final Map<String, DBConnection> connectionByName = new HashMap<>();
 
-    public DatabaseManager()
+    public DatabaseManagerImpl()
     {
         final FistinAPIConfiguration configuration = ConfigurationProviders.getConfig(FistinAPIConfiguration.class);
         this.addConnection("LevelingConnection", new DBConnection(new DBCredentials(configuration.getLevelingUser(), configuration.getLevelingPass()), configuration.getLevelingHost(), configuration.getLevelingDbName(), configuration.getLevelingPort()));

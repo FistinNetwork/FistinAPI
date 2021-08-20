@@ -2,17 +2,17 @@ package fr.fistin.api.plugin.providers;
 
 import fr.fistin.api.plugin.PluginType;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PluginProvidersTest
 {
     private interface CustomProvider extends IPluginProvider
     {
-        void action();
-
         @Override
         default @NotNull PluginType pluginType()
         {
@@ -20,85 +20,39 @@ public class PluginProvidersTest
         }
     }
 
+    @AfterEach
+    public void clean()
+    {
+        PluginProviders.clear();
+    }
+
     @Test
     public void testOnePluginProvider()
     {
-        class X implements IPluginProvider
-        {
-            @Override
-            public String toString()
-            {
-                return "test ok";
-            }
-
-            @Override
-            public @NotNull PluginType pluginType()
-            {
-                return PluginType.UTILITY;
-            }
-        }
-        final IPluginProvider provider = new X();
+        final IPluginProvider provider = mock(IPluginProvider.class);
+        when(provider.toString()).thenReturn("test ok");
 
         PluginProviders.setProvider(IPluginProvider.class, provider);
 
         final IPluginProvider fromPluginProviders = PluginProviders.getProvider(IPluginProvider.class);
         assertSame(provider, fromPluginProviders);
         assertSame("test ok", fromPluginProviders.toString());
-
-        PluginProviders.clear();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAnObjectProviderInterface()
     {
-        class X implements IPluginProvider
-        {
-            @Override
-            public @NotNull PluginType pluginType()
-            {
-                return PluginType.UTILITY;
-            }
-        }
-
-        PluginProviders.setProvider(X.class, new X());
-        PluginProviders.clear();
+        final IPluginProvider mockedProvider = mock(IPluginProvider.class);
+        assertThrows(IllegalArgumentException.class, () -> PluginProviders.setProvider(mockedProvider.getClass(), mockedProvider));
     }
 
     @Test
     public void testTwoPluginProviders()
     {
-        class X implements IPluginProvider
-        {
-            @Override
-            public String toString()
-            {
-                return "test ok";
-            }
-
-            @Override
-            public @NotNull PluginType pluginType()
-            {
-                return PluginType.UTILITY;
-            }
-        }
-        
-        class Y implements CustomProvider
-        {
-            @Override
-            public String toString()
-            {
-                return "test ok2";
-            }
-
-            @Override
-            public void action()
-            {
-                System.out.println(this);
-            }
-        }
-        
-        final IPluginProvider provider = new X();
-        final CustomProvider provider1 = new Y();
+        final IPluginProvider provider = mock(IPluginProvider.class);
+        final CustomProvider provider1 = mock(CustomProvider.class);
+        when(provider.toString()).thenReturn("test ok");
+        when(provider1.toString()).thenReturn("test ok2");
 
         PluginProviders.setProvider(IPluginProvider.class, provider);
         PluginProviders.setProvider(CustomProvider.class, provider1);
@@ -111,44 +65,13 @@ public class PluginProvidersTest
 
         assertSame(provider1, fromPluginProviders1);
         assertSame("test ok2", fromPluginProviders1.toString());
-
-        PluginProviders.clear();
     }
 
     @Test
     public void testImmutableValuesOfMap()
     {
-        class X implements IPluginProvider
-        {
-            @Override
-            public String toString()
-            {
-                return "test ok";
-            }
-
-            @Override
-            public @NotNull PluginType pluginType()
-            {
-                return PluginType.UTILITY;
-            }
-        }
-        
-        class Y implements IPluginProvider
-        {
-            @Override
-            public String toString()
-            {
-                return "test ok2";
-            }
-
-            @Override
-            public @NotNull PluginType pluginType()
-            {
-                return PluginType.UTILITY;
-            }
-        }
-        final IPluginProvider provider = new X();
-        final IPluginProvider provider1 = new Y();
+        final IPluginProvider provider = mock(IPluginProvider.class);
+        final IPluginProvider provider1 = mock(IPluginProvider.class);
 
         PluginProviders.setProvider(IPluginProvider.class, provider);
         PluginProviders.setProvider(IPluginProvider.class, provider1);
@@ -157,7 +80,5 @@ public class PluginProvidersTest
 
         assertSame(provider, fromPluginProviders);
         assertNotSame(provider1, fromPluginProviders);
-
-        PluginProviders.clear();
     }
 }

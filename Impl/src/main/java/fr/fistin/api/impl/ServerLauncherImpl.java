@@ -8,17 +8,12 @@ import fr.fistin.api.packets.HStartServerPacket;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.utils.FistinAPIException;
 
-import java.util.logging.Level;
-
 public class ServerLauncherImpl implements ServerLauncher
 {
     @Override
     public void launchServer(String template)
     {
-        if (ConfigurationProviders.getConfig(FistinAPIConfiguration.class).getHydraEnable())
-        {
-            PluginProviders.getProvider(IFistinAPIProvider.class).packetManager().sendPacket(new HStartServerPacket(template));
-        }
-        else throw new FistinAPIException("Calling `launchServer` but hydra.enable=false");
+        if (!ConfigurationProviders.getConfig(FistinAPIConfiguration.class).getHydraEnable()) throw new FistinAPIException("Calling `launchServer` but hydra.enable=false");
+        PluginProviders.getProvider(IFistinAPIProvider.class).packetManager().sendPacket(new HStartServerPacket(template));
     }
 }

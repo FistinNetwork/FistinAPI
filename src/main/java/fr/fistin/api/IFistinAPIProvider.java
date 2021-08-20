@@ -1,6 +1,6 @@
 package fr.fistin.api;
 
-import fr.fistin.api.database.IDatabaseManager;
+import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.hydra.ServerLauncher;
 import fr.fistin.api.packets.PacketManager;
 import fr.fistin.api.plugin.PluginType;
@@ -19,7 +19,7 @@ public interface IFistinAPIProvider extends IStandalonePlugin
     @NotNull String BUNGEE_CORD_CHANNEL = "BungeeCord";
 
     @NotNull PacketManager packetManager();
-    @NotNull IDatabaseManager databaseManager();
+    @NotNull DatabaseManager databaseManager();
     @NotNull ServerLauncher serverLauncher();
 
     @Override
