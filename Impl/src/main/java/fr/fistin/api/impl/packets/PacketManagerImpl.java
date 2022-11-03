@@ -1,4 +1,4 @@
-package fr.fistin.api.impl;
+package fr.fistin.api.impl.packets;
 
 import fr.fistin.api.packets.FistinPacket;
 import fr.fistin.api.packets.PacketException;

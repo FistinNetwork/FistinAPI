@@ -1,7 +1,5 @@
 package fr.fistin.api.packets;
 
-import fr.fistin.api.IFistinAPIProvider;
-
 import java.util.UUID;
 
 public class FReturnToBungeePacket implements FistinPacket
@@ -21,7 +19,7 @@ public class FReturnToBungeePacket implements FistinPacket
 
     public FReturnToBungeePacket(Object plugin, String serverName, UUID toSend)
     {
-        this(plugin, IFistinAPIProvider.BUNGEE_CORD_CHANNEL, serverName, toSend);
+        this(plugin, "BungeeCord", serverName, toSend);
     }
 
     public Object getPlugin()

@@ -7,22 +7,6 @@ repositories {
     maven {
         url "https://hub.spigotmc.org/nexus/content/repositories/public"
     }
-
-    maven {
-        credentials {
-            if(System.getenv('USERNAME') != null) {
-                username System.getenv('USERNAME')
-            }
-            else username "${USERNAME}"
-
-            if(System.getenv('TOKEN') != null) {
-                password System.getenv('TOKEN')
-            }
-            else password "${TOKEN}"
-        }
-        name = "HydraConnector_maven"
-        url = "https://maven.pkg.github.com/FistinNetwork/HydraConnector"
-    }
 }
 
 configurations {
@@ -41,13 +25,13 @@ dependencies {
 
     shade project.parent
     shade 'fr.flowarg:sch:1.0.1'
-    shade ('fr.fistin:hydra-connector:1.1.5-SNAPSHOT') {
+    shade ('fr.fistin:hydra-api:1.0.0') {
         exclude module: 'gson'
     }
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    testImplementation 'org.mockito:mockito-core:3.12.1'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
 }
 
 test {

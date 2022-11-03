@@ -1,4 +1,4 @@
-package fr.fistin.api.impl;
+package fr.fistin.api.impl.listener;
 
 import fr.fistin.api.IFistinAPIProvider;
 import fr.fistin.api.plugin.providers.PluginProviders;
@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
-class SetupListener implements Listener
+public class SetupListener implements Listener
 {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)

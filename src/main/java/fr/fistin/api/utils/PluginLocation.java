@@ -91,4 +91,5 @@ public class PluginLocation
     {
         return "PluginLocation{" + "namespace='" + this.namespace + '\'' + ", path='" + this.path + '\'' + ", finalPath='" + this.finalPath + '\'' + '}';
     }
+
 }

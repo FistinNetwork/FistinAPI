@@ -1,4 +1,4 @@
-package fr.fistin.api.impl;
+package fr.fistin.api.impl.database;
 
 import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ApiStatus.Internal
-class DatabaseManagerImpl implements DatabaseManager
+public class DatabaseManagerImpl implements DatabaseManager
 {
     private final Map<String, DBConnection> connectionByName = new HashMap<>();
 

@@ -1,5 +1,6 @@
 package fr.fistin.api.impl;
 
+import fr.fistin.api.impl.packets.PacketManagerImpl;
 import fr.fistin.api.packets.FistinPacket;
 import fr.fistin.api.packets.PacketException;
 import fr.fistin.api.packets.PacketManager;

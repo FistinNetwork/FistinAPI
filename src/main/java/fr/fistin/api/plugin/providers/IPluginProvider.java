@@ -8,5 +8,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface IPluginProvider
 {
+
+    /**
+     * Get the type of the plugin
+     *
+     * @return A {@link PluginType}
+     */
     @NotNull PluginType pluginType();
+
 }

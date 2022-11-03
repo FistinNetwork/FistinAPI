@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
+    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
 }
 
 allprojects {
@@ -11,6 +11,8 @@ allprojects {
     version '1.6.1'
 
     java {
+        withJavadocJar()
+
         toolchain {
             languageVersion = JavaLanguageVersion.of(8)
         }
@@ -23,23 +25,30 @@ allprojects {
 
     repositories {
         mavenCentral()
-    }
 
-    task javadocJar(type: Jar) {
-        classifier 'javadoc'
-        from javadoc
+        maven {
+            credentials {
+                if (System.getenv('USERNAME') != null) {
+                    username System.getenv('USERNAME')
+                }
+                else username "${USERNAME}"
+
+                if (System.getenv('TOKEN') != null) {
+                    password System.getenv('TOKEN')
+                }
+                else password "${TOKEN}"
+            }
+
+            name = "Hydra_maven"
+            url = "https://maven.pkg.github.com/FistinNetwork/Hydra"
+        }
     }
 }
 
 archivesBaseName = "FistinAPI"
 
-task sourcesJar(type: Jar) {
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourcesJar, javadocJar
+java {
+    withSourcesJar()
 }
 
 publishing {
@@ -73,10 +82,11 @@ publishing {
 }
 
 dependencies {
-    api 'org.jetbrains:annotations:22.0.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    testImplementation 'org.mockito:mockito-core:3.12.1'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.1'
+    api 'fr.fistin:hydra-api:1.0.0'
+    api 'org.jetbrains:annotations:23.0.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
 }
 
 test {
