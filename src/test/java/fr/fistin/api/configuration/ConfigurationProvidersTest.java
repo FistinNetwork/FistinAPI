@@ -1,7 +1,5 @@
-package fr.fistin.api.impl.server.configuration;
+package fr.fistin.api.configuration;
 
-import fr.fistin.api.configuration.ConfigurationProviders;
-import fr.fistin.api.configuration.FistinConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

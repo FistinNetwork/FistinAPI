@@ -1,7 +1,9 @@
 package fr.fistin.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import fr.fistin.api.database.DatabaseManager;
-import fr.fistin.api.packets.PacketManager;
+import fr.fistin.api.packet.PacketManager;
 import fr.fistin.api.plugin.PluginType;
 import fr.fistin.api.plugin.providers.IStandalonePlugin;
 import fr.fistin.api.plugin.providers.PluginProviders;
@@ -27,6 +29,8 @@ public interface IFistinAPIProvider extends IStandalonePlugin
 
     /** The namespace of Fistin API */
     @NotNull String NAMESPACE = "fistinapi";
+    /** The {@link  Gson} instance used by Fistin API */
+    @NotNull Gson GSON = new GsonBuilder().create();
 
     /**
      * Get the packet manager instance.<br>

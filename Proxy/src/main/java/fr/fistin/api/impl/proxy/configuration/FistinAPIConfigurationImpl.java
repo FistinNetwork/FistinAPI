@@ -3,7 +3,6 @@ package fr.fistin.api.impl.proxy.configuration;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.impl.proxy.FistinAPI;
 import fr.fistin.hydra.api.protocol.data.RedisData;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;

@@ -6,9 +6,9 @@ import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.impl.common.database.DatabaseManagerImpl;
-import fr.fistin.api.impl.common.packets.PacketManagerImpl;
+import fr.fistin.api.impl.common.packet.PacketManagerImpl;
 import fr.fistin.api.impl.common.redis.RedisImpl;
-import fr.fistin.api.packets.PacketManager;
+import fr.fistin.api.packet.PacketManager;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.redis.Redis;
 import fr.fistin.api.utils.PluginLocation;
@@ -32,7 +32,6 @@ public class FistinAPIProvider implements IFistinAPIProvider {
     protected DatabaseManager databaseManager;
 
     protected RedisImpl redis;
-    protected RedisImpl communicationRedis;
 
     protected HydraEnv hydraEnv;
     protected HydraAPI hydraAPI;
@@ -57,9 +56,6 @@ public class FistinAPIProvider implements IFistinAPIProvider {
 
     protected void init()
     {
-        this.databaseManager = new DatabaseManagerImpl();
-        this.packetManager = new PacketManagerImpl();
-
         final boolean hydraEnabled = this.configuration.isHydraEnabled();
 
         if (hydraEnabled) {
@@ -69,20 +65,20 @@ public class FistinAPIProvider implements IFistinAPIProvider {
         final RedisData redisConfig = hydraEnabled ? this.hydraEnv.getRedis() : this.configuration.getRedis();
 
         this.redis = new RedisImpl(redisConfig);
-        this.communicationRedis = new RedisImpl(redisConfig);
 
-        if (!this.redis.connect() || !this.communicationRedis.connect()) {
+        if (!this.redis.connect()) {
             System.exit(-1);
             return;
         }
 
-        IFistinAPIProvider.fistinAPI().getLogger().log(Level.INFO, "Fistin API is now connected with Redis database.");
+        this.databaseManager = new DatabaseManagerImpl();
+        this.packetManager = new PacketManagerImpl();
 
         if (hydraEnabled) {
             final String appName = hydraEnv.getName();
 
             this.hydraAPI = new HydraAPI.Builder(HydraAPI.Type.SERVER, appName)
-                    .withRedis(this.communicationRedis)
+                    .withRedis(this.redis)
                     .withLogger(this.getLogger())
                     .withLogHeader("Hydra")
                     .build();
@@ -104,7 +100,6 @@ public class FistinAPIProvider implements IFistinAPIProvider {
         }
 
         this.redis.disconnect();
-        this.communicationRedis.disconnect();
 
         PluginProviders.clear();
         ConfigurationProviders.clear();

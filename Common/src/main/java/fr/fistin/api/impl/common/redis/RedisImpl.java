@@ -1,7 +1,6 @@
 package fr.fistin.api.impl.common.redis;
 
 import fr.fistin.api.IFistinAPIProvider;
-import fr.fistin.api.impl.common.FistinAPIProvider;
 import fr.fistin.api.redis.Redis;
 import fr.fistin.hydra.api.protocol.data.RedisData;
 import fr.fistin.hydra.api.redis.IHydraRedis;
@@ -53,6 +52,8 @@ public class RedisImpl implements Redis, IHydraRedis {
 
             this.connected = true;
             this.reconnectTask = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::reconnect, 10, 10, TimeUnit.SECONDS);
+
+            IFistinAPIProvider.fistinAPI().getLogger().log(Level.INFO, "Fistin API is now connected with Redis database.");
         } catch (Exception e) {
             IFistinAPIProvider.fistinAPI().getLogger().log(Level.SEVERE, "Couldn't connect to Redis database!");
         }

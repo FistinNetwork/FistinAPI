@@ -4,7 +4,7 @@ import fr.fistin.hydra.api.proxy.HydraProxy;
 
 /**
  * Created by AstFaster
- * on 03/11/2022 at 20:05
+ * on 03/11/2022 at 20:05.<br>
  *
  * Represents the abstraction of the proxy running Fistin API.<br>
  * It will not work if Fistin API is not using Hydra systems or not running on a proxy.

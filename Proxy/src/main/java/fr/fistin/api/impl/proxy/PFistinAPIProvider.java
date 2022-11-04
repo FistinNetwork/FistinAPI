@@ -2,13 +2,17 @@ package fr.fistin.api.impl.proxy;
 
 import fr.fistin.api.impl.common.FistinAPIProvider;
 import fr.fistin.api.impl.proxy.configuration.FistinAPIConfigurationImpl;
+import fr.fistin.api.impl.proxy.listener.ServersListener;
+import fr.fistin.api.impl.proxy.receiver.PlayersReceiver;
 import fr.fistin.api.proxy.FistinProxy;
-import fr.fistin.api.server.FistinServer;
-import fr.fistin.api.utils.FistinAPIException;
+import fr.fistin.hydra.api.event.HydraEvent;
+import fr.fistin.hydra.api.server.HydraServer;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.logging.Logger;
 
 @ApiStatus.Internal
@@ -50,7 +54,21 @@ public final class PFistinAPIProvider extends FistinAPIProvider
     @Override
     protected void postInit()
     {
+        if (this.configuration.isHydraEnabled()) {
+            // Register existing servers
+            for (HydraServer server : this.hydraAPI.getServersService().getServers()) {
+                final String serverName = server.getName();
+                final ServerInfo serverInfo = ProxyServer.getInstance().constructServerInfo(serverName, new InetSocketAddress(serverName, 25565), "", false);
 
+                ProxyServer.getInstance().getServers().put(serverName, serverInfo);
+            }
+
+            this.hydraAPI.getEventBus().subscribe(HydraEvent.class, new ServersListener());
+        }
+
+        this.packetManager.registerReceiver("players", new PlayersReceiver());
+
+        super.postInit();
     }
 
     @Override

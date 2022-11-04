@@ -1,8 +1,6 @@
 package fr.fistin.api.impl.proxy.listener;
 
 import fr.fistin.api.IFistinAPIProvider;
-import fr.fistin.api.configuration.ConfigurationProviders;
-import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.proxy.FistinProxy;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
