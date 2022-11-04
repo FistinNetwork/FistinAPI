@@ -1,0 +1,12 @@
+name: FistinAPI
+version: @version@
+main: fr.fistin.api.impl.server.FistinAPI
+prefix: FistinAPI
+website: https://fistin.fr
+description: API de FistinNetwork, (c) FistinNetwork - All rights reserved.
+load: POSTWORLD
+author: Flow Arg (FlowArg)
+authors:
+  - Flow Arg (Maintainer)
+  - Filouz (Contributor)
+  - Faustin (Contributor)

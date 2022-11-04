@@ -1,2 +1,5 @@
 rootProject.name = 'FistinAPI'
-include 'Impl'
+include 'Server'
+include 'Proxy'
+include 'Common'
+

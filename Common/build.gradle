@@ -1,0 +1,35 @@
+archivesBaseName = "FistinAPI-Common"
+
+dependencies {
+    api project.parent
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact tasks.sourcesJar
+            artifact tasks.javadocJar
+
+            pom {
+                groupId = project.group
+                artifactId = 'fistinapi-common'
+                version = project.version
+                name = 'FistinAPI'
+                description = 'API afin de communiquer entre les différents composants de l\'infrastructure de FistinNetwork. (Common Impl)'
+                url = 'https://github.com/FistinNetwork/FistinAPI'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username System.getenv('USERNAME')
+                password System.getenv('TOKEN')
+            }
+            name "FistinAPI_maven"
+            url 'https://maven.pkg.github.com/FistinNetwork/FistinAPI'
+        }
+    }
+}

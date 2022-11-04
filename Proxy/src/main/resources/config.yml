@@ -1,0 +1,14 @@
+databases:
+  leveling:
+    credentials:
+      user: "root"
+      pass: ""
+    host: "localhost"
+    dbName: "minecraft"
+    port: 3306
+redis:
+  hostname: "localhost"
+  port: 6379
+  password: ""
+hydra:
+  enable: false

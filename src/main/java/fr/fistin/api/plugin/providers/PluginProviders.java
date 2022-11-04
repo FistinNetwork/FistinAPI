@@ -13,7 +13,7 @@ public class PluginProviders
     @SuppressWarnings("unchecked")
     public static <P extends IPluginProvider> P getProvider(Class<P> providerClass)
     {
-        return (P)PLUGIN_PROVIDERS.get(providerClass).get();
+        return (P) PLUGIN_PROVIDERS.get(providerClass).get();
     }
 
     public static <P extends IPluginProvider> void setProvider(Class<? extends IPluginProvider> providerInterface, P provider)

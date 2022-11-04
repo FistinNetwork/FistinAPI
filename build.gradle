@@ -12,6 +12,7 @@ allprojects {
 
     java {
         withJavadocJar()
+        withSourcesJar()
 
         toolchain {
             languageVersion = JavaLanguageVersion.of(8)
@@ -46,10 +47,6 @@ allprojects {
 }
 
 archivesBaseName = "FistinAPI"
-
-java {
-    withSourcesJar()
-}
 
 publishing {
     publications {

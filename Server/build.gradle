@@ -1,0 +1,88 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+archivesBaseName = "FistinAPI-Server"
+
+repositories {
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
+    }
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/public"
+    }
+}
+
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
+jar {
+    from {
+        project.parent.sourceSets.main.output
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+}
+
+dependencies {
+    implementation('org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT') {
+        exclude module: 'junit'
+    }
+
+    shade project(":Common")
+    shade 'fr.flowarg:sch:1.0.1'
+    shade ('fr.fistin:hydra-api:1.0.0') {
+        exclude module: 'gson'
+    }
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
+}
+
+processResources {
+    filter {
+        it.replace('@version@', project.version)
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+artifacts {
+    archives shadowJar
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact tasks.sourcesJar
+            artifact tasks.javadocJar
+            artifact tasks.shadowJar
+
+            pom {
+                groupId = project.group
+                artifactId = 'fistinapi-server'
+                version = project.version
+                name = 'FistinAPI'
+                description = 'API afin de communiquer entre les différents composants de l\'infrastructure de FistinNetwork. (Server Impl)'
+                url = 'https://github.com/FistinNetwork/FistinAPI'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username System.getenv('USERNAME')
+                password System.getenv('TOKEN')
+            }
+            name "FistinAPI_maven"
+            url 'https://maven.pkg.github.com/FistinNetwork/FistinAPI'
+        }
+    }
+}

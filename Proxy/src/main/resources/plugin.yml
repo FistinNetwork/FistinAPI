@@ -1,0 +1,5 @@
+name: FistinAPI
+version: @version@
+main: fr.fistin.api.impl.proxy.FistinAPI
+description: API de FistinNetwork, (c) FistinNetwork - All rights reserved.
+author: Flow Arg (FlowArg)

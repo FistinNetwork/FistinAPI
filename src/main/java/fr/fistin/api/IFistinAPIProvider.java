@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IFistinAPIProvider extends IStandalonePlugin
 {
+
     /**
      * Get the Fistin API instance from plugin providers.
      *

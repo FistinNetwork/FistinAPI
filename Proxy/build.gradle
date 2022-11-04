@@ -1,0 +1,73 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+archivesBaseName = "FistinAPI-Proxy"
+
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
+jar {
+    from {
+        project.parent.sourceSets.main.output
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+}
+
+dependencies {
+    implementation('net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT') {
+        exclude module: 'junit'
+    }
+
+    shade project(":Common")
+}
+
+artifacts {
+    archives shadowJar
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact tasks.sourcesJar
+            artifact tasks.javadocJar
+            artifact tasks.shadowJar
+
+            pom {
+                groupId = project.group
+                artifactId = 'fistinapi-proxy'
+                version = project.version
+                name = 'FistinAPI'
+                description = 'API afin de communiquer entre les différents composants de l\'infrastructure de FistinNetwork. (Proxy Impl)'
+                url = 'https://github.com/FistinNetwork/FistinAPI'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username System.getenv('USERNAME')
+                password System.getenv('TOKEN')
+            }
+            name "FistinAPI_maven"
+            url 'https://maven.pkg.github.com/FistinNetwork/FistinAPI'
+        }
+    }
+}
+
+processResources {
+    filter {
+        it.replace('@version@', project.version)
+    }
+}
