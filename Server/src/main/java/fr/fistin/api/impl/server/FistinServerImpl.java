@@ -20,7 +20,7 @@ public class FistinServerImpl implements FistinServer {
 
     public FistinServerImpl(String name) {
         if (!ConfigurationProviders.getConfig(FistinAPIConfiguration.class).isHydraEnabled()) {
-            this.handle = new HydraServer("dev", "normal", "", HydraServer.Accessibility.PUBLIC, HydraServer.Process.PERMANENT, new HydraServerOptions(), new HydraData(), 1000);
+            this.handle = new HydraServer(name, "normal", "", HydraServer.Accessibility.PUBLIC, HydraServer.Process.PERMANENT, new HydraServerOptions(), new HydraData(), 1000);
             return;
         }
 

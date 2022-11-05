@@ -14,6 +14,7 @@ import org.jetbrains.annotations.ApiStatus;
 public class FistinAPIConfigurationImpl implements FistinAPIConfiguration
 {
     private final FileConfiguration config = JavaPlugin.getPlugin(FistinAPI.class).getConfig();
+    private final BooleanEntry localEntry = new BooleanEntry("local", this.config);
     private final StringEntry levelingUser = new StringEntry("databases.leveling.credentials.user", this.config);
     private final StringEntry levelingPass = new StringEntry("databases.leveling.credentials.pass", this.config);
     private final StringEntry levelingHost = new StringEntry("databases.leveling.host", this.config);
@@ -25,6 +26,11 @@ public class FistinAPIConfigurationImpl implements FistinAPIConfiguration
     private final BooleanEntry hydraEnable = new BooleanEntry("hydra.enable", this.config);
 
     private RedisData redis;
+
+    @Override
+    public boolean isLocal() {
+        return this.localEntry.get();
+    }
 
     @Override
     public String getLevelingUser()

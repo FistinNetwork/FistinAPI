@@ -7,8 +7,10 @@ import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.impl.common.database.DatabaseManagerImpl;
 import fr.fistin.api.impl.common.packet.PacketManagerImpl;
+import fr.fistin.api.impl.common.player.PlayersServiceImpl;
 import fr.fistin.api.impl.common.redis.RedisImpl;
 import fr.fistin.api.packet.PacketManager;
+import fr.fistin.api.player.PlayersService;
 import fr.fistin.api.plugin.providers.PluginProviders;
 import fr.fistin.api.redis.Redis;
 import fr.fistin.api.utils.PluginLocation;
@@ -35,6 +37,8 @@ public class FistinAPIProvider implements IFistinAPIProvider {
 
     protected HydraEnv hydraEnv;
     protected HydraAPI hydraAPI;
+
+    protected PlayersService playersService;
 
     public void enable(FistinAPIConfiguration configuration) {
         this.getLogger().log(Level.INFO, "==========================");
@@ -84,6 +88,8 @@ public class FistinAPIProvider implements IFistinAPIProvider {
                     .build();
             this.hydraAPI.start();
         }
+
+        this.playersService = new PlayersServiceImpl();
     }
 
     protected void postInit()
@@ -127,6 +133,11 @@ public class FistinAPIProvider implements IFistinAPIProvider {
     @Override
     public HydraAPI hydra() {
         return this.hydraAPI;
+    }
+
+    @Override
+    public @NotNull PlayersService playersService() {
+        return this.playersService;
     }
 
     @Override

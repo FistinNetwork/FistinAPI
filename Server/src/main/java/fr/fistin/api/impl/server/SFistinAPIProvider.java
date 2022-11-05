@@ -3,6 +3,7 @@ package fr.fistin.api.impl.server;
 import fr.fistin.api.impl.common.FistinAPIProvider;
 import fr.fistin.api.impl.server.configuration.FistinAPIConfigurationImpl;
 import fr.fistin.api.impl.server.listener.JoinListener;
+import fr.fistin.api.impl.server.listener.SessionListener;
 import fr.fistin.api.impl.server.listener.SetupListener;
 import fr.fistin.api.server.FistinServer;
 import org.bukkit.event.Listener;
@@ -39,9 +40,7 @@ public final class SFistinAPIProvider extends FistinAPIProvider
     {
         super.init();
 
-        if (this.configuration.isHydraEnabled()) {
-            this.server = new FistinServerImpl(this.hydraEnv.getName());
-        }
+        this.server = new FistinServerImpl(this.hydraEnv == null ? "dev-server" : this.hydraEnv.getName());
     }
 
     @Override
@@ -51,6 +50,7 @@ public final class SFistinAPIProvider extends FistinAPIProvider
 
         listenerRegisterer.accept(new SetupListener());
         listenerRegisterer.accept(new JoinListener());
+        listenerRegisterer.accept(new SessionListener());
 
         super.postInit();
     }

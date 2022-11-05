@@ -7,10 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -19,6 +16,40 @@ import java.util.logging.Level;
 @ApiStatus.Internal
 class LevelingProvider implements ILevelingProvider
 {
+    @Override
+    public void initialize(UUID player) {
+        if (!this.isPlayerExisting(player)) {
+            this.createConnectionAndRequest("INSERT INTO player_levels (uuid, exp, coins) VALUES (?, 0, 0)", statement -> {
+                try {
+                    statement.setString(1, player.toString());
+                    statement.executeUpdate();
+                } catch (SQLException e) {
+                    catchException(e);
+                }
+            });
+        }
+    }
+
+    private boolean isPlayerExisting(UUID player) {
+        return this.createConnectionAndRequest("SELECT * FROM player_levels", statement -> {
+            try {
+                final ResultSet resultSet =  statement.executeQuery();
+
+                if (resultSet.getMetaData().getColumnName(1).equalsIgnoreCase("uuid")) {
+                    while (resultSet.next()) {
+                        if (resultSet.getString("uuid").equalsIgnoreCase(player.toString())) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            } catch (SQLException e) {
+                catchException(e);
+            }
+            return false;
+        }, false);
+    }
+
     @Override
     public void addExp(@NotNull UUID player, int amount, float boost)
     {
@@ -102,14 +133,16 @@ class LevelingProvider implements ILevelingProvider
         try
         {
             final Connection connection = this.createConnection();
-            if(connection != null) return request.apply(connection.prepareStatement(cmd));
-            else return nullValue;
+
+            if(connection != null) {
+                return request.apply(connection.prepareStatement(cmd));
+            }
         }
         catch (SQLException e)
         {
             catchException(e);
-            return nullValue;
         }
+        return nullValue;
     }
 
     private void createConnectionAndRequest(String cmd, Consumer<PreparedStatement> request)
@@ -117,7 +150,10 @@ class LevelingProvider implements ILevelingProvider
         try
         {
             final Connection connection = this.createConnection();
-            if(connection != null) request.accept(connection.prepareStatement(cmd));
+
+            if(connection != null) {
+                request.accept(connection.prepareStatement(cmd));
+            }
         }
         catch (SQLException e)
         {
@@ -170,4 +206,5 @@ class LevelingProvider implements ILevelingProvider
     {
         PluginProviders.getProvider(IFistinAPIProvider.class).getLogger().log(Level.SEVERE, e.getMessage(), e);
     }
+
 }

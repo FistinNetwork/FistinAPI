@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.packet.PacketManager;
+import fr.fistin.api.player.PlayersService;
 import fr.fistin.api.plugin.PluginType;
 import fr.fistin.api.plugin.providers.IStandalonePlugin;
 import fr.fistin.api.plugin.providers.PluginProviders;
@@ -62,6 +63,14 @@ public interface IFistinAPIProvider extends IStandalonePlugin
      * @return The {@link HydraAPI} instance
      */
     HydraAPI hydra();
+
+    /**
+     * Get the players service instance.<br>
+     * {@linkplain PlayersService Players service} is used to interact with players data.
+     *
+     * @return The {@link PlayersService} instance
+     */
+    @NotNull PlayersService playersService();
 
     /**
      * Get the server instance if Fistin API is running on a server.

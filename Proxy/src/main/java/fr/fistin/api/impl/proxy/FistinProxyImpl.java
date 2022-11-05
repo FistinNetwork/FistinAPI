@@ -9,6 +9,8 @@ import fr.fistin.hydra.api.protocol.data.HydraData;
 import fr.fistin.hydra.api.proxy.HydraProxy;
 import fr.fistin.hydra.api.proxy.event.HydraProxyUpdatedEvent;
 
+import java.util.HashSet;
+
 /**
  * Created by AstFaster
  * on 04/11/2022 at 14:59
@@ -19,7 +21,7 @@ public class FistinProxyImpl implements FistinProxy {
 
     public FistinProxyImpl(String name) {
         if (!ConfigurationProviders.getConfig(FistinAPIConfiguration.class).isHydraEnabled()) {
-            this.handle = new HydraProxy(new HydraData(), 25577);
+            this.handle = new HydraProxy(name, System.currentTimeMillis(), HydraProxy.State.STARTING, new HydraData(), new HashSet<>(), 25577);
             return;
         }
 

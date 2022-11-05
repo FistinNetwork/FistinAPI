@@ -17,6 +17,7 @@ import java.nio.file.Files;
 public class FistinAPIConfigurationImpl implements FistinAPIConfiguration
 {
 
+    private final boolean local;
     private final String levelingUser;
     private final String levelingPass;
     private final String levelingHost;
@@ -45,6 +46,7 @@ public class FistinAPIConfigurationImpl implements FistinAPIConfiguration
 
         final Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(plugin.getDataFolder(), "config.yml"));
 
+        this.local = config.getBoolean("local");
         this.levelingUser = config.getString("databases.leveling.credentials.user");
         this.levelingPass = config.getString("databases.leveling.credentials.pass");
         this.levelingHost = config.getString("databases.leveling.host");
@@ -54,6 +56,11 @@ public class FistinAPIConfigurationImpl implements FistinAPIConfiguration
         this.redisPort = config.getInt("redis.port");
         this.redisPassword = config.getString("redis.password");
         this.hydraEnable = config.getBoolean("hydra.enable");
+    }
+
+    @Override
+    public boolean isLocal() {
+        return this.local;
     }
 
     @Override

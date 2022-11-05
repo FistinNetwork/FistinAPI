@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface ILevelingProvider extends IPluginProvider
 {
+    void initialize(UUID player);
+
     void addExp(@NotNull UUID player, final int amount, final float boost);
     void removeExp(@NotNull UUID player, final int amount);
     void addCoins(@NotNull UUID player, final int amount, final float boost);
