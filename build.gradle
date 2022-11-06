@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 allprojects {
@@ -48,10 +48,33 @@ allprojects {
 
 archivesBaseName = "FistinAPI"
 
+configurations {
+    shade
+    api.extendsFrom shade
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+}
+
+dependencies {
+    shade 'fr.fistin:hydra-api:1.0.0'
+
+    api 'org.jetbrains:annotations:23.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
 publishing {
     publications {
-        maven(MavenPublication) {
-            from components.java
+        maven(MavenPublication) { publication ->
+            project.shadow.component(publication)
             artifact tasks.sourcesJar
             artifact tasks.javadocJar
 
@@ -76,16 +99,4 @@ publishing {
             url "https://maven.pkg.github.com/FistinNetwork/FistinAPI"
         }
     }
-}
-
-dependencies {
-    api 'fr.fistin:hydra-api:1.0.0'
-    api 'org.jetbrains:annotations:23.0.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
-    testImplementation 'org.mockito:mockito-core:4.8.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
-}
-
-test {
-    useJUnitPlatform()
 }

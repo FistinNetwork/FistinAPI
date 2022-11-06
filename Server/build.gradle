@@ -16,12 +16,6 @@ configurations {
     implementation.extendsFrom shade
 }
 
-jar {
-    from {
-        project.parent.sourceSets.main.output
-    }
-}
-
 shadowJar {
     configurations = [project.configurations.shade]
 }
@@ -52,17 +46,12 @@ test {
     useJUnitPlatform()
 }
 
-artifacts {
-    archives shadowJar
-}
-
 publishing {
     publications {
-        maven(MavenPublication) {
-            from components.java
+        maven(MavenPublication) { publication ->
+            project.shadow.component(publication)
             artifact tasks.sourcesJar
             artifact tasks.javadocJar
-            artifact tasks.shadowJar
 
             pom {
                 groupId = project.group

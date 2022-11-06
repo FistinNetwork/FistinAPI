@@ -6,9 +6,11 @@ import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.impl.common.database.DatabaseManagerImpl;
+import fr.fistin.api.impl.common.lobby.LobbyBalancerImpl;
 import fr.fistin.api.impl.common.packet.PacketManagerImpl;
 import fr.fistin.api.impl.common.player.PlayersServiceImpl;
 import fr.fistin.api.impl.common.redis.RedisImpl;
+import fr.fistin.api.lobby.LobbyBalancer;
 import fr.fistin.api.packet.PacketManager;
 import fr.fistin.api.player.PlayersService;
 import fr.fistin.api.plugin.providers.PluginProviders;
@@ -39,6 +41,8 @@ public class FistinAPIProvider implements IFistinAPIProvider {
     protected HydraAPI hydraAPI;
 
     protected PlayersService playersService;
+
+    protected LobbyBalancer lobbyBalancer;
 
     public void enable(FistinAPIConfiguration configuration) {
         this.getLogger().log(Level.INFO, "==========================");
@@ -90,6 +94,7 @@ public class FistinAPIProvider implements IFistinAPIProvider {
         }
 
         this.playersService = new PlayersServiceImpl();
+        this.lobbyBalancer = new LobbyBalancerImpl();
     }
 
     protected void postInit()
@@ -138,6 +143,11 @@ public class FistinAPIProvider implements IFistinAPIProvider {
     @Override
     public @NotNull PlayersService playersService() {
         return this.playersService;
+    }
+
+    @Override
+    public @NotNull LobbyBalancer lobbyBalancer() {
+        return this.lobbyBalancer;
     }
 
     @Override
