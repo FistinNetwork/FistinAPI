@@ -2,12 +2,14 @@ package fr.fistin.api.lobby;
 
 /**
  * Created by AstFaster
- * on 05/11/2022 at 20:50
+ * on 05/11/2022 at 20:50.<br>
+ *
+ * The {@link LobbyBalancer} is used to interact with the current best lobby where players will be connected.
  */
 public interface LobbyBalancer {
 
-    /** The hash used by the balancer */
-    String HASH = "lobby-balancer";
+    /** The Redis key used by the balancer */
+    String REDIS_KEY = "lobby-balancer";
 
     /**
      * Get the current best lobby name.

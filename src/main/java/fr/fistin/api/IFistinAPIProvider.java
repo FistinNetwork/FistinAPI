@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.fistin.api.database.DatabaseManager;
 import fr.fistin.api.lobby.LobbyBalancer;
+import fr.fistin.api.network.FistinNetwork;
 import fr.fistin.api.packet.PacketManager;
 import fr.fistin.api.player.PlayersService;
 import fr.fistin.api.plugin.PluginType;
@@ -66,22 +67,6 @@ public interface IFistinAPIProvider extends IStandalonePlugin
     HydraAPI hydra();
 
     /**
-     * Get the players service instance.<br>
-     * {@linkplain PlayersService Players service} is used to interact with players data.
-     *
-     * @return The {@link PlayersService} instance
-     */
-    @NotNull PlayersService playersService();
-
-    /**
-     * Get the lobby balancer instance.<br>
-     * {@linkplain LobbyBalancer Lobby balancer} is used to get the current best lobby on the network.
-     *
-     * @return The {@link LobbyBalancer} instance
-     */
-    @NotNull LobbyBalancer lobbyBalancer();
-
-    /**
      * Get the server instance if Fistin API is running on a server.
      *
      * @return THe {@link FistinServer} instance; or <code>null</code> if Fistin API is not on a server
@@ -98,6 +83,30 @@ public interface IFistinAPIProvider extends IStandalonePlugin
     default FistinProxy proxy() {
         throw new FistinAPIException("Fistin API is not running in proxy mode.");
     }
+
+    /**
+     * Get the network instance.<br>
+     * {@linkplain FistinNetwork Network} is used to fetch network information, interact with maintenance, etc.
+     *
+     * @return The {@link FistinNetwork} instance
+     */
+    @NotNull FistinNetwork network();
+
+    /**
+     * Get the players service instance.<br>
+     * {@linkplain PlayersService Players service} is used to interact with players data.
+     *
+     * @return The {@link PlayersService} instance
+     */
+    @NotNull PlayersService playersService();
+
+    /**
+     * Get the lobby balancer instance.<br>
+     * {@linkplain LobbyBalancer Lobby balancer} is used to get the current best lobby on the network.
+     *
+     * @return The {@link LobbyBalancer} instance
+     */
+    @NotNull LobbyBalancer lobbyBalancer();
 
     @Override
     default @NotNull PluginType pluginType()

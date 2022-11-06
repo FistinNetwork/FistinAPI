@@ -12,17 +12,17 @@ import java.util.UUID;
  */
 public class PlayersServiceImpl implements PlayersService {
 
-    private static final String HASH = "players-sessions:";
+    private static final String REDIS_KEY = "players-sessions:";
 
     @Override
     public boolean isPlayerOnline(UUID playerId) {
-        return IFistinAPIProvider.fistinAPI().redis().get(jedis -> jedis.exists(HASH + playerId.toString()));
+        return IFistinAPIProvider.fistinAPI().redis().get(jedis -> jedis.exists(REDIS_KEY + playerId.toString()));
     }
 
     @Override
     public PlayerSession session(UUID playerId) {
         return IFistinAPIProvider.fistinAPI().redis().get(jedis -> {
-            final String json = jedis.get(HASH + playerId.toString());
+            final String json = jedis.get(REDIS_KEY + playerId.toString());
 
             return json == null ? null : IFistinAPIProvider.GSON.fromJson(json, PlayerSessionImpl.class);
         });
@@ -39,12 +39,12 @@ public class PlayersServiceImpl implements PlayersService {
 
     @Override
     public void saveSession(PlayerSession session) {
-        IFistinAPIProvider.fistinAPI().redis().process(jedis -> jedis.set(HASH + session.playerId().toString(), IFistinAPIProvider.GSON.toJson(session)));
+        IFistinAPIProvider.fistinAPI().redis().process(jedis -> jedis.set(REDIS_KEY + session.playerId().toString(), IFistinAPIProvider.GSON.toJson(session)));
     }
 
     @Override
     public void deleteSession(UUID playerId) {
-        IFistinAPIProvider.fistinAPI().redis().process(jedis -> jedis.del(HASH + playerId.toString()));
+        IFistinAPIProvider.fistinAPI().redis().process(jedis -> jedis.del(REDIS_KEY + playerId.toString()));
     }
 
 }

@@ -14,7 +14,7 @@ public class LobbyBalancerImpl implements LobbyBalancer {
     @Override
     public String bestLobby() {
         return IFistinAPIProvider.fistinAPI().redis().get(jedis -> {
-            final List<String> lobbies = jedis.zrange(HASH, 0, 0);
+            final List<String> lobbies = jedis.zrange(REDIS_KEY, 0, 0);
 
             if (lobbies != null && lobbies.size() > 0) {
                 return lobbies.get(0);
