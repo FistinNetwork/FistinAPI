@@ -5,6 +5,9 @@ import fr.fistin.api.ILevelingProvider;
 import fr.fistin.api.configuration.ConfigurationProviders;
 import fr.fistin.api.configuration.FistinAPIConfiguration;
 import fr.fistin.api.database.DatabaseManager;
+import fr.fistin.api.eventbus.DefaultEventBus;
+import fr.fistin.api.eventbus.FistinEvent;
+import fr.fistin.api.eventbus.FistinEventBus;
 import fr.fistin.api.impl.common.database.DatabaseManagerImpl;
 import fr.fistin.api.impl.common.lobby.LobbyBalancerImpl;
 import fr.fistin.api.impl.common.network.FistinNetworkImpl;
@@ -23,6 +26,7 @@ import fr.fistin.hydra.api.protocol.data.HydraEnv;
 import fr.fistin.hydra.api.protocol.data.RedisData;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,8 +37,8 @@ import java.util.logging.Logger;
 public class FistinAPIProvider implements IFistinAPIProvider {
 
     protected FistinAPIConfiguration configuration;
+    protected Logger logger;
 
-    protected PacketManager packetManager;
     protected DatabaseManager databaseManager;
 
     protected RedisImpl redis;
@@ -42,13 +46,17 @@ public class FistinAPIProvider implements IFistinAPIProvider {
     protected HydraEnv hydraEnv;
     protected HydraAPI hydraAPI;
 
+    protected PacketManager packetManager;
+    protected FistinEventBus<Supplier<? extends FistinEvent>> eventBus;
     protected FistinNetwork network;
     protected PlayersService playersService;
     protected LobbyBalancer lobbyBalancer;
 
-    public void enable(FistinAPIConfiguration configuration) {
-        this.getLogger().log(Level.INFO, "==========================");
-        this.getLogger().log(Level.INFO, "Hello, Starting Fistin API");
+    public void enable(FistinAPIConfiguration configuration, Logger logger) {
+        this.logger = logger;
+
+        this.logger.log(Level.INFO, "==========================");
+        this.logger.log(Level.INFO, "Hello, Starting Fistin API");
 
         this.configuration = configuration;
 
@@ -82,7 +90,6 @@ public class FistinAPIProvider implements IFistinAPIProvider {
         }
 
         this.databaseManager = new DatabaseManagerImpl();
-        this.packetManager = new PacketManagerImpl();
 
         if (hydraEnabled) {
             final String appName = hydraEnv.getName();
@@ -95,6 +102,8 @@ public class FistinAPIProvider implements IFistinAPIProvider {
             this.hydraAPI.start();
         }
 
+        this.packetManager = new PacketManagerImpl();
+        this.eventBus = new DefaultEventBus();
         this.network = new FistinNetworkImpl();
         this.playersService = new PlayersServiceImpl();
         this.lobbyBalancer = new LobbyBalancerImpl();
@@ -119,13 +128,8 @@ public class FistinAPIProvider implements IFistinAPIProvider {
         ConfigurationProviders.clear();
         PluginLocation.clear();
 
-        this.getLogger().log(Level.INFO, "Stopped Fistin API, bye!");
-        this.getLogger().log(Level.INFO, "=========================");
-    }
-
-    @Override
-    public @NotNull PacketManager packetManager() {
-        return this.packetManager;
+        this.logger.log(Level.INFO, "Stopped Fistin API, bye!");
+        this.logger.log(Level.INFO, "=========================");
     }
 
     @Override
@@ -141,6 +145,16 @@ public class FistinAPIProvider implements IFistinAPIProvider {
     @Override
     public HydraAPI hydra() {
         return this.hydraAPI;
+    }
+
+    @Override
+    public @NotNull PacketManager packetManager() {
+        return this.packetManager;
+    }
+
+    @Override
+    public @NotNull FistinEventBus<Supplier<? extends FistinEvent>> eventBus() {
+        return this.eventBus;
     }
 
     @Override
@@ -160,7 +174,7 @@ public class FistinAPIProvider implements IFistinAPIProvider {
 
     @Override
     public Logger getLogger() {
-        return Logger.getLogger("FistinAPI");
+        return this.logger;
     }
 
 }

@@ -3,6 +3,8 @@ package fr.fistin.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.fistin.api.database.DatabaseManager;
+import fr.fistin.api.eventbus.FistinEvent;
+import fr.fistin.api.eventbus.FistinEventBus;
 import fr.fistin.api.lobby.LobbyBalancer;
 import fr.fistin.api.network.FistinNetwork;
 import fr.fistin.api.packet.PacketManager;
@@ -16,6 +18,8 @@ import fr.fistin.api.server.FistinServer;
 import fr.fistin.api.utils.FistinAPIException;
 import fr.fistin.hydra.api.HydraAPI;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 public interface IFistinAPIProvider extends IStandalonePlugin
 {
@@ -34,14 +38,6 @@ public interface IFistinAPIProvider extends IStandalonePlugin
     @NotNull String NAMESPACE = "fistinapi";
     /** The {@link  Gson} instance used by Fistin API */
     @NotNull Gson GSON = new GsonBuilder().create();
-
-    /**
-     * Get the packet manager instance.<br>
-     * {@linkplain PacketManager Packet manager} is used to send packets through the network.
-     *
-     * @return The {@link PacketManager} instance
-     */
-    @NotNull PacketManager packetManager();
 
     /**
      * Get the database manager instance.<br>
@@ -83,6 +79,21 @@ public interface IFistinAPIProvider extends IStandalonePlugin
     default FistinProxy proxy() {
         throw new FistinAPIException("Fistin API is not running in proxy mode.");
     }
+
+    /**
+     * Get the packet manager instance.<br>
+     * {@linkplain PacketManager Packet manager} is used to send packets through the network.
+     *
+     * @return The {@link PacketManager} instance
+     */
+    @NotNull PacketManager packetManager();
+
+    /**
+     * Get Fistin API event bus instance.
+     *
+     * @return The {@link FistinEventBus} instance
+     */
+    @NotNull FistinEventBus<Supplier<? extends FistinEvent>> eventBus();
 
     /**
      * Get the network instance.<br>

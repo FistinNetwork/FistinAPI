@@ -32,7 +32,7 @@ public final class PFistinAPIProvider extends FistinAPIProvider
         this.plugin = plugin;
 
         try {
-            this.enable(new FistinAPIConfigurationImpl(plugin));
+            this.enable(new FistinAPIConfigurationImpl(plugin), this.plugin.getLogger());
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -89,11 +89,6 @@ public final class PFistinAPIProvider extends FistinAPIProvider
     @Override
     public FistinProxy proxy() {
         return this.proxy;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return this.plugin.getLogger();
     }
 
 }

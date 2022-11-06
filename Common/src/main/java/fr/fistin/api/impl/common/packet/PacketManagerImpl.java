@@ -38,10 +38,17 @@ public class PacketManagerImpl implements PacketManager
     }
 
     @Override
+    public <P extends FistinPacket> void registerSerializer(@NotNull Class<P> packetClass, FistinPacket.@NotNull Serializer<P> serializer) {
+        if (this.assertStarted()) {
+            this.packetProcessor.processSerializer(packetClass, serializer);
+        }
+    }
+
+    @Override
     public void clear()
     {
         this.started = false;
-        this.packetProcessor.clear();
+        this.packetProcessor.clean();
     }
 
     private boolean assertStarted()
@@ -52,10 +59,10 @@ public class PacketManagerImpl implements PacketManager
         throw new PacketException("PacketManager isn't started!");
     }
 
-    static final class PacketProcessor extends JedisPubSub
-    {
+    private static final class PacketProcessor extends JedisPubSub {
 
         private final Map<String, List<FistinPacketReceiver>> receivers = new HashMap<>();
+        private final Map<Class<? extends FistinPacket>, SerializerContext<?>> serializers = new IdentityHashMap<>();
 
         private final Thread subscriberThread;
 
@@ -69,7 +76,9 @@ public class PacketManagerImpl implements PacketManager
             try {
                 final JsonObject object = IFistinAPIProvider.GSON.fromJson(new String(Base64.getDecoder().decode(message), StandardCharsets.UTF_8), JsonObject.class);
                 final Class<?> packetClass = Class.forName(object.get("id").getAsString());
-                final FistinPacket packet = (FistinPacket) IFistinAPIProvider.GSON.fromJson(object.getAsJsonObject("data"), packetClass);
+                final String data = object.get("data").getAsString();
+                final SerializerContext<?> serializerContext = this.serializers.get(packetClass);
+                final FistinPacket packet = serializerContext == null ? (FistinPacket) IFistinAPIProvider.GSON.fromJson(data, packetClass) : serializerContext.deserialize(packetClass, data);
                 final List<FistinPacketReceiver> receivers = this.receivers.get(channel);
 
                 if (receivers != null) {
@@ -83,9 +92,10 @@ public class PacketManagerImpl implements PacketManager
         <P extends FistinPacket> void processPacket(@NotNull String channel, @NotNull P packet) {
             try {
                 final JsonObject object = new JsonObject();
+                final SerializerContext<?> serializerContext = this.serializers.get(packet.getClass());
 
                 object.addProperty("id", packet.getClass().getName());
-                object.add("data", IFistinAPIProvider.GSON.toJsonTree(packet));
+                object.addProperty("data", serializerContext == null ? IFistinAPIProvider.GSON.toJson(packet) : serializerContext.serialize(packet));
 
                 IFistinAPIProvider.fistinAPI()
                         .redis()
@@ -103,12 +113,49 @@ public class PacketManagerImpl implements PacketManager
             this.receivers.put(channel, receivers);
         }
 
-        void clear() {
+        <P extends FistinPacket> void processSerializer(@NotNull Class<P> packetClass, FistinPacket.@NotNull Serializer<P> serializer) {
+            this.serializers.put(packetClass, new SerializerContext<>(packetClass, serializer));
+        }
+
+        void clean() {
+            this.receivers.clear();
+            this.serializers.clear();
+
             this.subscriberThread.interrupt();
 
             if (this.isSubscribed()) {
                 this.punsubscribe();
             }
+        }
+
+        private static class SerializerContext<P extends FistinPacket> {
+
+            private final Class<P> packetClass;
+            private final FistinPacket.Serializer<P> serializer;
+
+            public SerializerContext(Class<P> packetClass, FistinPacket.Serializer<P> serializer) {
+                this.packetClass = packetClass;
+                this.serializer = serializer;
+            }
+
+            @SuppressWarnings("unchecked")
+            String serialize(FistinPacket packet) throws Exception {
+                return this.serializer.serialize((P) packet);
+            }
+
+            @SuppressWarnings("unchecked")
+            P deserialize(Class<?> packetClass, String input) throws Exception {
+                return this.serializer.deserialize((Class<P>) packetClass, input);
+            }
+
+            public Class<P> getPacketClass() {
+                return this.packetClass;
+            }
+
+            public FistinPacket.Serializer<P> getSerializer() {
+                return this.serializer;
+            }
+
         }
 
     }

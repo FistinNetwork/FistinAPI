@@ -23,7 +23,7 @@ public final class SFistinAPIProvider extends FistinAPIProvider
     public SFistinAPIProvider(FistinAPI plugin) {
         this.plugin = plugin;
 
-        this.enable(new FistinAPIConfigurationImpl());
+        this.enable(new FistinAPIConfigurationImpl(), this.plugin.getLogger());
     }
 
     @Override
@@ -64,11 +64,6 @@ public final class SFistinAPIProvider extends FistinAPIProvider
     @Override
     public FistinServer server() {
         return this.server;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return this.plugin.getLogger();
     }
 
 }

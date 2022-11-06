@@ -1,11 +1,15 @@
 package fr.fistin.api.impl.common.network;
 
 import fr.fistin.api.IFistinAPIProvider;
+import fr.fistin.api.eventbus.FistinEvent;
+import fr.fistin.api.eventbus.FistinEventBus;
 import fr.fistin.api.impl.common.network.counter.NetworkCounterImpl;
 import fr.fistin.api.network.FistinNetwork;
 import fr.fistin.api.network.NetworkMaintenance;
 import fr.fistin.api.network.counter.NetworkCounter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 /**
  * Created by AstFaster
@@ -13,10 +17,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FistinNetworkImpl implements FistinNetwork {
 
+    private final NetworkEventBus eventBus;
     private final NetworkCounter counter;
 
     public FistinNetworkImpl() {
+        this.eventBus = new NetworkEventBus();
         this.counter = new NetworkCounterImpl();
+    }
+
+    @Override
+    public @NotNull FistinEventBus<Supplier<? extends FistinEvent>> eventBus() {
+        return this.eventBus;
     }
 
     @Override

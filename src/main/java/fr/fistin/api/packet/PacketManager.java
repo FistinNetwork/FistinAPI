@@ -29,6 +29,8 @@ public interface PacketManager
      */
     void registerReceiver(@NotNull String channel, @NotNull FistinPacketReceiver receiver);
 
+    <P extends FistinPacket> void registerSerializer(@NotNull Class<P> packetClass, @NotNull FistinPacket.Serializer<P> serializer);
+
     /**
      * Clear the packet manager.<br>
      * No more packets will be received and sent.
